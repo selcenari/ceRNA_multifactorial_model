@@ -1,0 +1,272 @@
+---
+title: "article_supplementary"
+author: "Selcen Ari"
+date: "20 Mart 2019"
+output: html_document
+bibliography: ref.bib
+---
+
+# Introduction
+
+This file describes how to apply `ceRNAnetsim` package on a breast cancer patient miRNA:target interaction dataset. Before the approach, we obtained three datasets and combined them.
+
+```{r, echo=FALSE, message= FALSE, warning=FALSE}
+# Install the packages which is necessary to obtain and process datasets.
+BiocManager::install("SummarizedExperiment", version = "3.8")
+library(TCGAbiolinks)
+library(SummarizedExperiment)
+#install devtools
+devtools::install.github(selcenari/ceRNAnetsim)
+library(ceRNAnetsim)
+
+```
+
+## 1. How to get gene expression counts of TCGA-E9-A1N5 patient.
+
+We have obtained the gene expression values of patient using [TCGAbiolinks](https://www.bioconductor.org/packages/release/bioc/html/TCGAbiolinks.html) package from [Bioconductor](https://www.bioconductor.org/). For this process, we have followed the instructions of the package. `TCGAbiolinks` package provides to obtain data for whole number of given barcode(s) at once. But, we preferred to download them seperately to show datasets.
+
++ Obtain the tumor tissue gene expression counts.
+
+```{r,message= FALSE, warning=FALSE}
+
+BCP_tumor <- GDCquery(project = "TCGA-BRCA",
+                  data.category = "Transcriptome Profiling",
+                  data.type = "Gene Expression Quantification", 
+                  workflow.type = "HTSeq - Counts",
+                  barcode = "TCGA-E9-A1N5-01A-11R-A14D-07")
+
+GDCdownload(BCP_tumor)
+BCPGE_tumor <- GDCprepare(BCP_tumor)
+
+as.data.frame(assay(BCPGE_tumor))%>%
+  mutate(ensembl_gene_id = rownames(.))%>%
+  dplyr::inner_join(as.data.frame(rowData(BCPGE_tumor)), by = "ensembl_gene_id")%>%
+  dplyr::select(ensembl_gene_id, external_gene_name, 1)-> TCGA_E9_A1N5_tumor
+
+colnames(TCGA_E9_A1N5_tumor)[3] <- "GE_tumor"
+
+head(TCGA_E9_A1N5_tumor)
+```
+
++ Obtain the normal tissue gene expression counts.
+
+```{r, message= FALSE, warning=FALSE}
+BCP_normal <- GDCquery(project = "TCGA-BRCA",
+                  data.category = "Transcriptome Profiling",
+                  data.type = "Gene Expression Quantification", 
+                  workflow.type = "HTSeq - Counts",
+                  barcode = "TCGA-E9-A1N5-11A-41R-A14D-07")
+GDCdownload(BCP_normal)
+
+BCPGE_normal <- GDCprepare(BCP_normal)
+
+as.data.frame(assay(BCPGE_normal))%>%
+  mutate(ensembl_gene_id = rownames(.))%>%
+  dplyr::inner_join(as.data.frame(rowData(BCPGE_normal)), by = "ensembl_gene_id")%>%
+  dplyr::select(ensembl_gene_id, external_gene_name, 1)-> TCGA_E9_A1N5_normal
+
+colnames(TCGA_E9_A1N5_normal)[3] <- "GE_normal"
+
+head(TCGA_E9_A1N5_normal)
+
+```
+
+```{r, echo=FALSE, message= FALSE, warning=FALSE}
+#remove:
+rm(BCPGE_normal, BCPGE_tumor, BCP_normal, BCP_tumor)
+```
+
+
+## 2. How to get miRNA expression counts of TCGA-E9-A1N5 patient.
+
+We used `TCGAbiolinks` package to obtain miRNA expression quantification. The query gives read count of miRNA as isoform chromosome coordination. The data also contains mature miRNA information. So, we processed data to attain -5p -3p isoform information using mirbase release21 dataset.
+
++ Get the mirbase id of mature miRNA:
+
+We downloaded the mirbase release 21 dataset from [mirbase](http://www.mirbase.org/ftp.shtml) and processed the patient mirna expression datasets as following:
+
+```{r, message= FALSE, warning=FALSE}
+library(readr)
+read_tsv("hsa_mirna.txt", comment = "#", col_names = FALSE)%>%
+  dplyr::select(mirna_type= X3, definition = X9)%>%
+  filter(!endsWith(mirna_type, "primary_transcript"))%>%
+  tidyr::separate(definition, c("ID", "Alias", "Name", "Derivated"), sep = ";")%>%
+  dplyr::select(Alias, Name)%>%
+  tidyr::separate(Alias, c("trash1", "ID"), sep = "=")%>%
+  tidyr::separate(Name, c("trash2", "Name"), sep = "=")%>%
+  dplyr::select(-trash1, -trash2)-> mirbase_id_conv
+
+head(mirbase_id_conv)
+```
+
++ Obtain the miRNA expression of tumor tissue of patient:
+
+```{r, message= FALSE, warning=FALSE}
+BCP_mirnatumor <- GDCquery(project = "TCGA-BRCA",
+                  data.category = "Transcriptome Profiling",
+                  data.type = "Isoform Expression Quantification",
+                  workflow.type = "BCGSC miRNA Profiling",
+                  barcode = "TCGA-E9-A1N5-01A-11R-A14C-13")
+
+GDCdownload(BCP_mirnatumor)
+
+GDCprepare(BCP_mirnatumor)%>%
+  as.data.frame()%>%
+  dplyr::select(miRNA_ID, read_count, reads_per_million_miRNA_mapped, miRNA_region)%>%
+  dplyr::filter(startsWith(miRNA_region, "mature"))%>%
+  dplyr::mutate(mirbase_id =str_remove(miRNA_region, "mature,"))%>%
+  dplyr::select(-miRNA_region)%>%
+  dplyr::inner_join(mirbase_id_conv, by = c("mirbase_id"="ID"))%>%
+  dplyr::select(miRNA_name = Name, read_count, reads_per_million_miRNA_mapped)%>%
+  dplyr::group_by(miRNA_name)%>%
+  mutate(read_count= sum(read_count), reads_per_million_miRNA_mapped = sum(reads_per_million_miRNA_mapped))%>%
+  dplyr::ungroup()%>%
+  distinct() -> BCPME_mirnatumor
+
+head(BCPME_mirnatumor)
+```
+
++ Obtain the miRNA expression of normal tissue of patient:
+
+```{r, message= FALSE, warning=FALSE}
+BCP_mirnanormal <- GDCquery(project = "TCGA-BRCA",
+                  data.category = "Transcriptome Profiling",
+                  data.type = "Isoform Expression Quantification",
+                  workflow.type = "BCGSC miRNA Profiling",
+                  barcode = "TCGA-E9-A1N5-11A-41R-A14C-13")
+
+GDCdownload(BCP_mirnanormal)
+# a616435d-0b69-48ac-813d-5d75ad9b85eb.mirbase21.isoforms.quantification.txt
+
+GDCprepare(BCP_mirnanormal)%>%
+  as.data.frame()%>%
+  dplyr::select(miRNA_ID, read_count, reads_per_million_miRNA_mapped, miRNA_region)%>%
+  dplyr::filter(startsWith(miRNA_region, "mature"))%>%
+  dplyr::mutate(mirbase_id =str_remove(miRNA_region, "mature,"))%>%
+  dplyr::select(-miRNA_region)%>%
+  dplyr::inner_join(mirbase_id_conv, by = c("mirbase_id"="ID"))%>%
+  dplyr::select(miRNA_name = Name, read_count, reads_per_million_miRNA_mapped)%>%
+  dplyr::group_by(miRNA_name)%>%
+  mutate(read_count= sum(read_count), reads_per_million_miRNA_mapped = sum(reads_per_million_miRNA_mapped))%>%
+  dplyr::ungroup()%>%
+  distinct() -> BCPME_mirnanormal
+
+head(BCPME_mirnanormal)
+```
+
+
+## 3. Get the high-throughput experimental miRNA:target dataset.
+
+There are various datasets about miRNA:target pairs such as miRTarBase, DianaTools, miRecords, miRWalk etc. Some of these present the experimentally supported miRNA target pairs or only predicted ones. The experimentally supported datasets generally provides weak evidence for interactions. For these reasons, we obtained the high-throughput experimental miRNA:target dataset from two studies performed by Helwak et al. and Moore et al. These steps were not handle in this file because they contain many processes. 
+
+Briefly these datasets contain various common information about miRNA:target interactions such as the miRNA name, miRNAsequence, target name, target sequence, their chromosomal locations, binding location on the target sequence, binding free energy, seed structure. But these datasets provides the informations with different data structures.So we followed the steps:
+
++ The datasets were directly downloaded from supplementary data files of the studies.
++ It was provided that the datasets are converted to same human genome build.
++ The seed type information was organized as the same style.
++ The datasets were combined.
++ We commited the interaction factors as numeric values according to previous studies. 
+
+Finally, we have obtained the experimentally supported miRNA:target dataset. 
+
+```{r, message= FALSE, warning=FALSE}
+data("experimentalmirnagene")
+
+head(experimentalmirnagene)
+
+```
+
+The methods about miRNA:target interactions are based a basic principle that is reading after isolation of miRNA:target chimerics. The datasets contain all the chimeric miRNA:target structures found in the environment during the experiment. On the other hand, it could be said that the reading is performed as snapshot.Because of that, the methods can provide different chimeric interactions the same miRNA:target pair. We have preferred to select most effective interaction parameters for the same miRNA:target pairs that can exhibit various interactions. The step is performed as: 
+
+```{r, message= FALSE, warning=FALSE}
+experimentalmirnagene%>%
+  dplyr::select(miRNA, Ensembl_Gene_Id, hgnc_symbol, Energy, seed_type_effect, region_effect)%>%
+  distinct()%>%
+  group_by(Ensembl_Gene_Id, miRNA)%>%
+  mutate(seed_type_effect= ifelse(seed_type_effect==max(seed_type_effect), seed_type_effect, max(seed_type_effect)), Energy = ifelse(Energy==min(Energy), Energy, min(Energy)), region_effect= ifelse(region_effect==max(region_effect), region_effect, max(region_effect)))%>%
+  distinct()-> tocombine_mirnagene
+
+head(tocombine_mirnagene)
+```
+
+## 4. Combine the dataset
+
+```{r, message= FALSE, warning=FALSE}
+BCPME_mirnanormal%>%
+  dplyr::inner_join(tocombine_mirnagene, by = c("miRNA_name"="miRNA"))%>%
+  dplyr::inner_join(TCGA_E9_A1N5_normal, by = c("Ensembl_Gene_Id"="ensembl_gene_id", "hgnc_symbol"="external_gene_name"))%>%
+  distinct()%>%
+  dplyr::select(hgnc_symbol, miRNA_name, mirna_RPM= reads_per_million_miRNA_mapped, GE_normal, Energy, seed_type_effect, region_effect)-> E9GE_mirnagenenormal
+
+head(E9GE_mirnagenenormal)
+```
+
+```{r, message= FALSE, warning=FALSE}
+BCPME_mirnatumor%>%
+  dplyr::inner_join(tocombine_mirnagene, by = c("miRNA_name"="miRNA"))%>%
+  dplyr::inner_join(TCGA_E9_A1N5_tumor, by = c("Ensembl_Gene_Id"="ensembl_gene_id", "hgnc_symbol"="external_gene_name"))%>%
+  distinct()%>%
+  dplyr::select(hgnc_symbol, miRNA_name, mirna_RPM= reads_per_million_miRNA_mapped, GE_tumor, Energy, seed_type_effect, region_effect)-> E9GE_mirnagenetumor
+
+head(E9GE_mirnagenetumor)
+
+
+```
+
+## Comparison of two datasets
+
+We have compared two datasets that are obtained for the tumor and normal tissue samples of same patient. We tried to change expression of a gene in normal tissue as the same level in the tumor tissue. Of course, we do not know that the selected gene is responsible for all regulations in the interactions. Moreover, we do not think that one gene causes different regulations in whole interactions. But we wanted to show that a single gene can cause changing regulations of interaction of whole miRNA target network. 
+
+For this step, we have determined the changes of the gene expression in terms of fold change:
+
+```{r}
+E9GE_mirnagenetumor%>%
+  dplyr::select(hgnc_symbol, GE_tumor)%>%
+  dplyr::inner_join((E9GE_mirnagenenormal%>%dplyr::select(hgnc_symbol, GE_normal)), by ="hgnc_symbol")%>%
+  dplyr::mutate(FC= GE_tumor/GE_normal)%>%
+  distinct()
+
+# ABCC1 gene has 5827 read count in tumor tissue although 1420 in normal tissue (FC=4.10)
+```
+	
+# Approach of Method into Combined Datasets
+
+We selected ABCC1 gene for simulation of regulation on network.
+
+## Find iteration of simulation
+
+```{r}
+as.data.frame(E9GE_mirnagenenormal)%>%
+iteration_graph(competing_count = GE_normal, miRNA_count = mirna_RPM, aff_factor = c(Energy, seed_type_effect), deg_factor = region_effect, "ABCC1", .iter =200 , how = 4.10, limit = 1)
+
+```
+
+The node amount of changed gene on the system in terms of percentage were shown in above. As seen, firstly, the changed gene count increase, decreasing started in the one point. The system which contains the hundreds of miRNAs and thousands of genes can slowly gain the steady-state again. At first glance, it can be assumed that when all nodes in the system are reached, a stable state will be provided. However, although all nodes are reached, the nodes competing with each other cause the edits to continue for a while.
+
+The dynamics of the approach are shown in package viggnettes [link](https://github.com/selcenari/ceRNAnetsim/blob/master/vignettes/convenient_iteration.Rmd). 
+
+So, we offered an approach about to find iteration. `find_iteration` function does not give the iteration to gain steady-state, but it gives the iteration which has maximum affected node counts. The function is applied as following:
+
+```{r}
+find_iteration(as.data.frame(E9GE_mirnagenenormal), GE_normal, miRNA_count = mirna_RPM, aff_factor = c(Energy, seed_type_effect), deg_factor = region_effect, "ABCC1", .iter =100 , how = 4.10, limit = 10)
+
+#26
+```
+
+We tried to apply the output of the `find_iteration` in simulation.
+
+```{r}
+
+as.data.frame(E9GE_mirnagenenormal)%>%
+  priming_graph(competing_count = GE_normal, miRNA_count = mirna_RPM, aff_factor = c(Energy, seed_type_effect), deg_factor = region_effect)%>%
+  update_nodes(once=TRUE)%>%
+  update_how("ABCC1", 4.10)%>%
+  update_nodes()%>%
+  simulate(26)
+
+```
+
+
+Actually, we have developed to provide a new approach mirna mediated regulation networks. This approach may not explain the whole regulation behaviors between miRNAs and targets but can be first step to more detailed and cohorent miRNA:target regulation approach.
+
+

@@ -1,0 +1,37 @@
+---
+title: "supplement"
+author: "Selcen Arı"
+date: "7 Nisan 2019"
+output: html_document
+---
+
+```{r}
+data("minsamp")
+
+minsamp
+```
+
+
+```{r}
+priming_graph(minsamp, competing_count = Competing_expression, miRNA_count = miRNA_expression)%>%
+  update_nodes(once=TRUE)%>%
+  update_how("Gene2", 2)%>%
+  update_nodes()%>%
+  simulate(3)%>%activate(edges)%>%
+  as_tibble()%>%
+  select(Competing_name,comp_count_list,effect_list)%>%
+  unnest()
+
+```
+
+```{r}
+priming_graph(minsamp, competing_count = Competing_expression, miRNA_count = miRNA_expression, aff_factor = c(energy, seed_type), deg_factor = region)%>%
+  update_nodes(once=TRUE)%>%
+  update_how("Gene2", 2)%>%
+  update_nodes()%>%
+  simulate(3)%>%activate(edges)%>%
+  as_tibble()%>%
+  select(Competing_name,comp_count_list,effect_list)%>%
+  unnest()
+```
+
