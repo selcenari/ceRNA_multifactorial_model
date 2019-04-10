@@ -1,0 +1,5 @@
+^.*\.Rproj$
+^\.Rproj\.user$
+^ceRNAnetsim\.Rcheck$
+^ceRNAnetsim.*\.tar\.gz$
+^ceRNAnetsim.*\.tgz$

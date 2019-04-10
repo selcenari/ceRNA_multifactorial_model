@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2019.1.30)  8 APR 2019 13:26
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2019.1.30)  10 APR 2019 19:47
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -941,7 +941,7 @@ LaTeX Font Info:    External font `lmex10' loaded for size
 (Font)              <5> on input line 91.
 [1
 
-{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}] <Fig1.jpg, id=58, 956.8246
+{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}] <Fig1.jpg, id=59, 956.8246
 9pt x 504.38437pt>
 File: Fig1.jpg Graphic file (type jpg)
 <use Fig1.jpg>
@@ -952,11 +952,11 @@ LaTeX Font Info:    External font `lmex10' loaded for size
 (Font)              <10> on input line 211.
 LaTeX Font Info:    External font `lmex10' loaded for size
 (Font)              <7> on input line 211.
-<fig2.jpg, id=70, 564.60938pt x 1187.18532pt>
+<fig2.jpg, id=70, 559.33969pt x 1176.64594pt>
 File: fig2.jpg Graphic file (type jpg)
 <use fig2.jpg>
 Package pdftex.def Info: fig2.jpg used on input line 238.
-(pdftex.def)             Requested size: 309.3472pt x 650.45409pt.
+(pdftex.def)             Requested size: 309.19112pt x 650.42493pt.
 
 LaTeX Warning: Command \textquoteright invalid in math mode on input line 238.
 
@@ -976,63 +976,57 @@ LaTeX Warning: Command \textquoteright invalid in math mode on input line 238.
 LaTeX Warning: Command \textquoteright invalid in math mode on input line 238.
 
 
-LaTeX Warning: Float too large for page by 47.9685pt on input line 239.
+LaTeX Warning: Float too large for page by 47.93935pt on input line 239.
 
 
 LaTeX Warning: Command \textquoteright invalid in math mode on input line 280.
 
-<workflow.jpg, id=78, 963.6pt x 542.025pt>
-File: workflow.jpg Graphic file (type jpg)
-<use workflow.jpg>
-Package pdftex.def Info: workflow.jpg used on input line 292.
-(pdftex.def)             Requested size: 469.75679pt x 264.23819pt.
 [3pdfTeX warning (ext4): destination with the same identifier (name{equation.0.
 1}) has been already used, duplicate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.354 
+l.307 
       pdfTeX warning (ext4): destination with the same identifier (name{equatio
 n.0.1}) has been already used, duplicate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.354 
+l.307 
       pdfTeX warning (ext4): destination with the same identifier (name{equatio
 n.0.1}) has been already used, duplicate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.354 
+l.307 
       pdfTeX warning (ext4): destination with the same identifier (name{equatio
 n.0.1}) has been already used, duplicate ignored
 
 \AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
                                                   \fi \fi 
-l.354 
-      ] [4 <./fig2.jpg>] [5 <./workflow.jpg>] <Fig4.jpg, id=118, 963.6pt x 476.
-53032pt>
-File: Fig4.jpg Graphic file (type jpg)
-<use Fig4.jpg>
-Package pdftex.def Info: Fig4.jpg used on input line 406.
+l.307 
+      ] [4 <./fig2.jpg>] <Fig3.jpg, id=106, 963.6pt x 476.53032pt>
+File: Fig3.jpg Graphic file (type jpg)
+<use Fig3.jpg>
+Package pdftex.def Info: Fig3.jpg used on input line 359.
 (pdftex.def)             Requested size: 469.75679pt x 232.30942pt.
-[6] [7 <./Fig4.jpg>] [8]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 665.
+[5] [6 <./Fig3.jpg>] [7] [8]
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 642.
 [9]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 665.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 642.
 (./article.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 665.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 665.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 642.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 642.
 Package rerunfilecheck Info: File `article.out' has not changed.
-(rerunfilecheck)             Checksum: 6ABE2DE72734B62CD368F6B41557CFB6;1528.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 665.
+(rerunfilecheck)             Checksum: 5335A028DDA8788473DAEAB6903BC518;1645.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 642.
  ) 
 Here is how much of TeX's memory you used:
- 12463 strings out of 494944
- 179401 string characters out of 6180677
- 283085 words of memory out of 5000000
- 15381 multiletter control sequences out of 15000+600000
- 65364 words of font info for 124 fonts, out of 8000000 for 9000
+ 12457 strings out of 494944
+ 179387 string characters out of 6180677
+ 278960 words of memory out of 5000000
+ 15376 multiletter control sequences out of 15000+600000
+ 65187 words of font info for 123 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
  39i,7n,35p,539b,354s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/share/texmf/fonts/enc/dvips/lm/lm-ec.enc}{/usr/share/texmf/fonts/enc/dv
@@ -1048,10 +1042,10 @@ ublic/lm/lmr17.pfb></usr/share/texmf/fonts/type1/public/lm/lmr6.pfb></usr/share
 mr8.pfb></usr/share/texmf/fonts/type1/public/lm/lmri10.pfb></usr/share/texmf/fo
 nts/type1/public/lm/lmri12.pfb></usr/share/texmf/fonts/type1/public/lm/lmsy10.p
 fb></usr/share/texmf/fonts/type1/public/lm/lmsy7.pfb>
-Output written on article.pdf (9 pages, 726223 bytes).
+Output written on article.pdf (9 pages, 644623 bytes).
 PDF statistics:
- 276 PDF objects out of 1000 (max. 8388607)
- 244 compressed objects within 3 object streams
- 68 named destinations out of 1000 (max. 500000)
- 16469 words of extra memory for PDF output out of 17280 (max. 10000000)
+ 272 PDF objects out of 1000 (max. 8388607)
+ 241 compressed objects within 3 object streams
+ 69 named destinations out of 1000 (max. 500000)
+ 16464 words of extra memory for PDF output out of 17280 (max. 10000000)
 

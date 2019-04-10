@@ -2,7 +2,9 @@
 title: "article_supplementary"
 author: "Selcen Ari"
 date: "20 Mart 2019"
-output: html_document
+output:
+  pdf_document: default
+  html_document: default
 bibliography: ref.bib
 ---
 
@@ -12,20 +14,19 @@ This file describes how to apply `ceRNAnetsim` package on a breast cancer patien
 
 ```{r, echo=FALSE, message= FALSE, warning=FALSE}
 # Install the packages which is necessary to obtain and process datasets.
-BiocManager::install("SummarizedExperiment", version = "3.8")
+#BiocManager::install("SummarizedExperiment", version = "3.8")
 library(TCGAbiolinks)
 library(SummarizedExperiment)
 #install devtools
 devtools::install.github(selcenari/ceRNAnetsim)
 library(ceRNAnetsim)
-
 ```
 
 ## 1. How to get gene expression counts of TCGA-E9-A1N5 patient.
 
 We have obtained the gene expression values of patient using [TCGAbiolinks](https://www.bioconductor.org/packages/release/bioc/html/TCGAbiolinks.html) package from [Bioconductor](https://www.bioconductor.org/). For this process, we have followed the instructions of the package. `TCGAbiolinks` package provides to obtain data for whole number of given barcode(s) at once. But, we preferred to download them seperately to show datasets.
 
-+ Obtain the tumor tissue gene expression counts.
++ Obtain to gene expression counts of tumor tissue.
 
 ```{r,message= FALSE, warning=FALSE}
 
@@ -48,7 +49,7 @@ colnames(TCGA_E9_A1N5_tumor)[3] <- "GE_tumor"
 head(TCGA_E9_A1N5_tumor)
 ```
 
-+ Obtain the normal tissue gene expression counts.
++ Obtain to gene expression counts of normal tissue.
 
 ```{r, message= FALSE, warning=FALSE}
 BCP_normal <- GDCquery(project = "TCGA-BRCA",
@@ -79,7 +80,7 @@ rm(BCPGE_normal, BCPGE_tumor, BCP_normal, BCP_tumor)
 
 ## 2. How to get miRNA expression counts of TCGA-E9-A1N5 patient.
 
-We used `TCGAbiolinks` package to obtain miRNA expression quantification. The query gives read count of miRNA as isoform chromosome coordination. The data also contains mature miRNA information. So, we processed data to attain -5p -3p isoform information using mirbase release21 dataset.
+We have used `TCGAbiolinks` package to obtain miRNA expression quantification. The query gives read count of miRNA as isoform chromosome coordination. The data also contains mature miRNA information. So, we processed data to attain -5p -3p isoform information using mirbase release21 dataset.
 
 + Get the mirbase id of mature miRNA:
 

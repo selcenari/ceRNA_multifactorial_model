@@ -1,0 +1,8 @@
+inst/doc
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+ceRNAnetsim.Rcheck/
+ceRNAnetsim*.tar.gz
+ceRNAnetsim*.tgz
