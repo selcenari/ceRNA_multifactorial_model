@@ -56,6 +56,21 @@ Eff_{gi}= Eff_{gi}*RE^\prime_{gi} \tag{5}\label{eq:5}
 
 ![Calculations to determine of miRNA binding and repression efficiency. $G$, Gene; $M$, miRNA; $STE$, seed type effect; $RE$, Region Effect; $E$, Energy; $STE^\prime$, normalized values of seed type efficiency coefficient; $RE^\prime$, normalized values of region efficiency coefficient; $E^\prime$, normalized values of energy coefficient.](fig2.jpg){#fig2}
 
+\iffalse
+%% (#TODO the equation is not considering binding factors, right?. We should explain the calculation made in  simulate function  here, in simple sentences. the function looks like this: 
+%%    input_graph%>%
+%%      tidygraph::activate(edges)%>%
+%%      group_by(to)%>%
+%%      mutate(mirna_count_per_comp = mirna_count_current*comp_count_current*afff_factor/sum(comp_count_current*afff_factor), mirna_count_per_comp = ifelse(is.na(mirna_count_per_comp), 0, mirna_count_per_comp))%>%
+%%      ungroup()%>%
+%%      mutate(effect_pre = effect_current, effect_current = mirna_count_per_comp*degg_factor)%>%
+%%      group_by(from)%>%
+%%      mutate(comp_count_pre = ifelse(comp_count_current< 0, 1, comp_count_current), comp_count_current = comp_count_pre - (sum(effect_current)-sum(effect_pre)), comp_count_current = ifelse(comp_count_current< 0, 1, comp_count_current))%>%
+%%      ungroup()%>%
+%%      mutate(comp_count_list = pmap(list(comp_count_list, comp_count_current), c), effect_list = pmap(list(effect_list, effect_current), c), mirna_count_list = pmap(list(mirna_count_list, mirna_count_current), c))
+%% )
+\fi
+
 After miRNA binds to its target, but might not repress to bound target. The functionality of bound miRNA on target depends on efficiency factors like region that is binding sequence of miRNA on its target. Exact repression efficiency of miRNA is calculated according to equation \eqref{eq:5} (\autoref{fig2}d); $RE^\prime_{gi}$, normalized values of region efficiency coefficient between miRNA and gene. The cooperative repression activity of miRNAs to their common targets is figured out as shown in \autoref{fig2}e.
 
 
