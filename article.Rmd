@@ -117,5 +117,3 @@ Network based approaches for analyzing miRNA:target interactions have been devel
 In our approach, we have not taken into account transcription, degradation or binding rates of elements in network. Because, although it is known as the miRNAs are highly stable, the transcription and degradation rates of miRNAs change depending on cellular conditions [@ruegger_microrna_2012]. However, due to lack of datasets including degradation and transcription rates of miRNAs at specific cellular conditions, such factors are neglected in our model. Additionally, other regulation parameters such as gene-gene interactions and transcription factors are ignored but the network structure is flexible and can integrate additional regulation elements as they become available. In the future, with developments in experimental techniques about miRNAs:target interaction dynamica, more accurate results can be obtained from our model resulting in better understanding and predictions of abnormal regulations and pathways underlying diseases or conditions.
 
 ## References
-
-
