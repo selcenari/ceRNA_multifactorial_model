@@ -45,6 +45,19 @@ data("minsamp")
 minsamp
 ```
 
+
+|competing| miRNA | Competing_expression | miRNA_expression | seed_type | region | energy
+|-----------|------------|----------|----------------|---------|-----------|----------|
+| `Gene1`   | `Mir1` | 10000 | 1000 | 0.43 | 0.30 | -20 |
+| `Gene2`   | `Mir1` | 10000 | 1000 | 0.43 | 0.01 | -15 |
+| `Gene3`   | `Mir1` | 5000  | 1000 | 0.32 | 0.40 | -14 |
+| `Gene4`   | `Mir1` | 10000 | 1000 | 0.23 | 0.50 | -10 |
+| `Gene4`   | `Mir2` | 10000 | 2000 | 0.35 | 0.90 | -12 |
+| `Gene5`   | `Mir2` | 5000  | 2000 | 0.05 | 0.40 | -11 |
+| `Gene6`   | `Mir2` | 10000 | 2000 | 0.01 | 0.80 | -25 |
+
+
+
 ## *minsamp* dataset analysis in lack of interaction factors.
 
 Firstly, we have analysed minimal data without interaction factors between miRNA:target.
