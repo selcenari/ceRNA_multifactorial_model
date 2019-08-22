@@ -89,7 +89,7 @@ After miRNA binds to its target, but might not repress to bound target. The func
 
 We have applied our model in a real dataset for which experimental measurements of various factors were available. Expression levels of miRNA and genes in tumor and normal tissue of single  patient are retrieved from [TCGA](https://www.cancer.gov/about-nci/organization/ccg/research/structural-genomics/tcga)(#TODO). High-throughput experimental datasets which are provided miRNA:gene target pairs with interaction factors [@helwak_mapping_2013; @moore_mirnatarget_2015]. We have combined miRNA and gene expression datasets via miRNA:target gene dataset retrieved from ... (#FIX name of database and its citation) answer->suplementary datasets of [@helwak_mapping_2013; @moore_mirnatarget_2015]. Detailed description of network construction and its code is available in Supplementary data (#TODO burada link nasıl olacak, word dosyası veya PDF dosyası ismi mi vermemiz mi  gerekiyor, yoksa sadece Sup Data denilmesi yeterli mi? ilgili dosya: TCGA_E9-A1N5_article.Rmd). ABCC1 gene, over-expressed in tumor tissue, was selected as trigger for simulation of integrated dataset. After simulation of network, we have compared simulation results and tumor tissue expression levels.
 
-[#TODO]: <> "about formulas, 1) eq:3 F/Fmax can be removed, 2) in formulas eq:1 and eq:2, C_m or Eff_gi is not intuitive, is there consensus terms about effect or nth gene?"
+[#TODO]: <> "about formulas, 2) in formulas eq:1 and eq:2, C_m or Eff_gi is not intuitive, is there consensus terms about effect or nth gene?"
 
 ## Results and Conclusions
 ### Networks with single factor
