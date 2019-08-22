@@ -1,5 +1,5 @@
 ---
-title: "article_supplementary"
+title: "Supplementary file 2"
 author: "Selcen Ari"
 date: "20 Mart 2019"
 output:
@@ -14,11 +14,13 @@ This file describes how to apply `ceRNAnetsim` package on a breast cancer patien
 
 ```{r, echo=FALSE, message= FALSE, warning=FALSE}
 # Install the packages which is necessary to obtain and process datasets.
-#BiocManager::install("SummarizedExperiment", version = "3.8")
+#install.packages("BiocManager")
+#BiocManager::install("SummarizedExperiment")
+#BiocManager::install("TCGAbiolinks")
 library(TCGAbiolinks)
 library(SummarizedExperiment)
 #install devtools
-devtools::install.github(selcenari/ceRNAnetsim)
+#devtools::install_github("selcenari/ceRNAnetsim")
 library(ceRNAnetsim)
 ```
 
@@ -177,7 +179,7 @@ head(experimentalmirnagene)
 
 ```
 
-The methods about miRNA:target interactions are based a basic principle that is reading after isolation of miRNA:target chimerics. The datasets contain all the chimeric miRNA:target structures found in the environment during the experiment. On the other hand, it could be said that the reading is performed as snapshot.Because of that, the methods can provide different chimeric interactions the same miRNA:target pair. We have preferred to select most effective interaction parameters for the same miRNA:target pairs that can exhibit various interactions. The step is performed as: 
+The methods about miRNA:target interactions are based a basic principle that is reading after isolation of miRNA:target chimerics. The datasets contain all the chimeric miRNA:target structures found in the medium during the experiment. On the other hand, it could be said that the reading is performed as snapshot.Because of that, the methods can provide different chimeric interactions the same miRNA:target pair. We have preferred to select most effective interaction parameters for the same miRNA:target pairs that can exhibit various interactions. The step is performed as: 
 
 ```{r, message= FALSE, warning=FALSE}
 experimentalmirnagene%>%
@@ -216,7 +218,7 @@ head(E9GE_mirnagenetumor)
 
 ## Comparison of two datasets
 
-We have compared two datasets that are obtained for the tumor and normal tissue samples of same patient. We tried to change expression of a gene in normal tissue as the same level in the tumor tissue. Of course, we do not know that the selected gene is responsible for all regulations in the interactions. Moreover, we do not think that one gene causes different regulations in whole interactions. But we wanted to show that a single gene can cause changing regulations of interaction of whole miRNA target network. 
+We have compared two datasets that are obtained for the tumor and normal tissue samples of same patient. We tried to change expression of a gene in normal tissue as the same level in the tumor tissue. Of course, we do not know that the selected gene is responsible for all regulations in the interactions. Moreover, it is not considered that one gene causes different regulations in whole interactions. But we wanted to show that a single gene can cause changing regulations of interaction of whole miRNA target network. 
 
 For this step, we have determined the changes of the gene expression in terms of fold change:
 
@@ -238,7 +240,11 @@ We selected ABCC1 gene for simulation of regulation on network.
 
 ```{r}
 as.data.frame(E9GE_mirnagenenormal)%>%
-iteration_graph(competing_count = GE_normal, miRNA_count = mirna_RPM, aff_factor = c(Energy, seed_type_effect), deg_factor = region_effect, "ABCC1", .iter =200 , how = 4.10, limit = 1)
+ priming_graph(competing_count = GE_normal, miRNA_count = mirna_RPM, aff_factor = c(Energy, seed_type_effect), deg_factor = region_effect)%>%
+ update_how("ABCC1",4.10) %>%
+ simulate(100) %>%
+ find_iteration(limit=0, plot= TRUE)
+
 
 ```
 
@@ -249,7 +255,11 @@ The dynamics of the approach are shown in package viggnettes [link](https://gith
 So, we offered an approach about to find iteration. `find_iteration` function does not give the iteration to gain steady-state, but it gives the iteration which has maximum affected node counts. The function is applied as following:
 
 ```{r}
-find_iteration(as.data.frame(E9GE_mirnagenenormal), GE_normal, miRNA_count = mirna_RPM, aff_factor = c(Energy, seed_type_effect), deg_factor = region_effect, "ABCC1", .iter =100 , how = 4.10, limit = 10)
+as.data.frame(E9GE_mirnagenenormal)%>%
+ priming_graph(competing_count = GE_normal, miRNA_count = mirna_RPM, aff_factor = c(Energy, seed_type_effect), deg_factor = region_effect)%>%
+ update_how("ABCC1",4.10) %>%
+ simulate(100) %>%
+ find_iteration(limit=0, plot= FALSE)
 
 #26
 ```
@@ -260,9 +270,7 @@ We tried to apply the output of the `find_iteration` in simulation.
 
 as.data.frame(E9GE_mirnagenenormal)%>%
   priming_graph(competing_count = GE_normal, miRNA_count = mirna_RPM, aff_factor = c(Energy, seed_type_effect), deg_factor = region_effect)%>%
-  update_nodes(once=TRUE)%>%
   update_how("ABCC1", 4.10)%>%
-  update_nodes()%>%
   simulate(26)
 
 ```
