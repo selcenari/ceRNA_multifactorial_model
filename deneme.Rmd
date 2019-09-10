@@ -3,7 +3,7 @@ title: "Network based multifactorial modelling microRNA-target interaction."
 author: 
 - Selcen Ari^[Department of Bioengineering, Yildiz Technical University, Istanbul, Turkey]
 - Alper Yilmaz^[Department of Bioengineering, Yildiz Technical University, Istanbul, Turkey]
-date: "20 Ağustos 2019"
+date: "`r format(Sys.time(), '%d %B %Y')`"
 output:
   pdf_document: 
     keep_tex: true
@@ -12,6 +12,15 @@ output:
 
 
 
+```{r echo= FALSE, results= 'asis'}
+install.packages("xtable")
+library(xtable)
+data("minsamp")
+
+print(xtable::xtable(minsamp, caption="Expression values of elements and interaction factors of miRNA:target interacions", label = "tab:one", 
+             table.placement = "l!", 
+             caption.placement = "top"), comment= FALSE)
+```
 
 \begin{table}[ht]
 \centering
@@ -29,5 +38,5 @@ output:
   7 & Gene6 & Mir2 & 10000.00 & 2000.00 & 0.01 & 0.80 & -25.00 \\ 
    \hline
 \end{tabular}
-\label{tab:one}
+
 \end{table}

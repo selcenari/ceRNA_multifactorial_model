@@ -83,7 +83,7 @@
   \postauthor{\par}
       \predate{\centering\large\emph}
   \postdate{\par}
-    \date{21 Ağustos 2019}
+    \date{10 Eylül 2019}
 
 
 \begin{document}
@@ -132,12 +132,12 @@ regulator of gene expression through various post-transcriptional
 mechanisms. Although the mechanisms by which miRNA represses are not
 fully understood, miRNAs predominantly repress their targets. Repressive
 activities of miRNAs vary depending on many factors that are significant
-to microRNA:target interactions. These factors include microRNA:target
-binding energy, binding location in target sequence, base pairing types
-between miRNA and target, abundance of miRNAs and targets (Grimson et
-al. \protect\hyperlink{ref-grimson_microrna_2007}{2007}). Binding
-energies of miRNA:target complexes vary based on nucleotide context and
-determine folding stability of complex (Cao and Chen
+to miRNA:target interactions. These factors include miRNA:target binding
+energy, binding location in target sequence, base pairing types between
+miRNA and target, abundance of miRNAs and targets (Grimson et al.
+\protect\hyperlink{ref-grimson_microrna_2007}{2007}). Binding energies
+of miRNA:target complexes vary based on nucleotide context and determine
+folding stability of complex (Cao and Chen
 \protect\hyperlink{ref-cao_predicting_2012}{2012}). It has been
 demonstrated that the binding energy between miRNA and target indicates
 stability or affinity of complex (Helwak et al.
@@ -163,8 +163,9 @@ the 5' end of miRNAs (Bartel
 \protect\hyperlink{ref-bartel_micrornas:_2009}{2009}; Grimson et al.
 \protect\hyperlink{ref-grimson_microrna_2007}{2007}). On the other hand,
 some researchers have reported that seed sequence of miRNA can have
-mismatches or bulged/wobble nucleotides and may locate in region other
-than 5'end of miRNAs (Hafner et al.
+mismatches or bulged/wobble nucleotides (Chi, Hannon, and Darnell
+\protect\hyperlink{ref-chi2012alternative}{2012}) and may locate in
+region other than 5'end of miRNAs (Hafner et al.
 \protect\hyperlink{ref-hafner_transcriptome-wide_2010}{2010}; Helwak et
 al. \protect\hyperlink{ref-helwak_mapping_2013}{2013}). On top of all
 these factors, abundance of miRNAs and targets and miRNA:target ratio in
@@ -189,7 +190,7 @@ predicting results of an individual perturbation is difficult due to
 complexity of interactions. Various computational and experimental
 studies have tackled the problem of unraveling ceRNA:miRNA interactions.
 It has been observed that when abundance of one of the targets of
-miR-122 was increased, the other target expression also slightly
+miR-122 was increased, the other targets' expression also slightly
 increased as a result of decreasing repressive activity of miR-122 on
 them (Denzler et al.
 \protect\hyperlink{ref-denzler_assessing_2014}{2014}). Bosson et
@@ -210,11 +211,11 @@ can explain miRNA target interaction through topological features has
 been applied at bipartite network by Nitzan et al.~(Nitzan et al.
 \protect\hyperlink{ref-nitzan_interactions_2014}{2014}). Robinson and
 Henderson applied the model that handles miRNA:target direct and
-indirect interactions via common miRNA of gene and target of miRNA, at
-bipartite network. It has been demonstrated that all miRNAs and targets
-in the network can interact with each other through common miRNAs and
-genes, without interaction between the same type of nodes (Robinson and
-Henderson
+indirect interactions via common targeting miRNA of genes and target of
+miRNAs, at bipartite network. It has been demonstrated that all miRNAs
+and targets in the network can interact with each other through common
+miRNAs and genes, without interaction between the same type of nodes
+(Robinson and Henderson
 \protect\hyperlink{ref-robinson_modelling_2018}{2018}).Associated genes
 that are targets of the same miRNAs have been found with help of
 correlation of gene expression changes in recent algorithm (Markus List
@@ -246,16 +247,18 @@ the manuscript terms target, gene and ceRNA are used interchangeably.
 calculations}\label{triggering-perturbation-and-subsequent-calculations}}
 
 Initially, the network is assumed in steady-state (\autoref{fig1}a)
-condition and needs a trigger for initiating calculations. The trigger
-can be a change in expression level of one or more genes
+condition and needs least one trigger for initiating calculations. The
+trigger can be a change in expression level of one or more genes
 (\autoref{fig1}b). After a trigger, the network undergoes iterative
 cycle of calculations at each of which distribution of miRNA in local
 neighborhood is recalculated (\autoref{fig1}c). Based on new miRNA
-distribution, expression level of each node (i.e.~ceRNA) is updated. Due
-to nodes which are targeted by multiple miRNAs, the change in one
-neighborhood spreads to other neighborhoods (\autoref{fig1}d),
-consequently have potential to effect whole network due to ``ripple
-effect''.
+distribution, expression level of each node (i.e.~ceRNA) is updated.
+This update results in change of expression value of common target (G4)
+in system. In this case, the common target acts as trigger for the other
+group (the targets interacted with M2 miRNA) in the network. Due to
+common targeted elements, the change in one neighborhood spreads to
+other neighborhoods (\autoref{fig1}d), consequently have potential to
+effect whole network due to ``ripple effect''.
 
 \begin{figure}
 \hypertarget{fig1}{%
@@ -391,7 +394,7 @@ dataset}\label{breast-cancer-patient-dataset}}
 We have applied our model in a real dataset for which experimental
 measurements of various factors were available. Expression levels of
 miRNA and genes in tumor and normal tissue of single patient are
-retrieved from
+retrieved from The Cancer Genome Atlas
 \href{https://www.cancer.gov/about-nci/organization/ccg/research/structural-genomics/tcga}{TCGA}(\#TODO).
 High-throughput experimental datasets which are provided miRNA:gene
 target pairs with interaction factors (Helwak et al.
@@ -420,7 +423,7 @@ factor}\label{networks-with-single-factor}}
 We have developed a network-based approach to assess effects of
 expression level changes in competitive ceRNA regulation. The basic mode
 of miRNA repression activity has been based on miRNA and target
-abundance in various researches(Arvey et al.
+abundance in various researches (Arvey et al.
 \protect\hyperlink{ref-arvey_target_2010}{2010}; Denzler et al.
 \protect\hyperlink{ref-denzler_assessing_2014}{2014}). Our approach can
 effortlessly calculate effects of expression changes when abundance
@@ -549,26 +552,26 @@ important for repression.
 In regulation of miRNA target sample system (\autoref{fig3}), miRNA (M1)
 repressive efficiency on the primary triggering gene (G2) is low in
 steady-state. So it has been observed that the regulatory activities of
-miRNA efficiencies on the targets are weak after the increase of miRNA
-target G2. When model is triggered with two fold increase in expression
-level of common target (G4), the changes of other gene expressions have
-observed more prominent \href{}{}. Furthermore, change in expression
-level of target gene that has strong miRNA repression efficiency
-resulted in evident perturbation in network. On the other hand, it was
-observed that Gene2 was weakly affected from change of Gene4 expression
-because of its weak interaction factors. Since perturbation efficiency
-of each gene is different, we have developed a function which screens
-each gene in the network for their perturbation efficiencies.
-\textbf{(see details in Supplementary File(fig1\_2app.Rmd)}. On the
-other hand, when we applied the method on the minimal dataset, Gene4 has
-been found to be the most efficient element in terms of number of
-perturbed elements and miRNA2 (M2) has been found to be causing the
-highest mean in expression changes. {[}{]}{[}\#TODO2{]}
+miRNA on the targets are weak after the increase of miRNA target G2.
+When model is triggered with two fold increase in expression level of
+common target (G4), the changes of other gene expressions have observed
+more prominent \href{}{}. Furthermore, change in expression level of
+target gene that has strong miRNA repression efficiency resulted in
+evident perturbation in network. On the other hand, it was observed that
+Gene2 was weakly affected from change of Gene4 expression because of its
+weak interaction factors. Since perturbation efficiency of each gene is
+different, we have developed a function which screens each gene in the
+network for their perturbation efficiencies. \textbf{(see details in
+Supplementary File(fig1\_2app.Rmd)}. On the other hand, when we applied
+the method on the minimal dataset, Gene4 has been found to be the most
+efficient element in terms of number of perturbed elements and miRNA2
+(M2) has been found to be causing the highest mean in expression
+changes. {[}{]}{[}\#TODO2{]}
 
-\href{}{} We used our model to simulate a real dataset which contains
-thousands of genes and hundreds of miRNAs. Our model can successfully
-simulate perturbations in such large network despite complex behaviors
-and struggle to reach steady-state \textbf{(see details in Supplementary
+We used our model to simulate a real dataset which contains thousands of
+genes and hundreds of miRNAs. Our model can successfully simulate
+perturbations in such large network despite complex behaviors and
+struggle to reach steady-state \textbf{(see details in Supplementary
 File(TCGA\_E9-A1N5\_article.Rmd)}. Simulations show that change in
 expression level of single gene has potential to effect whole network,
 perturbing almost all nodes. These observations are in accordance with
@@ -584,19 +587,101 @@ based kinetic model integrating miRNA and target rates of transcription,
 degradation, binding and unbinding was developed (Nitzan et al.
 \protect\hyperlink{ref-nitzan_interactions_2014}{2014}) using high
 throughput experimental dataset about miR-92a depletion (Helwak et al.
-\protect\hyperlink{ref-helwak_mapping_2013}{2013}). In this study, it
-was demonstrated that distant ceRNAs can interact with each other via
-indirect links, and the interactions are effected depending on distance
-between ceRNAs or topological features of network (Nitzan et al.
+\protect\hyperlink{ref-helwak_mapping_2013}{2013}). It was demonstrated
+that distant ceRNAs can interact with each other via indirect links, and
+the interactions are effected depending on distance between ceRNAs or
+topological features of network (Nitzan et al.
 \protect\hyperlink{ref-nitzan_interactions_2014}{2014}). More recently,
 an approach to detect ceRNA interaction by using the miRNA expression,
 gene expression and common miRNAs between gene targets was developed
 (Markus List \protect\hyperlink{ref-markus_list_sponge_2017}{2017})
 which was effective in analyzing genes through miRNAs. Based on the
 observations that a miRNA can exhibit strong functionality to a target
-but may not against an other, the authors have concluded that common
+but may not against an other, the authors have concluded that existing
 miRNA based approach may not be suitable for understanding regulations
 of ceRNA interactions.
+
+{[}\#Add{]}More recently, Silveira et al.~have developed miRmapper
+package for using with R programme (Silveira et al.
+\protect\hyperlink{ref-da2018mirmapper}{2018}). Researchers have
+utilized the adjacency matrix to associate miRNAs using differentially
+expressed genes and found similarities of miRNAs with this approach.
+Authors who utilized the approach in dataset of bladder cancer cell line
+have identified significant miRNAs in network, and miRNAs which work
+synergistically.
+
+{[}\#Add{]} Today, there are many of tools that provide predicted or
+experimentally validated miRNA:target interaction dataset. The datasets
+that contain weak, proteomic analysis like western blot, and strong,
+crosslinking and immunoprecipitation CLiP, experimentally evidence are
+more reliable sources than prediction datasets. While in experimentally
+weak supported datasets it is not known that indirect or direct target
+of miRNAs in cell, high-throughput methods ensure handling of AGO
+(Argounate Protein) interacted miRNAs. For this reason we have preferred
+to utilize high-throughput datasets in our application. Especially, we
+collected datasets that depend on chimeric (Helwak et al.
+\protect\hyperlink{ref-helwak_mapping_2013}{2013}; Moore et al.
+\protect\hyperlink{ref-moore_mirnatarget_2015}{2015}) reading of miRNA:
+target pairs from among these datasets because they contain exact
+complementary seed regions.
+
+{[}\#Add{]} Although these experimental sources include exact binding
+sites, they do not provides which miRNA is functional or not (Liu and
+Wang \protect\hyperlink{ref-liu2019prediction}{2019}). We have used the
+features of bound miRNA:target pairs and scaled these parameters inside
+groups that is consisted according to, ceRNA (Competing Endogenous RNA),
+genes targeted by the same miRNA. In scaling process, we specified the
+interaction factors as numeric values in accordance with previous
+studies. Energy values in miRNA:target pairs are represented by
+high-throughput studies (Helwak et al.
+\protect\hyperlink{ref-helwak_mapping_2013}{2013}; Moore et al.
+\protect\hyperlink{ref-moore_mirnatarget_2015}{2015}) which are utilized
+in this study. On the other hand, we have specified the other
+interaction factors, seed type and location of binding region on the
+target, as numeric values based on the previous studies.(Grimson et al.
+\protect\hyperlink{ref-grimson_microrna_2007}{2007}) have compared the
+seed types' effect on target repression with few miRNA had canonical
+seed pairing in their study. Additionally, (Bartel
+\protect\hyperlink{ref-bartel_micrornas:_2009}{2009}) and (Betel et al.
+\protect\hyperlink{ref-betel2010comprehensive}{2010}) have studied on
+functional and non-functional seed interactions. Based on results of
+these studies we have arranged seed types of miRNA:target interactions
+as numeric values. We also have redefined location of binding region on
+the target as numeric values, based on studies of (Hausser et al.
+\protect\hyperlink{ref-hausser_analysis_2013}{2013}) and (Helwak et al.
+\protect\hyperlink{ref-helwak_mapping_2013}{2013}). With this process,
+we have handled this entegrated dataset in context of competitor
+behaviours and functionality of interactions.
+
+{[}\#Add{]}The main advantage of the method, ceRNAnetsim package, is
+providing various functions which contain optionally arguments. So,
+users can run the functions in accordance with their own data. For
+example, the functions can work without interaction factors or with a
+simple interaction factor that is specified by user. Furthermore, it can
+also be operated according to a different parameter(s) provided by the
+user.In this study, we have preferred to run model, shown in
+\emph{Multifactorial calculations in miRNA:target network} section.
+
+{[}\#TODO answer{]} We have observed that the results of simulation with
+ABCC1 gene, \emph{Multidrug resistance-associated protein 1}, which is
+one of the most significant factor to develop resistance against
+chemotherapotic agents(Atalay, Demirkazik, and Gunduz
+\protect\hyperlink{ref-atalay2008role}{2008}; Lu et al.
+\protect\hyperlink{ref-lu2015microrna}{2015}; Atalay et al.
+\protect\hyperlink{ref-atalay2006multidrug}{2006}) is not convenient
+with tumor tissue expression values, when we compared the tumor gene
+expression dataset retrieved from
+\href{https://www.cancer.gov/about-nci/organization/ccg/research/structural-genomics/tcga}{TCGA}
+and simulation results obtained via our approach. Simulation results
+were not expected to be consistent with tumor tissue expression values
+because large number of abnormal regulations were observed in these
+tissues. So, it might not said that a single gene is responsible for
+entire regulations in cancer cells. Besides, the all other factors such
+as up/down regulation of miRNAs or other genes were ignored. Therefore,
+it would be more useful to test our approach with an ideal dataset that
+includes entire informations of gene expression values before and after
+the regulation of a known gene at existing tissue, and miRNA expression
+values of this tissue at initial conditions.
 
 In our approach, we have not taken into account transcription,
 degradation or binding rates of elements in network. Because, although
@@ -634,6 +719,16 @@ S Marks. 2010. ``Target mRNA Abundance Dilutes microRNA and siRNA
 Activity.'' \emph{Molecular Systems Biology} 6 (April).
 \url{https://doi.org/10.1038/msb.2010.24}.
 
+\leavevmode\hypertarget{ref-atalay2006multidrug}{}%
+Atalay, Can, Ismet Deliloglu Gurhan, Cigdem Irkkan, and Ufuk Gunduz.
+2006. ``Multidrug Resistance in Locally Advanced Breast Cancer.''
+\emph{Tumor Biology} 27 (6): 309--18.
+
+\leavevmode\hypertarget{ref-atalay2008role}{}%
+Atalay, C, A Demirkazik, and U Gunduz. 2008. ``Role of Abcb1 and Abcc1
+Gene Induction on Survival in Locally Advanced Breast Cancer.''
+\emph{Journal of Chemotherapy} 20 (6): 734--39.
+
 \leavevmode\hypertarget{ref-bartel_micrornas_2004}{}%
 Bartel, David P. 2004. ``MicroRNAs.'' \emph{Cell} 116 (2): 281--97.
 \url{https://doi.org/10.1016/S0092-8674(04)00045-5}.
@@ -642,6 +737,12 @@ Bartel, David P. 2004. ``MicroRNAs.'' \emph{Cell} 116 (2): 281--97.
 Bartel, David P. 2009. ``MicroRNAs: Target Recognition and Regulatory
 Functions.'' \emph{Cell} 136 (2): 215--33.
 \url{https://doi.org/10.1016/j.cell.2009.01.002}.
+
+\leavevmode\hypertarget{ref-betel2010comprehensive}{}%
+Betel, Doron, Anjali Koppal, Phaedra Agius, Chris Sander, and Christina
+Leslie. 2010. ``Comprehensive Modeling of microRNA Targets Predicts
+Functional Non-Conserved and Non-Canonical Sites.'' \emph{Genome
+Biology} 11 (8): R90.
 
 \leavevmode\hypertarget{ref-bosson_endogenous_2014}{}%
 Bosson, Andrew D., Jesse R. Zamudio, and Phillip A. Sharp. 2014.
@@ -666,6 +767,11 @@ Cesana, Marcella, and George Q. Daley. 2013. ``Deciphering the Rules of
 ceRNA Networks.'' \emph{Proceedings of the National Academy of Sciences
 of the United States of America} 110 (18): 7112--3.
 \url{https://doi.org/10.1073/pnas.1305322110}.
+
+\leavevmode\hypertarget{ref-chi2012alternative}{}%
+Chi, Sung Wook, Gregory J Hannon, and Robert B Darnell. 2012. ``An
+Alternative Mode of microRNA Target Recognition.'' \emph{Nature
+Structural \& Molecular Biology} 19 (3): 321.
 
 \leavevmode\hypertarget{ref-denzler_assessing_2014}{}%
 Denzler, Rémy, Vikram Agarwal, Joanna Stefano, David P. Bartel, and
@@ -724,6 +830,16 @@ Lewis, Benjamin P., Christopher B. Burge, and David P. Bartel. 2005.
 Thousands of Human Genes Are MicroRNA Targets.'' \emph{Cell} 120 (1):
 15--20. \url{https://doi.org/10.1016/j.cell.2004.12.035}.
 
+\leavevmode\hypertarget{ref-liu2019prediction}{}%
+Liu, Weijun, and Xiaowei Wang. 2019. ``Prediction of Functional microRNA
+Targets by Integrative Modeling of microRNA Binding and Target
+Expression Data.'' \emph{Genome Biology} 20 (1): 18.
+
+\leavevmode\hypertarget{ref-lu2015microrna}{}%
+Lu, Lin, Fang Ju, Hui Zhao, and Xuezhen Ma. 2015. ``MicroRNA-134
+Modulates Resistance to Doxorubicin in Human Breast Cancer Cells by
+Downregulating Abcc1.'' \emph{Biotechnology Letters} 37 (12): 2387--94.
+
 \leavevmode\hypertarget{ref-markus_list_sponge_2017}{}%
 Markus List, Marcel Schulz. 2017. ``SPONGE.'' Bioconductor.
 \url{https://doi.org/10.18129/B9.bioc.SPONGE}.
@@ -759,6 +875,12 @@ Salmena, Leonardo, Laura Poliseno, Yvonne Tay, Lev Kats, and Pier Paolo
 Pandolfi. 2011. ``A ceRNA Hypothesis: The Rosetta Stone of a Hidden RNA
 Language?'' \emph{Cell} 146 (3): 353--58.
 \url{https://doi.org/10.1016/j.cell.2011.07.014}.
+
+\leavevmode\hypertarget{ref-da2018mirmapper}{}%
+Silveira, Willian da, Ludivine Renaud, Jonathan Simpson, William Glen,
+Edward Hazard, Dongjun Chung, and Gary Hardiman. 2018. ``MiRmapper: A
+Tool for Interpretation of miRNA--mRNA Interaction Networks.''
+\emph{Genes} 9 (9): 458.
 
 \leavevmode\hypertarget{ref-tay_multilayered_2014}{}%
 Tay, Yvonne, John Rinn, and Pier Paolo Pandolfi. 2014. ``The
