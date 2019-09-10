@@ -568,47 +568,7 @@ efficient element in terms of number of perturbed elements and miRNA2
 (M2) has been found to be causing the highest mean in expression
 changes. {[}{]}{[}\#TODO2{]}
 
-We used our model to simulate a real dataset which contains thousands of
-genes and hundreds of miRNAs. Our model can successfully simulate
-perturbations in such large network despite complex behaviors and
-struggle to reach steady-state \textbf{(see details in Supplementary
-File(TCGA\_E9-A1N5\_article.Rmd)}. Simulations show that change in
-expression level of single gene has potential to effect whole network,
-perturbing almost all nodes. These observations are in accordance with
-competing endogenous RNA hypothesis where genes targeted with many
-common miRNAs subsequently transmit perturbation to neighboring groups.
-
-Network based approaches for analyzing miRNA:target interactions have
-been developed in earlier studies. An initial attempt demonstrated the
-ceRNA crosstalk in a network-like minimal interaction structure with
-concentrations of ceRNA and miRNAs (Figliuzzi, Marinari, and De Martino
-\protect\hyperlink{ref-figliuzzi_micrornas_2013}{2013}). Next, a network
-based kinetic model integrating miRNA and target rates of transcription,
-degradation, binding and unbinding was developed (Nitzan et al.
-\protect\hyperlink{ref-nitzan_interactions_2014}{2014}) using high
-throughput experimental dataset about miR-92a depletion (Helwak et al.
-\protect\hyperlink{ref-helwak_mapping_2013}{2013}). It was demonstrated
-that distant ceRNAs can interact with each other via indirect links, and
-the interactions are effected depending on distance between ceRNAs or
-topological features of network (Nitzan et al.
-\protect\hyperlink{ref-nitzan_interactions_2014}{2014}). More recently,
-an approach to detect ceRNA interaction by using the miRNA expression,
-gene expression and common miRNAs between gene targets was developed
-(Markus List \protect\hyperlink{ref-markus_list_sponge_2017}{2017})
-which was effective in analyzing genes through miRNAs. Based on the
-observations that a miRNA can exhibit strong functionality to a target
-but may not against an other, the authors have concluded that existing
-miRNA based approach may not be suitable for understanding regulations
-of ceRNA interactions.
-
-{[}\#Add{]}More recently, Silveira et al.~have developed miRmapper
-package for using with R programme (Silveira et al.
-\protect\hyperlink{ref-da2018mirmapper}{2018}). Researchers have
-utilized the adjacency matrix to associate miRNAs using differentially
-expressed genes and found similarities of miRNAs with this approach.
-Authors who utilized the approach in dataset of bladder cancer cell line
-have identified significant miRNAs in network, and miRNAs which work
-synergistically.
+\#\#\#Model Approach in RNA-seq data
 
 {[}\#Add{]} Today, there are many of tools that provide predicted or
 experimentally validated miRNA:target interaction dataset. The datasets
@@ -653,14 +613,15 @@ the target as numeric values, based on studies of (Hausser et al.
 we have handled this entegrated dataset in context of competitor
 behaviours and functionality of interactions.
 
-{[}\#Add{]}The main advantage of the method, ceRNAnetsim package, is
-providing various functions which contain optionally arguments. So,
-users can run the functions in accordance with their own data. For
-example, the functions can work without interaction factors or with a
-simple interaction factor that is specified by user. Furthermore, it can
-also be operated according to a different parameter(s) provided by the
-user.In this study, we have preferred to run model, shown in
-\emph{Multifactorial calculations in miRNA:target network} section.
+We used our model to simulate a real dataset which contains thousands of
+genes and hundreds of miRNAs. Our model can successfully simulate
+perturbations in such large network despite complex behaviors and
+struggle to reach steady-state \textbf{(see details in Supplementary
+File(TCGA\_E9-A1N5\_article.Rmd)}. Simulations show that change in
+expression level of single gene has potential to effect whole network,
+perturbing almost all nodes. These observations are in accordance with
+competing endogenous RNA hypothesis where genes targeted with many
+common miRNAs subsequently transmit perturbation to neighboring groups.
 
 {[}\#TODO answer{]} We have observed that the results of simulation with
 ABCC1 gene, \emph{Multidrug resistance-associated protein 1}, which is
@@ -682,6 +643,53 @@ it would be more useful to test our approach with an ideal dataset that
 includes entire informations of gene expression values before and after
 the regulation of a known gene at existing tissue, and miRNA expression
 values of this tissue at initial conditions.
+
+\hypertarget{discussion}{%
+\subsection{Discussion}\label{discussion}}
+
+Network based approaches for analyzing miRNA:target interactions have
+been developed in earlier studies. An initial attempt demonstrated the
+ceRNA crosstalk in a network-like minimal interaction structure with
+concentrations of ceRNA and miRNAs (Figliuzzi, Marinari, and De Martino
+\protect\hyperlink{ref-figliuzzi_micrornas_2013}{2013}). Next, a network
+based kinetic model integrating miRNA and target rates of transcription,
+degradation, binding and unbinding was developed (Nitzan et al.
+\protect\hyperlink{ref-nitzan_interactions_2014}{2014}) using high
+throughput experimental dataset about miR-92a depletion (Helwak et al.
+\protect\hyperlink{ref-helwak_mapping_2013}{2013}). It was demonstrated
+that distant ceRNAs can interact with each other via indirect links, and
+the interactions are effected depending on distance between ceRNAs or
+topological features of network (Nitzan et al.
+\protect\hyperlink{ref-nitzan_interactions_2014}{2014}). More recently,
+an approach to detect ceRNA interaction by using the miRNA expression,
+gene expression and common miRNAs between gene targets was developed
+(Markus List \protect\hyperlink{ref-markus_list_sponge_2017}{2017})
+which was effective in analyzing genes through miRNAs. Based on the
+observations that a miRNA can exhibit strong functionality to a target
+but may not against an other, the authors have concluded that existing
+miRNA based approach may not be suitable for understanding regulations
+of ceRNA interactions.
+
+{[}\#Add{]}More recently, Silveira et al.~have developed miRmapper
+package for using with R programme (Silveira et al.
+\protect\hyperlink{ref-da2018mirmapper}{2018}). Researchers have
+utilized the adjacency matrix to associate miRNAs using differentially
+expressed genes and found similarities of miRNAs with this approach.
+Authors who utilized the approach in dataset of bladder cancer cell line
+have identified significant miRNAs in network, and miRNAs which work
+synergistically.
+
+{[}\#Add{]}The main advantage of the method, ceRNAnetsim package, is
+providing various functions which contain optionally arguments. So,
+users can run the functions in accordance with their own data. For
+example, the functions can work without interaction factors or with a
+simple interaction factor that is specified by user. Furthermore, it can
+also be operated according to a different parameter(s) provided by the
+user.In this study, we have preferred to run model, shown in
+\emph{Multifactorial calculations in miRNA:target network} section.
+
+\hypertarget{conclusion}{%
+\subsection{Conclusion}\label{conclusion}}
 
 In our approach, we have not taken into account transcription,
 degradation or binding rates of elements in network. Because, although
