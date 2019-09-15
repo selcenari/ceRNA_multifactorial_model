@@ -1,26 +1,13 @@
-\documentclass[]{article}
+\documentclass[a4,center,fleqn]{NAR}
 \usepackage{lmodern}
 \usepackage{amssymb,amsmath}
 \usepackage{ifxetex,ifluatex}
 \usepackage{fixltx2e} % provides \textsubscript
-\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
-  \usepackage[T1]{fontenc}
-  \usepackage[utf8]{inputenc}
-\else % if luatex or xelatex
-  \ifxetex
-    \usepackage{mathspec}
-  \else
-    \usepackage{fontspec}
-  \fi
-  \defaultfontfeatures{Ligatures=TeX,Scale=MatchLowercase}
-\fi
+\usepackage[T1]{fontenc}
+\usepackage{inputenc}
+\usepackage{xspace}
 % use upquote if available, for straight quotes in verbatim environments
-\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
 % use microtype if available
-\IfFileExists{microtype.sty}{%
-\usepackage{microtype}
-\UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
-}{}
 \usepackage{hyperref}
 \hypersetup{unicode=true,
             pdftitle={Network based multifactorial modelling microRNA-target interaction.},
@@ -83,7 +70,7 @@
   \postauthor{\par}
       \predate{\centering\large\emph}
   \postdate{\par}
-    \date{10 Eylül 2019}
+    \date{12 Eylül 2019}
 
 
 \begin{document}
@@ -223,8 +210,7 @@ correlation of gene expression changes in recent algorithm (Markus List
 specified that their approach can be useful for ceRNA studies and
 published their approach as an R package.
 
-\hypertarget{methods}{%
-\subsection{Methods}\label{methods}}
+\subsection{Methods}
 
 \hypertarget{construction-of-mirnatarget-network}{%
 \subsubsection{Construction of miRNA:target
