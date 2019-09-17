@@ -429,7 +429,7 @@ We selected SERPINE2 gene for simulation of regulation on network.
 
 ### 2.5.1 Find iteration of simulation
 
-```{r, fig.cap= "Percentage of affected nodes of each iteration for SERPINE2 Gene"}
+```{r, fig.cap= "Percentage of affected nodes of each iteration for SERPINE2 Gene", eval=FALSE}
 as.data.frame(E9GE_mirnagenenormal)%>%
  priming_graph(competing_count = GE_normal, miRNA_count = mirna_RPM, aff_factor = c(Energy, seed_type_effect), deg_factor = region_effect)%>%
  update_how("SERPINE2",2.75) %>%
@@ -443,7 +443,7 @@ The dynamics of the approach are shown in package viggnettes [link](https://selc
 
 So, we offered an approach about to find iteration. `find_iteration` function does not give the iteration to gain steady-state, but it gives the iteration which has maximum affected node counts. The function is applied as following:
 
-```{r}
+```{r, eval=FALSE}
 as.data.frame(E9GE_mirnagenenormal)%>%
  priming_graph(competing_count = GE_normal, miRNA_count = mirna_RPM, aff_factor = c(Energy, seed_type_effect), deg_factor = region_effect)%>%
  update_how("SERPINE2",2.75) %>%
@@ -457,7 +457,7 @@ as.data.frame(E9GE_mirnagenenormal)%>%
 
 We tried to apply two fold of the point that SERPINE2 has maximum affected genes on network.
 
-```{r}
+```{r, eval=FALSE}
 
 as.data.frame(E9GE_mirnagenenormal)%>%
   priming_graph(competing_count = GE_normal, miRNA_count = mirna_RPM, aff_factor = c(Energy, seed_type_effect), deg_factor = region_effect)%>%
@@ -466,7 +466,7 @@ as.data.frame(E9GE_mirnagenenormal)%>%
 
 ```
 
-```{r}
+```{r, eval=FALSE}
 as.data.frame(E9GE_mirnagenenormal)%>%
   priming_graph(competing_count = GE_normal, miRNA_count = mirna_RPM, aff_factor = c(Energy, seed_type_effect), deg_factor = region_effect)%>%
   update_how("SERPINE2",2.75)%>%
@@ -476,7 +476,7 @@ as.data.frame(E9GE_mirnagenenormal)%>%
 ```
 
 ### 2.5.3 Comparison of simulation results and tumor tissue expression values
-```{r}
+```{r, eval=FALSE}
 E9GE_mirnagenetumor%>%
   dplyr::select(hgnc_symbol, GE_tumor)%>%
   dplyr::inner_join((E9GE_mirnagenenormal%>%dplyr::select(hgnc_symbol, GE_normal)), by ="hgnc_symbol")%>%
