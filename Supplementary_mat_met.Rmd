@@ -1,5 +1,5 @@
 ---
-title: "Supplementary File 1"
+title: "Supplementary Materials And Methods"
 author: "Selcen Ari"
 date: "7 Nisan 2019"
 output:
@@ -7,11 +7,16 @@ output:
   html_document: default
   word_document: default
 bibliography: ref.bib
+header-includes: 
+  \usepackage{float} \floatplacement{figure}{H} 
+  \newcommand{\beginsupplement}{\setcounter{table}{0}  \renewcommand{\thetable}{S\arabic{table}} \setcounter{figure}{0}     \renewcommand{\thefigure}{S\arabic{figure}}}
+  \usepackage{subfig}
 ---
 
+\beginsupplement
 
-#1. Defined functions for ceRNA models and workflow of method
-We defined the functions that can be used with R programming. Briefly, these functions process a given miRNA:gene dataset and convert to graph object. All values that are significant in miRNA:target interactions are stored in edge variables and processed with formulations that are given in previous section. The functions and steps of approach are explained as following (Figure 1) :
+# 1. Defined functions for ceRNA models and workflow of method
+We defined the functions that can be used with R programming. Briefly, these functions process a given miRNA:gene dataset and convert to graph object. All values that are significant in miRNA:target interactions are stored in edge variables and processed with formulations that are given in previous section. The functions and steps of approach are explained as following (Figure S1) :
 
 
 **Convertion of dataset**: priming_graph function processes the given dataset that includes competing elements in first variable and repressive element in second variable. If the affinity and/or degradation factors are specified in the function, factors are taken into account, are processed with defaults in vice versa. The formulations that are given in equations (1-4) are performed in this function. This step gives the graph object which contains efficiency values of miRNA:competing target pairs in steady-state in terms of amount. It is assumed that the initial target amounts in the dataset is observed after the reppressive activity of miRNAs in steady-state. 
@@ -37,6 +42,17 @@ We defined the functions that can be used with R programming. Briefly, these fun
 The node elements in the dataset are handled as two type; repressives (miRNAs) and competings (targets). It is assumed in approach that while targets are degrading or inhibiting by miRNAs continuously, miRNAs reversibly used. If the trigger of the network is a miRNA, it maintains the current value of amount that provides by user. On the contrary, it tries to help this process to provide steady-state through the regulations on its amount, if a competing element is used as a trigger. The functions that are used in the approach are developed with R programming so as can be used with other packages. These are can be found in the github repository [ceRNAnetsim github page](https://github.com/selcenari/ceRNAnetsim) and improved with contributions of others.
 
 
+```{r, include=FALSE, message=FALSE, warning=FALSE}
+
+library(tidygraph)
+library(dplyr)
+library(tidyr)
+library(stringr)
+
+```
+
+
+
 ```{r, message=FALSE, warning=FALSE}
 #install.packages("devtools")
 #devtools::install_github("selcenari/ceRNAnetsim")
@@ -51,18 +67,7 @@ data("minsamp")
 minsamp
 ```
 
-
-|competing| miRNA | Competing_expression | miRNA_expression | seed_type | region | energy
-|-----------|------------|----------|----------------|---------|-----------|----------|
-| `Gene1`   | `Mir1` | 10000 | 1000 | 0.43 | 0.30 | -20 |
-| `Gene2`   | `Mir1` | 10000 | 1000 | 0.43 | 0.01 | -15 |
-| `Gene3`   | `Mir1` | 5000  | 1000 | 0.32 | 0.40 | -14 |
-| `Gene4`   | `Mir1` | 10000 | 1000 | 0.23 | 0.50 | -10 |
-| `Gene4`   | `Mir2` | 10000 | 2000 | 0.35 | 0.90 | -12 |
-| `Gene5`   | `Mir2` | 5000  | 2000 | 0.05 | 0.40 | -11 |
-| `Gene6`   | `Mir2` | 10000 | 2000 | 0.01 | 0.80 | -25 |
-
-
+See Figure S1 in Supplementary Tables file.
 
 ## *minsamp* dataset analysis in lack of interaction factors.
 
@@ -70,14 +75,14 @@ Firstly, we have analysed minimal data without interaction factors between miRNA
 
 - 1. We have evaluated graph in the steady state conditions as followings:
 
-```{r, message=FALSE, warning=FALSE}
+```{r, message=FALSE, warning=FALSE, fig.cap= "Minimal Dataset in Steady-state", fig.width=5, fig.height=4}
 priming_graph(minsamp, competing_count = Competing_expression, miRNA_count = miRNA_expression)%>%
   vis_graph(Competing_color = "navajowhite3", mirna_color = "ivory4", title = "Minimal dataset in steady-state conditions")
 ```
 
 - 2. We have obtained graph after change on Gene2 expression as followings:
 
-```{r, message=FALSE, warning=FALSE}
+```{r, message=FALSE, warning=FALSE, fig.keep='all', fig.cap= "Gene2 Upregulation on Minimal Dataset", fig.width=5, fig.height=4}
 priming_graph(minsamp, competing_count = Competing_expression, miRNA_count = miRNA_expression)%>%
   update_how("Gene2", 2)%>%
   vis_graph(Competing_color = "navajowhite3", mirna_color = "ivory4", Upregulation = "red", title = "Gene2 Upregulation without interaction factors")
@@ -86,13 +91,16 @@ priming_graph(minsamp, competing_count = Competing_expression, miRNA_count = miR
 
 - 3. We have determined regulations after Gene2 Upregulation:
 
-```{r, message=FALSE, warning=FALSE}
+```{r, message=FALSE, warning=FALSE, out.width='50%', fig.asp=1, fig.ncol = 2, fig.cap = "Sequential iteration of minsampdata", fig.subcap= c("First response of system to Gene2 upregulation (2nd iteration)", "Spreading of perturbation on system (3th iteration)")}
 
 priming_graph(minsamp, competing_count = Competing_expression, miRNA_count = miRNA_expression)%>%
   update_how("Gene2", 2)%>%
   simulate_vis(Competing_color = "navajowhite3", mirna_color = "ivory4", Upregulation = "red", Downregulation = "blue", title = "Regulations after Gene2 Upregulation", 2)
 
 ```
+
+
+
 Note that the regulations are colored according to expression changes of present and a previous value. So, it can be observed that whole gene expressions increase in comparison of initial steady-state. The overall regulations of gene expressions are as followings:
 
 ```{r, message=FALSE, warning=FALSE}
@@ -109,23 +117,24 @@ priming_graph(minsamp, competing_count = Competing_expression, miRNA_count = miR
 
 We have made the same analysis in present of interaction factors.
 
-```{r, message=FALSE, warning=FALSE}
+```{r, message=FALSE, warning=FALSE, fig.cap= "Minimal Dataset with interaction factors in Steady-state", fig.width=5, fig.height=4}
 priming_graph(minsamp, competing_count = Competing_expression, miRNA_count = miRNA_expression, aff_factor = c(energy, seed_type), deg_factor = region)%>%
-  vis_graph(Competing_color = "navajowhite3", mirna_color = "ivory4", title = "Minimal dataset in steady-state conditions")
+  vis_graph(Competing_color = "navajowhite3", mirna_color = "ivory4", title = "Minimal dataset with interaction factors in steady-state conditions")
 
 ```
 
-```{r, message=FALSE, warning=FALSE}
-priming_graph(minsamp, competing_count = Competing_expression, miRNA_count = miRNA_expression, aff_factor = c(energy, seed_type), deg_factor = region)%>%
-  update_how("Gene2", 2)%>%
-  vis_graph(Competing_color = "navajowhite3", mirna_color = "ivory4", Upregulation = "red", title = "Gene2 Upregulation without interaction factors")
-```
-
-```{r, message=FALSE, warning=FALSE}
+```{r, message=FALSE, warning=FALSE, fig.cap= " When Gene2 is upregulated on Minimal Dataset with interaction factors", fig.width=5, fig.height=4}
 priming_graph(minsamp, competing_count = Competing_expression, miRNA_count = miRNA_expression, aff_factor = c(energy, seed_type), deg_factor = region)%>%
   update_how("Gene2", 2)%>%
-  simulate_vis(Competing_color = "navajowhite3", mirna_color = "ivory4", Upregulation = "red", title = "Gene2 Upregulation without interaction factors",2)
+  vis_graph(Competing_color = "navajowhite3", mirna_color = "ivory4", Upregulation = "red", title = "Gene2 Upregulation with interaction factors")
 ```
+
+```{r, message=FALSE, warning=FALSE, out.width='50%', fig.asp=1, fig.ncol = 2, fig.cap = "Sequential iteration of minsampdata with interaction factors", fig.subcap= c("First response of system to Gene2 upregulation (2nd iteration)", "Spreading of perturbation on system (3th iteration)")}
+priming_graph(minsamp, competing_count = Competing_expression, miRNA_count = miRNA_expression, aff_factor = c(energy, seed_type), deg_factor = region)%>%
+  update_how("Gene2", 2)%>%
+  simulate_vis(Competing_color = "navajowhite3", mirna_color = "ivory4", Upregulation = "red", title = "Gene2 Upregulation with interaction factors",2)
+```
+
 
 When the graphs which were resulted from analyses were examined, it was observed that behaviours were same. But, when the results were analysed in terms of expression values, the regulation differences can be observed.
 
@@ -143,10 +152,10 @@ priming_graph(minsamp, competing_count = Competing_expression, miRNA_count = miR
 
 There are hundreds of defined miRNAs for human, so this results in presence of common targets of miRNAs in cells. Therefore, we have analysed perturbation efficiency of common target in *minsamp* dataset.
 
-```{r, message=FALSE, warning=FALSE}
+```{r, message=FALSE, warning=FALSE, out.width='50%', fig.asp=1, fig.ncol = 2, fig.cap = "Perturbation of Gene4 on minsampdata with interaction factors", fig.subcap= c("1st iteration after Gene4 upregulation", "2nd iteration after Gene4 perturbation")}
 priming_graph(minsamp, competing_count = Competing_expression, miRNA_count = miRNA_expression, aff_factor = c(energy, seed_type), deg_factor = region)%>%
   update_how("Gene4", 2)%>%
-  simulate_vis(Competing_color = "navajowhite3", mirna_color = "ivory4", Upregulation = "red", title = "Gene2 Upregulation without interaction factors",2)
+  simulate_vis(Competing_color = "navajowhite3", mirna_color = "ivory4", Upregulation = "red", title = "Common Gene-Gene4 Upregulation without interaction factors",2)
 ```
 
 The common target perturbation  (increasing to two fold at Gene4 expression in presence of interaction factors) resulted in more prominent efficiency at the same conditions (shown in following).
@@ -172,20 +181,17 @@ find_node_perturbation(sample_graph, how = 2, cycle = 3, limit = 0.1)
 ```
 
 
-#2. Obtaining breast cancer dataset and integration
+# 2. Obtaining breast cancer dataset and integration
 
 This section describes how to apply `ceRNAnetsim` package on a breast cancer patient miRNA:target interaction dataset. Before the approach, we obtained three datasets and combined them.
 
 ```{r, echo=FALSE, message= FALSE, warning=FALSE}
 # Install the packages which is necessary to obtain and process datasets.
-install.packages("BiocManager")
-BiocManager::install("SummarizedExperiment")
-BiocManager::install("TCGAbiolinks")
+#install.packages("BiocManager")
+#BiocManager::install("SummarizedExperiment")
+#BiocManager::install("TCGAbiolinks")
 library(TCGAbiolinks)
 library(SummarizedExperiment)
-#install devtools
-devtools::install_github("selcenari/ceRNAnetsim")
-library(ceRNAnetsim)
 ```
 
 ## 2.1 How to get gene expression counts of TCGA-E9-A1N5 patient.
@@ -194,7 +200,7 @@ We have obtained the gene expression values of patient using [TCGAbiolinks](http
 
 + Obtain to gene expression counts of tumor tissue.
 
-```{r,message= FALSE, warning=FALSE}
+```{r,message= FALSE, warning=FALSE, eval=FALSE}
 
 BCP_tumor <- GDCquery(project = "TCGA-BRCA",
                   data.category = "Transcriptome Profiling",
@@ -217,7 +223,7 @@ head(TCGA_E9_A1N5_tumor)
 
 + Obtain to gene expression counts of normal tissue.
 
-```{r, message= FALSE, warning=FALSE}
+```{r, message= FALSE, warning=FALSE, eval=FALSE}
 BCP_normal <- GDCquery(project = "TCGA-BRCA",
                   data.category = "Transcriptome Profiling",
                   data.type = "Gene Expression Quantification", 
@@ -237,12 +243,6 @@ colnames(TCGA_E9_A1N5_normal)[3] <- "GE_normal"
 head(TCGA_E9_A1N5_normal)
 
 ```
-
-```{r, echo=FALSE, message= FALSE, warning=FALSE}
-#remove:
-rm(BCPGE_normal, BCPGE_tumor, BCP_normal, BCP_tumor)
-```
-
 
 ## 2.2 How to get miRNA expression counts of TCGA-E9-A1N5 patient.
 
@@ -268,7 +268,7 @@ head(mirbase_id_conv)
 
 + Obtain the miRNA expression of tumor tissue of patient:
 
-```{r, message= FALSE, warning=FALSE}
+```{r, message= FALSE, warning=FALSE, eval=FALSE}
 BCP_mirnatumor <- GDCquery(project = "TCGA-BRCA",
                   data.category = "Transcriptome Profiling",
                   data.type = "Isoform Expression Quantification",
@@ -295,7 +295,7 @@ head(BCPME_mirnatumor)
 
 + Obtain the miRNA expression of normal tissue of patient:
 
-```{r, message= FALSE, warning=FALSE}
+```{r, message= FALSE, warning=FALSE, eval=FALSE}
 BCP_mirnanormal <- GDCquery(project = "TCGA-BRCA",
                   data.category = "Transcriptome Profiling",
                   data.type = "Isoform Expression Quantification",
@@ -332,37 +332,7 @@ Briefly these datasets contain various common information about miRNA:target int
 + It was provided that the datasets are converted to same human genome build.
 + The seed type information was organized as the same style.
 + The datasets were combined.
-+ We commited the interaction factors as numeric values according to previous studies. (We added the interaction factors and their numeric values at following tables)
-
-Note: Energy values in miRNA:target pairs are represented by high-throughput studies [@helwak_mapping_2013; @moore_mirnatarget_2015] which are utilized in this study. On the other hand, we have specified the other interaction factors, seed type and location of binding region on the target, as numeric values based on the previous studies.[@grimson_microrna_2007] have compared the seed types' effect on target repression with few miRNA had canonical seed pairing in their study. Additionally, [@bartel_micrornas:_2009] and [@betel2010comprehensive] have studied on functional and non-functional seed interactions. Based on results of these studies we have arranged seed types of miRNA:target interactions as numeric values. We also have redefined location of binding region on the target as numeric values, based on studies of [@hausser_analysis_2013] and [@helwak_mapping_2013]. With this process, we have handled this entegrated dataset in context of competitor behaviours and functionality of interactions. 
-
-|seed_type| Coefficient |
-|-----------|------------|
-| `5-mer`   | `0.05` |
-| `5-mer_noncanonical`   | `0.04` |
-| `6-mer`   | `0.07` |
-| `6-mer_noncanonical`   | `0.05` |
-| `6-merA1`   | `0.07` |
-| `6-merA1_noncanonical`   | `0.05` |
-| `7-mer`   | `0.23` |
-| `7-mer_noncanonical`   | `0.19` |
-| `7-merA1`   | `0.19` |
-| `7-merA1_noncanonical`   | `0.16` |
-| `7-mer-8m`   | `0.25` |
-| `7-mer-8m_nonacnonical`   | `0.21` |
-| `8-mer`   | `0.43` |
-| `8-mer_noncanonical`   | `0.35` |
-| `9-mer`   | `0.43` |
-| `9-mer_noncanonical`   | `0.35` |
-| `none`   | `0.01` |
-
-
-|location of binding region on target| Coefficient |
-|-----------|------------|
-| `3'UTR`   | `0.84` |
-| `CDS`   | `0.42` |
-| `5'UTR`   | `0.01` |
-
++ We commited the interaction factors as numeric values according to previous studies. (We added the interaction factors and their numeric values at Supplementary tables S2-3)
 
 Finally, we have obtained the experimentally supported miRNA:target dataset. 
 
@@ -375,7 +345,7 @@ head(experimentalmirnagene)
 
 The methods about miRNA:target interactions are based a basic principle that is reading after isolation of miRNA:target chimerics. The datasets contain all the chimeric miRNA:target structures found in the medium during the experiment. On the other hand, it could be said that the reading is performed as snapshot.Because of that, the methods can provide different chimeric interactions the same miRNA:target pair. We have preferred to select most effective interaction parameters for the same miRNA:target pairs that can exhibit various interactions. The step is performed as: 
 
-```{r, message= FALSE, warning=FALSE}
+```{r, message= FALSE, warning=FALSE, eval=FALSE}
 experimentalmirnagene%>%
   dplyr::select(miRNA, Ensembl_Gene_Id, hgnc_symbol, Energy, seed_type_effect, region_effect)%>%
   distinct()%>%
@@ -388,26 +358,33 @@ head(tocombine_mirnagene)
 
 ## 2.4 Combine the dataset
 
-```{r, message= FALSE, warning=FALSE}
+```{r, message= FALSE, warning=FALSE, eval=FALSE}
 BCPME_mirnanormal%>%
   dplyr::inner_join(tocombine_mirnagene, by = c("miRNA_name"="miRNA"))%>%
   dplyr::inner_join(TCGA_E9_A1N5_normal, by = c("Ensembl_Gene_Id"="ensembl_gene_id", "hgnc_symbol"="external_gene_name"))%>%
   distinct()%>%
   dplyr::select(hgnc_symbol, miRNA_name, mirna_RPM= reads_per_million_miRNA_mapped, GE_normal, Energy, seed_type_effect, region_effect)-> E9GE_mirnagenenormal
 
+```
+
+
+```{r}
+data("E9GE_mirnagenenormal")
 head(E9GE_mirnagenenormal)
 ```
 
-```{r, message= FALSE, warning=FALSE}
+```{r, message= FALSE, warning=FALSE, eval=FALSE}
 BCPME_mirnatumor%>%
   dplyr::inner_join(tocombine_mirnagene, by = c("miRNA_name"="miRNA"))%>%
   dplyr::inner_join(TCGA_E9_A1N5_tumor, by = c("Ensembl_Gene_Id"="ensembl_gene_id", "hgnc_symbol"="external_gene_name"))%>%
   distinct()%>%
   dplyr::select(hgnc_symbol, miRNA_name, mirna_RPM= reads_per_million_miRNA_mapped, GE_tumor, Energy, seed_type_effect, region_effect)-> E9GE_mirnagenetumor
 
+```
+
+```{r}
+data("E9GE_mirnagenetumor")
 head(E9GE_mirnagenetumor)
-
-
 ```
 
 ## 2.5 Selection of trigger node
@@ -428,8 +405,8 @@ E9GE_mirnagenetumor%>%
 ```
 Secondly, we have determined the most important nodes of network. We applied `find_node_perturbation` function. We only defined nodes that affect the other nodes more than 1.05 fold change with 10 iteration when they increase 3 fold. 
 
-```{r}
-E9GE_mirnagenenormal%>%
+```{r, include=FALSE, eval=FALSE}
+as.data.frame(E9GE_mirnagenenormal)%>%
   priming_graph(competing_count = GE_normal, miRNA_count = mirna_RPM, aff_factor = c(Energy, seed_type_effect), deg_factor = region_effect)%>%
   find_node_perturbation(how = 3, cycle = 10, fast = 5)%>%
   filter(!is.na(perturbation_efficiency))->perturbationofnetwork
@@ -440,7 +417,7 @@ This dataset, perturbationofnetwork, includes 382 genes of totally 423 nodes.
 
 Result of this, we obtained common nodes of these two datasets (i.e perturbationofnetwork and three_fold_change) and selected a gene, SERPINE2.
 
-```{r}
+```{r, eval=FALSE}
 three_fold_change%>%
   inner_join(perturbationofnetwork, by = c("hgnc_symbol"="name"))
 
@@ -452,11 +429,11 @@ We selected SERPINE2 gene for simulation of regulation on network.
 
 ### 2.5.1 Find iteration of simulation
 
-```{r}
+```{r, fig.cap= "Percentage of affected nodes of each iteration for SERPINE2 Gene"}
 as.data.frame(E9GE_mirnagenenormal)%>%
  priming_graph(competing_count = GE_normal, miRNA_count = mirna_RPM, aff_factor = c(Energy, seed_type_effect), deg_factor = region_effect)%>%
  update_how("SERPINE2",2.75) %>%
- simulate(250) %>%
+ simulate(150) %>%
  find_iteration(limit=1, plot= TRUE) #limit=1 describes the change that is not taken into account.
 ```
 
@@ -498,7 +475,7 @@ as.data.frame(E9GE_mirnagenenormal)%>%
   select(name, initial_count, count_current)->simulation_results
 ```
 
-###2.5.3 Comparison of simulation results and tumor tissue expression values
+### 2.5.3 Comparison of simulation results and tumor tissue expression values
 ```{r}
 E9GE_mirnagenetumor%>%
   dplyr::select(hgnc_symbol, GE_tumor)%>%
@@ -509,3 +486,5 @@ E9GE_mirnagenetumor%>%
 
 
 Actually, we have developed to provide a new approach mirna mediated regulation networks. This approach may not explain the whole regulation behaviors between miRNAs and targets but can be first step to more detailed and cohorent miRNA:target regulation approach.
+
+# 3. REFERENCES

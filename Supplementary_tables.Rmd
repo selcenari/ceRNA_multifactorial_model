@@ -1,0 +1,89 @@
+---
+title: "Supplementary Tables"
+author: "Selcen Arı"
+date: "16 09 2019"
+output:
+  pdf_document: default
+  html_document: default
+  word_document: default
+bibliography: ref.bib
+header-includes: 
+  \usepackage{float} \floatplacement{figure}{H} 
+  \newcommand{\beginsupplement}{\setcounter{table}{0}  \renewcommand{\thetable}{S\arabic{table}} \setcounter{figure}{0} \renewcommand{\thefigure}{S\arabic{figure}}}
+---
+
+```{r, eval=FALSE, include=FALSE}
+#install.packages("kable")
+library(xtable)
+```
+
+
+\beginsupplement
+
+|competing| miRNA | Competing_expression | miRNA_expression | seed_type | region | energy
+|-----------|------------|----------|----------------|---------|-----------|----------|
+| `Gene1`   | `Mir1` | 10000 | 1000 | 0.43 | 0.30 | -20 |
+| `Gene2`   | `Mir1` | 10000 | 1000 | 0.43 | 0.01 | -15 |
+| `Gene3`   | `Mir1` | 5000  | 1000 | 0.32 | 0.40 | -14 |
+| `Gene4`   | `Mir1` | 10000 | 1000 | 0.23 | 0.50 | -10 |
+| `Gene4`   | `Mir2` | 10000 | 2000 | 0.35 | 0.90 | -12 |
+| `Gene5`   | `Mir2` | 5000  | 2000 | 0.05 | 0.40 | -11 |
+| `Gene6`   | `Mir2` | 10000 | 2000 | 0.01 | 0.80 | -25 |
+
+Table: *minsamp* sample dataset that includes interaction factors.
+
+
+Note: Energy values in miRNA:target pairs are represented by high-throughput studies [@helwak_mapping_2013; @moore_mirnatarget_2015] which are utilized in this study. On the other hand, we have specified the other interaction factors, seed type and location of binding region on the target, as numeric values based on the previous studies.[@grimson_microrna_2007] have compared the seed types' effect on target repression with few miRNA had canonical seed pairing in their study. Additionally, [@bartel_micrornas:_2009] and [@betel2010comprehensive] have studied on functional and non-functional seed interactions. Based on results of these studies we have arranged seed types of miRNA:target interactions as numeric values. We also have redefined location of binding region on the target as numeric values, based on studies of [@hausser_analysis_2013] and [@helwak_mapping_2013]. With this process, we have handled this entegrated dataset in context of competitor behaviours and functionality of interactions. 
+
+|seed_type| Coefficient |
+|-----------|------------|
+| `5-mer`   | `0.05` |
+| `5-mer_noncanonical`   | `0.04` |
+| `6-mer`   | `0.07` |
+| `6-mer_noncanonical`   | `0.05` |
+| `6-merA1`   | `0.07` |
+| `6-merA1_noncanonical`   | `0.05` |
+| `7-mer`   | `0.23` |
+| `7-mer_noncanonical`   | `0.19` |
+| `7-merA1`   | `0.19` |
+| `7-merA1_noncanonical`   | `0.16` |
+| `7-mer-8m`   | `0.25` |
+| `7-mer-8m_nonacnonical`   | `0.21` |
+| `8-mer`   | `0.43` |
+| `8-mer_noncanonical`   | `0.35` |
+| `9-mer`   | `0.43` |
+| `9-mer_noncanonical`   | `0.35` |
+| `none`   | `0.01` |
+
+Table: Efficiency factors for seed types.
+
+
+|location of binding region on target| Coefficient |
+|-----------|------------|
+| `3'UTR`   | `0.84` |
+| `CDS`   | `0.42` |
+| `5'UTR`   | `0.01` |
+
+Table: Efficiency factors for binding regions on targets
+
+```{r, eval=FALSE, include=FALSE}
+data("E9GE_mirnagenenormal")
+
+xtable(head(E9GE_mirnagenenormal),caption = "Example of E9GE_mirnagenenormal dataset" )
+```
+
+|hgnc_symbol| miRNA_name | mirna_RPM | GE_normal | Energy | seed_type_effect | region_effect |
+|-----------|------------|----------|----------------|---------|-----------|----------|
+| CCNG1 | hsa-let-7a-5p | 111204.15 | 5245.00 | -25.10 | 0.05 | 0.84 |
+| DICER1 | hsa-let-7a-5p | 111204.15 | 3285.00 | -24.40 | 0.43 | 0.42 | 
+| SESN1 | hsa-let-7a-5p | 111204.15 | 1179.00 | -22.20 | 0.05 | 0.93 |
+| NIPBL | hsa-let-7a-5p | 111204.15 | 4503.00 | -22.10 | 0.05 | 0.42 | 
+| INTS12 | hsa-let-7a-5p | 111204.15 | 600.00 | -21.90 | 0.05 | 0.42 | 
+| FNIP1 | hsa-let-7a-5p | 111204.15 | 1248.00 | -21.80 | 0.43 | 0.84 |
+
+Table: Example of E9GE_mirnagenenormal dataset.
+
+As a result of simulation a dataset, a graph object is obtained that includes various variables in edge and node data. A graph object includes variables at followings.
+
+
+## REFERENCES
