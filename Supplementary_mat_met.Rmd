@@ -16,16 +16,10 @@ header-includes:
 \beginsupplement
 
 # 1. Functions defined for ceRNA models and workflow of method
-We defined the functions that can be used with R programming. Briefly, these functions process a given miRNA:gene dataset and convert to graph object. All values that are significant in miRNA:target interactions are stored in edge variables and processed with formulations that are given in previous section. The functions and steps of approach are explained as following (Figure S1) :
+We defined the functions that can be used with R programming. Briefly, these functions process a given miRNA:gene dataset and convert to graph object. All values that are significant in miRNA:target interactions are stored in edge variables and processed with formulations that are given in previous section. The functions and steps of approach are explained as following (Figure S1 in Supplementary Figures) :
 
 
 **Conversion of dataset**: `priming_graph()` function processes the given dataset that includes competing elements in first variable and repressive element in second variable. If the affinity and/or degradation factors are specified in the function, factors are taken into account, are processed with defaults in vice versa. The formulations that are given in equations (1-4) are performed in this function. This step gives the graph object which contains efficiency values of miRNA:competing target pairs in steady-state in terms of amount. It is assumed that the initial target amounts in the dataset is observed after the repressive activity of miRNAs in steady-state. 
-
-
-
-![Workflow for simulation of competing endogenous RNA regulations. Graph object in steps 2-6 is saved and updated continuously.](workflow1.png){#figs1}
-
-
 
 **Transition of variables in graph**: In the previous step, the calculations are performed in the edge variables of the graph object. However, the graph object allows to use node variables, while the node features are handled to the graph. In this direction, update_nodes function carries the amount values to node variables This step must be applied with “once” option because it is primary process.
 
@@ -51,8 +45,6 @@ library(stringr)
 
 ```
 
-
-
 ```{r, message=FALSE, warning=FALSE}
 #install.packages("devtools")
 #devtools::install_github("selcenari/ceRNAnetsim")
@@ -73,33 +65,29 @@ See Table S1 in Supplementary Tables file.
 
 Firstly, we have analysed minimal data without interaction factors between miRNA:target.
 
-- 1. We have evaluated graph in the steady state conditions as followings:
+- 1. We have evaluated graph in the steady state conditions as followings (Figure S2 in Supplementary Figures):
 
-```{r, message=FALSE, warning=FALSE, fig.cap= "Minimal Dataset in Steady-state", fig.width=5, fig.height=4}
-priming_graph(minsamp, competing_count = Competing_expression, miRNA_count = miRNA_expression)%>%
-  vis_graph(Competing_color = "navajowhite3", mirna_color = "ivory4", title = "Minimal dataset in steady-state conditions")
+```{r, message=FALSE, warning=FALSE}
+priming_graph(minsamp, competing_count = Competing_expression, miRNA_count = miRNA_expression)
 ```
 
-- 2. We have obtained graph after change on Gene2 expression as following:
+- 2. We have obtained graph after change on Gene2 expression as following (Figure S3 in Supplementary Figures):
 
-```{r, message=FALSE, warning=FALSE, fig.keep='all', fig.cap= "Gene2 Upregulation on Minimal Dataset", fig.width=5, fig.height=4}
+```{r, message=FALSE, warning=FALSE}
 priming_graph(minsamp, competing_count = Competing_expression, miRNA_count = miRNA_expression)%>%
-  update_how("Gene2", 2)%>%
-  vis_graph(Competing_color = "navajowhite3", mirna_color = "ivory4", Upregulation = "red", title = "Gene2 Upregulation without interaction factors")
+  update_how("Gene2", 2)
 ```
 
 
-- 3. We have determined regulations after Gene2 upregulation:
+- 3. We have determined regulations after Gene2 upregulation (Figure S4 in Supplementary Figures):
 
-```{r, message=FALSE, warning=FALSE, out.width='50%', fig.asp=1, fig.ncol = 2,  fig.show='hold', fig.cap = "Sequential iteration of minsamp data. a) First response of system to Gene2 upregulation (2nd iteration). b) Spreading of perturbation on system (3th iteration)", fig.subcap= NULL}
+```{r, message=FALSE, warning=FALSE}
 
 priming_graph(minsamp, competing_count = Competing_expression, miRNA_count = miRNA_expression)%>%
   update_how("Gene2", 2)%>%
-  simulate_vis(Competing_color = "navajowhite3", mirna_color = "ivory4", Upregulation = "red", Downregulation = "blue", title = "Regulations after Gene2 Upregulation", 2)
+  simulate(cycle= 2)
 
 ```
-
-
 
 Note that the regulations are colored according to expression changes of present and a previous value. So, it can be observed that whole gene expressions increase in comparison of initial steady-state. The overall regulations of gene expressions are as followings:
 
@@ -115,26 +103,25 @@ priming_graph(minsamp, competing_count = Competing_expression, miRNA_count = miR
 
 ## *minsamp* dataset analysis with interaction factors.
 
-We have made the same analysis in presence of interaction factors.
+We have made the same analysis in presence of interaction factors (Sequentially shown at Figure S5-7 in Supplementary Figures).
 
-```{r, message=FALSE, warning=FALSE, fig.cap= "Minimal Dataset with interaction factors in Steady-state", fig.width=5, fig.height=4}
-priming_graph(minsamp, competing_count = Competing_expression, miRNA_count = miRNA_expression, aff_factor = c(energy, seed_type), deg_factor = region)%>%
-  vis_graph(Competing_color = "navajowhite3", mirna_color = "ivory4", title = "Minimal dataset with interaction factors in steady-state conditions")
+```{r, message=FALSE, warning=FALSE}
+priming_graph(minsamp, competing_count = Competing_expression, miRNA_count = miRNA_expression, aff_factor = c(energy, seed_type), deg_factor = region)
 
 ```
 
-```{r, message=FALSE, warning=FALSE, fig.cap= " When Gene2 is upregulated on Minimal Dataset with interaction factors", fig.width=5, fig.height=4}
+```{r, message=FALSE, warning=FALSE}
+
+priming_graph(minsamp, competing_count = Competing_expression, miRNA_count = miRNA_expression, aff_factor = c(energy, seed_type), deg_factor = region)%>%
+  update_how("Gene2", 2)
+```
+
+```{r, message=FALSE, warning=FALSE}
+
 priming_graph(minsamp, competing_count = Competing_expression, miRNA_count = miRNA_expression, aff_factor = c(energy, seed_type), deg_factor = region)%>%
   update_how("Gene2", 2)%>%
-  vis_graph(Competing_color = "navajowhite3", mirna_color = "ivory4", Upregulation = "red", title = "Gene2 Upregulation with interaction factors")
+  simulate(cycle=2)
 ```
-
-```{r, message=FALSE, warning=FALSE, out.width='50%', fig.asp=1, fig.ncol = 2, fig.cap = "Sequential iteration of minsamp data with interaction factors", fig.subcap= c("First response of system to Gene2 upregulation (2nd iteration)", "Spreading of perturbation on system (3th iteration)")}
-priming_graph(minsamp, competing_count = Competing_expression, miRNA_count = miRNA_expression, aff_factor = c(energy, seed_type), deg_factor = region)%>%
-  update_how("Gene2", 2)%>%
-  simulate_vis(Competing_color = "navajowhite3", mirna_color = "ivory4", Upregulation = "red", title = "Gene2 Upregulation with interaction factors",2)
-```
-
 
 When the graphs which were resulted from analyses were examined, it was observed that behaviors were same. But, when the results were analysed in terms of expression values, the regulation differences can be observed.
 
@@ -150,12 +137,13 @@ priming_graph(minsamp, competing_count = Competing_expression, miRNA_count = miR
 
 ## Common target perturbation in *minsamp* dataset.
 
-Genes targeted by multiple miRNAs (referred to as "common target") are of special interest since they are subject to cooperative effect. Also, they perturb more than one neighborhood. In our small dataset, minsamp, Gene4 is regulated by two miRNAs. Let's simulate perturbation effects triggered by Gene4.
+Genes targeted by multiple miRNAs (referred to as "common target") are of special interest since they are subject to cooperative effect. Also, they perturb more than one neighborhood. In our small dataset, minsamp, Gene4 is regulated by two miRNAs. Let's simulate perturbation effects triggered by Gene4 (Shown at Figure S8 in Supplementary Figures .
 
-```{r, message=FALSE, warning=FALSE, out.width='50%', fig.asp=1, fig.ncol = 2, fig.cap = "Perturbation of Gene4 on minsamp data with interaction factors", fig.subcap= c("1st iteration after Gene4 upregulation", "2nd iteration after Gene4 perturbation")}
+```{r, message=FALSE, warning=FALSE}
+
 priming_graph(minsamp, competing_count = Competing_expression, miRNA_count = miRNA_expression, aff_factor = c(energy, seed_type), deg_factor = region)%>%
   update_how("Gene4", 2)%>%
-  simulate_vis(Competing_color = "navajowhite3", mirna_color = "ivory4", Upregulation = "red", title = "Common Gene-Gene4 Upregulation without interaction factors",2)
+  simulate(cycle = 2)
 ```
 
 The common target perturbation  (increasing to two fold at Gene4 expression in presence of interaction factors) resulted in more prominent efficiency at the same conditions (shown in following).
@@ -332,14 +320,13 @@ Briefly these datasets contain various common information about miRNA:target int
 + It was provided that the datasets are converted to same human genome build.
 + The seed type information was organized as the same style.
 + The datasets were combined.
-+ We committed the interaction factors as numeric values according to previous studies. (We added the interaction factors and their numeric values at Supplementary tables S2-3)
-
-[#TODO çok karmaşık komutlar için ayrı bir klasör hazırlanabilir. burayada link verilebilir: "experimentalmirnagene" tablosu repodaki X.R script ile elde edilmiştir" gibi]
++ We committed the interaction factors as numeric values according to previous studies. (We added the interaction factors and their numeric values at Supplementary files, Process on miRNA:target pairs dataset for process codes and Supplementary Tables for used numeric values)
 
 Finally, we have obtained the experimentally supported miRNA:target dataset. 
 
 ```{r, message= FALSE, warning=FALSE}
-data("experimentalmirnagene")
+
+experimentalmirnagene<-readRDS("data/experimentalmirnagene.RDS")
 
 head(experimentalmirnagene)
 
@@ -371,7 +358,9 @@ BCPME_mirnanormal%>%
 
 
 ```{r}
-data("E9GE_mirnagenenormal")
+#saveRDS(E9GE_mirnagenenormal, "data/E9GE_mirnagenenormal.rda")
+
+E9GE_mirnagenenormal<-readRDS("data/E9GE_mirnagenenormal.rda")
 head(E9GE_mirnagenenormal)
 ```
 
@@ -385,103 +374,74 @@ BCPME_mirnatumor%>%
 ```
 
 ```{r}
-data("E9GE_mirnagenetumor")
+#saveRDS(E9GE_mirnagenetumor, "data/E9GE_mirnagenetumor.rda")
+
+E9GE_mirnagenetumor<-readRDS("data/E9GE_mirnagenetumor.rda")
 head(E9GE_mirnagenetumor)
 ```
 
 ## 2.5 Selection of trigger node
 
-We have compared two datasets that are obtained for the tumor and normal tissue samples of same patient. We tried to change expression of a gene in normal tissue as the same level in the tumor tissue. 
-
-For this step, we have determined the changes of the gene expression in terms of fold change:
-
-```{r}
-E9GE_mirnagenetumor%>%
-  dplyr::select(hgnc_symbol, GE_tumor)%>%
-  dplyr::inner_join((E9GE_mirnagenenormal%>%dplyr::select(hgnc_symbol, GE_normal)), by ="hgnc_symbol")%>%
-  dplyr::mutate(FC= GE_tumor/GE_normal)%>%
-  distinct()%>%
-  filter(FC>2.5,  FC<3.5)-> three_fold_change
-
-# ABCC1 gene has 5827 read count in tumor tissue although 1420 in normal tissue (FC=4.10)
-```
-
-[#TODO SERPINE2]
-
-Secondly, we have determined the most important nodes of network. We applied `find_node_perturbation` function. We only defined nodes that affect the other nodes more than 1.05 fold change with 10 iteration when they increase 3 fold. 
+We have determined the most important nodes of network. We applied `find_node_perturbation` function. We only defined nodes that affect the other nodes more than 1.05 fold change with 10 iteration when they increase 3 fold. 
 
 ```{r, include=FALSE, eval=FALSE}
-as.data.frame(E9GE_mirnagenenormal)%>%
+
+as_data_frame(E9GE_mirnagenenormal)%>%
   priming_graph(competing_count = GE_normal, miRNA_count = mirna_RPM, aff_factor = c(Energy, seed_type_effect), deg_factor = region_effect)%>%
   find_node_perturbation(how = 3, cycle = 10, fast = 5)%>%
   filter(!is.na(perturbation_efficiency))->perturbationofnetwork
 
-perturbationofnetwork
+perturbationofnetwork%>%
+  filter(type== "Competing")%>%
+  arrange(desc(perturbation_efficiency))
 ```
-This dataset, perturbationofnetwork, includes 382 genes of totally 423 nodes.
+This dataset, perturbationofnetwork, includes totally 423 effective nodes. We selected SERPINE2 gene to perturb the network because it is the most efficient node gene in network.
 
-Result of this, we obtained common nodes of these two datasets (i.e perturbationofnetwork and three_fold_change) and selected a gene, SERPINE2.
-
-```{r, eval=FALSE}
-three_fold_change%>%
-  inner_join(perturbationofnetwork, by = c("hgnc_symbol"="name"))
-
-#Selected node is SERPINE2
-```
 ## 2.5 Approach of Method into Combined Datasets
 
 We selected SERPINE2 gene for simulation of regulation on network.
 
 ### 2.5.1 Find iteration of simulation
 
-```{r, fig.cap= "Percentage of affected nodes of each iteration for SERPINE2 Gene", eval=FALSE}
-as.data.frame(E9GE_mirnagenenormal)%>%
- priming_graph(competing_count = GE_normal, miRNA_count = mirna_RPM, aff_factor = c(Energy, seed_type_effect), deg_factor = region_effect)%>%
- update_how("SERPINE2",2.75) %>%
- simulate(150) %>%
- find_iteration(limit=1, plot= TRUE) #limit=1 describes the change that is not taken into account.
-```
-
-The node amount of changed gene on the system in terms of percentage were shown in above. As seen, firstly, the changed gene count increase. The system which contains the hundreds of miRNAs and thousands of genes can slowly gain the steady-state again. At first glance, it can be assumed that when all nodes in the system are reached, stable state will be provided. However, although all nodes are reached, the nodes competing with each other cause the edits to continue for a while.
+The node amount of changed gene on the system in terms of percentage were shown at Figure S9 in Supplementary Figures. As seen, firstly, the changed gene count increase. The system which contains the hundreds of miRNAs and thousands of genes can slowly gain the steady-state again. At first glance, it can be assumed that when all nodes in the system are reached, stable state will be provided. However, although all nodes are reached, the nodes competing with each other cause the edits to continue for a while.
 
 The dynamics of the approach are shown in package  [vignettes](https://selcenari.github.io/ceRNAnetsim/articles/convenient_iteration.html). 
 
 So, we offered an approach about to find iteration. `find_iteration` function does not give the iteration to gain steady-state, but it gives the iteration which has maximum affected node counts. The function is applied as following:
 
-```{r, eval=FALSE}
+```{r}
+library(ceRNAnetsim)
 as.data.frame(E9GE_mirnagenenormal)%>%
  priming_graph(competing_count = GE_normal, miRNA_count = mirna_RPM, aff_factor = c(Energy, seed_type_effect), deg_factor = region_effect)%>%
- update_how("SERPINE2",2.75) %>%
- simulate(100) %>%
- find_iteration(limit=1, plot= FALSE)
-
-#31
+ update_how("SERPINE2",2.75)%>%
+ simulate(50) %>%
+ find_iteration(limit=0, plot= FALSE)
+ 
 ```
 
 ### 2.5.2 Simulation of dataset
 
 We tried to apply two fold of the point that SERPINE2 has maximum affected genes on network.
 
-```{r, eval=FALSE}
-
+```{r}
 as.data.frame(E9GE_mirnagenenormal)%>%
   priming_graph(competing_count = GE_normal, miRNA_count = mirna_RPM, aff_factor = c(Energy, seed_type_effect), deg_factor = region_effect)%>%
   update_how("SERPINE2",2.75)%>%
-  simulate(62)
+  simulate(32)
 
 ```
 
-```{r, eval=FALSE}
+```{r}
 as.data.frame(E9GE_mirnagenenormal)%>%
   priming_graph(competing_count = GE_normal, miRNA_count = mirna_RPM, aff_factor = c(Energy, seed_type_effect), deg_factor = region_effect)%>%
   update_how("SERPINE2",2.75)%>%
-  simulate(62)%>%
+  simulate(32)%>%
   as_tibble()%>%
-  select(name, initial_count, count_current)->simulation_results
+  dplyr::select(name, initial_count, count_current)->simulation_results
 ```
 
 ### 2.5.3 Comparison of simulation results and tumor tissue expression values
-```{r, eval=FALSE}
+```{r}
 E9GE_mirnagenetumor%>%
   dplyr::select(hgnc_symbol, GE_tumor)%>%
   dplyr::inner_join((E9GE_mirnagenenormal%>%dplyr::select(hgnc_symbol, GE_normal)), by ="hgnc_symbol")%>%

@@ -1,0 +1,130 @@
+---
+title: "Supplementary Figures"
+author: "Selcen Arı"
+date: "17 09 2019"
+output:
+  pdf_document: default
+  html_document: default
+  word_document: default
+bibliography: ref.bib
+header-includes: 
+  \usepackage{float} \floatplacement{figure}{H} 
+  \newcommand{\beginsupplement}{\setcounter{table}{0}  \renewcommand{\thetable}{S\arabic{table}} \setcounter{figure}{0}     \renewcommand{\thefigure}{S\arabic{figure}}}
+  \usepackage{subfig}
+---
+
+\beginsupplement
+
+
+![Workflow for simulation of competing endogenous RNA regulations. Graph object in steps 2-6 is saved and updated continuously.](workflow1.png){#figs1}
+
+```{r, include=FALSE, message=FALSE, warning=FALSE}
+
+library(tidygraph)
+library(dplyr)
+library(tidyr)
+library(stringr)
+
+```
+
+```{r, message=FALSE, warning=FALSE}
+#install.packages("devtools")
+#devtools::install_github("selcenari/ceRNAnetsim")
+library(ceRNAnetsim)
+```
+
+## *minsamp* dataset analysis at lack of interaction factors.
+
+```{r, message=FALSE, warning=FALSE, fig.cap= "Minimal Dataset in Steady-state", fig.width=5, fig.height=4}
+priming_graph(minsamp, competing_count = Competing_expression, miRNA_count = miRNA_expression)%>%
+  vis_graph(Competing_color = "navajowhite3", mirna_color = "ivory4", title = "Minimal dataset in steady-state conditions")
+```
+
+
+```{r, message=FALSE, warning=FALSE, fig.keep='all', fig.cap= "Gene2 Upregulation on Minimal Dataset", fig.width=5, fig.height=4}
+priming_graph(minsamp, competing_count = Competing_expression, miRNA_count = miRNA_expression)%>%
+  update_how("Gene2", 2)%>%
+  vis_graph(Competing_color = "navajowhite3", mirna_color = "ivory4", Upregulation = "red", title = "Gene2 Upregulation without interaction factors")
+```
+
+```{r, message=FALSE, warning=FALSE, out.width='50%', fig.asp=1, fig.ncol = 2,  fig.show='hold', fig.cap = "Sequential iteration of minsamp data. a) First response of system to Gene2 upregulation (2nd iteration). b) Spreading of perturbation on system (3th iteration)", fig.subcap= NULL}
+
+priming_graph(minsamp, competing_count = Competing_expression, miRNA_count = miRNA_expression)%>%
+  update_how("Gene2", 2)%>%
+  simulate(cycle=1)%>%
+  vis_graph(Competing_color = "navajowhite3", mirna_color = "ivory4", Upregulation = "red", Downregulation = "blue", title = "a)")
+
+priming_graph(minsamp, competing_count = Competing_expression, miRNA_count = miRNA_expression)%>%
+  update_how("Gene2", 2)%>%
+  simulate(2)%>%
+  vis_graph(Competing_color = "navajowhite3", mirna_color = "ivory4", Upregulation = "red", Downregulation = "blue", title = "b)")
+
+```
+
+
+## *minsamp* dataset analysis with interaction factors.
+
+```{r, message=FALSE, warning=FALSE, fig.cap= "Minimal Dataset with interaction factors in Steady-state", fig.width=5, fig.height=4}
+priming_graph(minsamp, competing_count = Competing_expression, miRNA_count = miRNA_expression, aff_factor = c(energy, seed_type), deg_factor = region)%>%
+  vis_graph(Competing_color = "navajowhite3", mirna_color = "ivory4", title = "Minimal dataset with interaction factors in steady-state conditions")
+
+```
+
+```{r, message=FALSE, warning=FALSE, fig.cap= " When Gene2 is upregulated on Minimal Dataset with interaction factors", fig.width=5, fig.height=4}
+priming_graph(minsamp, competing_count = Competing_expression, miRNA_count = miRNA_expression, aff_factor = c(energy, seed_type), deg_factor = region)%>%
+  update_how("Gene2", 2)%>%
+  vis_graph(Competing_color = "navajowhite3", mirna_color = "ivory4", Upregulation = "red", title = "Gene2 Upregulation with interaction factors")
+```
+
+```{r, message=FALSE, warning=FALSE, out.width='50%', fig.asp=1, fig.ncol = 2, fig.show='hold', fig.cap = "Sequential iteration of minsamp data with interaction factors a)First response of system to Gene2 upregulation (2nd iteration). b)Spreading of perturbation on system (3th iteration)"}
+priming_graph(minsamp, competing_count = Competing_expression, miRNA_count = miRNA_expression, aff_factor = c(energy, seed_type), deg_factor = region)%>%
+  update_how("Gene2", 2)%>%
+  simulate(cycle = 1)%>%
+  vis_graph(Competing_color = "navajowhite3", mirna_color = "ivory4", Upregulation = "red", Downregulation = "blue", title = "a)")
+
+priming_graph(minsamp, competing_count = Competing_expression, miRNA_count = miRNA_expression, aff_factor = c(energy, seed_type), deg_factor = region)%>%
+  update_how("Gene2", 2)%>%
+  simulate(cycle = 2)%>%
+  vis_graph(Competing_color = "navajowhite3", mirna_color = "ivory4", Upregulation = "red", Downregulation = "blue", title = "b)")
+  
+  
+```
+
+## Common target perturbation in *minsamp* dataset.
+
+```{r, message=FALSE, warning=FALSE, out.width='50%', fig.asp=1, fig.ncol = 2, fig.show='hold', fig.cap = "Perturbation of Gene4 on minsamp data with interaction factors. a) Netwrk at steady-state. b) Upregulation of Gene4. c) Primary response of network to upregulation of Gene4. d) Re-regulation of whole nodes on system (3th iteration)"}
+
+priming_graph(minsamp, competing_count = Competing_expression, miRNA_count = miRNA_expression, aff_factor = c(energy, seed_type), deg_factor = region)%>%
+  vis_graph(Competing_color = "navajowhite3", mirna_color = "ivory4", Upregulation = "red", title = "a)")
+
+priming_graph(minsamp, competing_count = Competing_expression, miRNA_count = miRNA_expression, aff_factor = c(energy, seed_type), deg_factor = region)%>%
+  update_how("Gene4", 2)%>%
+  vis_graph(Competing_color = "navajowhite3", mirna_color = "ivory4", Upregulation = "red", title = "b)")
+
+priming_graph(minsamp, competing_count = Competing_expression, miRNA_count = miRNA_expression, aff_factor = c(energy, seed_type), deg_factor = region)%>%
+  update_how("Gene4", 2)%>%
+  simulate(cycle=1)%>%
+  vis_graph(Competing_color = "navajowhite3", mirna_color = "ivory4", Upregulation = "red", title = "c)")
+
+priming_graph(minsamp, competing_count = Competing_expression, miRNA_count = miRNA_expression, aff_factor = c(energy, seed_type), deg_factor = region)%>%
+  update_how("Gene4", 2)%>%
+  simulate(cycle=2)%>%
+  vis_graph(Competing_color = "navajowhite3", mirna_color = "ivory4", Upregulation = "red", title = "d)")
+```
+
+## Determination of iteration for Upregulation of SERPINE2 gene from Breast cancer patient dataset
+
+```{r}
+E9GE_mirnagenenormal<-readRDS("data/E9GE_mirnagenenormal.rda")
+head(E9GE_mirnagenenormal)
+```
+
+
+```{r, fig.cap= "Percentage of affected nodes of each iteration for SERPINE2 Gene"}
+as.data.frame(E9GE_mirnagenenormal)%>%
+ priming_graph(competing_count = GE_normal, miRNA_count = mirna_RPM, aff_factor = c(Energy, seed_type_effect), deg_factor = region_effect)%>%
+ update_how("SERPINE2",2.75) %>%
+ simulate(150) %>%
+ find_iteration(limit=0, plot= TRUE) #limit=0 describes the change that is not taken into account.
+```
+

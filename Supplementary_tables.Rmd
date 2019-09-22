@@ -35,55 +35,107 @@ Table: *minsamp* sample dataset that includes interaction factors.
 
 Note: Energy values in miRNA:target pairs are represented by high-throughput studies [@helwak_mapping_2013; @moore_mirnatarget_2015] which are utilized in this study. On the other hand, we have specified the other interaction factors, seed type and location of binding region on the target, as numeric values based on the previous studies.[@grimson_microrna_2007] have compared the seed types' effect on target repression with few miRNA had canonical seed pairing in their study. Additionally, [@bartel_micrornas:_2009] and [@betel2010comprehensive] have studied on functional and non-functional seed interactions. Based on results of these studies we have arranged seed types of miRNA:target interactions as numeric values. We also have redefined location of binding region on the target as numeric values, based on studies of [@hausser_analysis_2013] and [@helwak_mapping_2013]. With this process, we have handled this entegrated dataset in context of competitor behaviours and functionality of interactions. 
 
-|seed_type| Coefficient |
-|-----------|------------|
-| `5-mer`   | `0.05` |
-| `5-mer_noncanonical`   | `0.04` |
-| `6-mer`   | `0.07` |
-| `6-mer_noncanonical`   | `0.05` |
-| `6-merA1`   | `0.07` |
-| `6-merA1_noncanonical`   | `0.05` |
-| `7-mer`   | `0.23` |
-| `7-mer_noncanonical`   | `0.19` |
-| `7-merA1`   | `0.19` |
-| `7-merA1_noncanonical`   | `0.16` |
-| `7-mer-8m`   | `0.25` |
-| `7-mer-8m_nonacnonical`   | `0.21` |
-| `8-mer`   | `0.43` |
-| `8-mer_noncanonical`   | `0.35` |
-| `9-mer`   | `0.43` |
-| `9-mer_noncanonical`   | `0.35` |
-| `none`   | `0.01` |
 
-Table: Efficiency factors for seed types.
+\begin{table}[ht]
+\centering
+\caption{Efficiency factors for seed types.}
+\begin{tabular}{rlr}
+  \hline
+ & seed\_type & seed\_type\_effect \\ 
+  \hline
+1 & 6-mer\_noncanonical & 0.05 \\ 
+  2 & 9-mer & 0.43 \\ 
+  3 & 6-mer & 0.07 \\ 
+  4 & 8-mer & 0.43 \\ 
+  5 & 7-mer & 0.23 \\ 
+  6 & none & 0.01 \\ 
+  7 & 5-mer\_noncanonical & 0.04 \\ 
+  8 & 5-mer & 0.05 \\ 
+  9 & 6-merA1\_noncanonical & 0.05 \\ 
+  10 & 7-mer-8m\_noncanonical & 0.21 \\ 
+  11 & 7-mer-8m & 0.25 \\ 
+  12 & 8-mer\_noncanonical & 0.35 \\ 
+  13 & 7-merA1\_noncanonical & 0.16 \\ 
+  14 & 7-merA1 & 0.19 \\ 
+  15 & 6-merA1 & 0.07 \\ 
+   \hline
+\end{tabular}
+\end{table}
 
 
-|location of binding region on target| Coefficient |
-|-----------|------------|
-| `3'UTR`   | `0.84` |
-| `CDS`   | `0.42` |
-| `5'UTR`   | `0.01` |
+\begin{table}[ht]
+\centering
+\caption{ Efficiency factors for binding regions on targets}
+\begin{tabular}{rlr}
+  \hline
+ & region & region\_effect \\ 
+  \hline
+1 & 3UTR & 0.84 \\ 
+  2 & CDS & 0.42 \\ 
+  3 & 3UTRCDS & 0.93 \\ 
+  4 & 5UTR & 0.01 \\ 
+  5 & 5UTRCDS & 0.42 \\ 
+  6 &  & 0.01 \\ 
+  7 & intron & 0.01 \\ 
+  8 & CDS3UTR & 0.93 \\ 
+  9 & CDS5UTR & 0.42 \\ 
+  10 & exon\_unclassified & 0.20 \\ 
+  11 & CDS3UTRintron & 0.93 \\ 
+  12 & 3UTRintron & 0.84 \\ 
+  13 & CDSintron & 0.42 \\ 
+  14 & 5UTRintron & 0.01 \\ 
+  15 & 5UTR3UTR & 0.93 \\ 
+  16 & CDS5UTR3UTR & 0.93 \\ 
+   \hline
+\end{tabular}
+\end{table}
 
-Table: Efficiency factors for binding regions on targets
 
-```{r, eval=FALSE, include=FALSE}
-data("E9GE_mirnagenenormal")
-
-xtable(head(E9GE_mirnagenenormal),caption = "Example of E9GE_mirnagenenormal dataset" )
-```
-
-|hgnc_symbol| miRNA_name | mirna_RPM | GE_normal | Energy | seed_type_effect | region_effect |
+|Hugo_Symbol| miRNA_name | mirna_RPM | GE_normal | energy | seed_type_effect | region_effect |
 |-----------|------------|----------|----------------|---------|-----------|----------|
-| CCNG1 | hsa-let-7a-5p | 111204.15 | 5245.00 | -25.10 | 0.05 | 0.84 |
-| DICER1 | hsa-let-7a-5p | 111204.15 | 3285.00 | -24.40 | 0.43 | 0.42 | 
-| SESN1 | hsa-let-7a-5p | 111204.15 | 1179.00 | -22.20 | 0.05 | 0.93 |
-| NIPBL | hsa-let-7a-5p | 111204.15 | 4503.00 | -22.10 | 0.05 | 0.42 | 
-| INTS12 | hsa-let-7a-5p | 111204.15 | 600.00 | -21.90 | 0.05 | 0.42 | 
-| FNIP1 | hsa-let-7a-5p | 111204.15 | 1248.00 | -21.80 | 0.43 | 0.84 |
+| ENAH | hsa-let-7a-5p | 111204.15 | 7540 | -22.70 | 0.01 | 0.00 |
+| GALNT2 | hsa-let-7a-5p | 111204.15 | 2824 | -20.50 | 0.14 | 0.00 | 
+| RLF | hsa-let-7a-5p | 111204.15 | 1144 | -18.00 | 0.03 | 0.20 |
+| MAST2 | hsa-let-7a-5p | 111204.15 | 2640 | -22.60 | 0.24 | 0.00 | 
+| DOCK1 | hsa-let-7a-5p | 111204.15 | 4826 | -20.50 | 0.01 | 0.00 | 
+| ZBTB16 | hsa-let-7a-5p | 111204.15 | 315 | -24.30 | 0.14 | 0.00 |
 
 Table: Example of E9GE_mirnagenenormal dataset.
 
+
 As a result of simulation a dataset, a graph object is obtained that includes various variables in edge and node data. A graph object includes variables at followings.
+
+|Variebles| Structure | Means|
+|-----------|------------|------------|
+| **Node Variables**
+| `name`  | character | node name |
+| `type`  | character |Competing or miRNA |
+| `node_id`  | numeric | in on graph object |
+| `initial_count`   | numeric | Initial Expression value of node |
+| `count_pre`   | numeric | Expression value of node at previous regulation |
+| `count_current`   | numeric | Existing expression value of node |
+| `changes_variable`   | character | Regulation of node (Up, down or steady) |
+|-----------|------------|------------|
+| **Edge Variables**
+| `Competing name` | character | name of genes|
+| `miRNA name` | character | name of miRNAs|
+| `Competing expression` | numeric | Expression values of competing elements at steady-state |
+| `miRNA expression` | numeric | Expression values of miRNA elements at steady-state |
+| `energy` | numeric | coefficient of miRNA:target interactions (binding affinity)|
+| `seed type` | numeric | coefficient of miRNA:target interactions (binding affinity)|
+| `region` | numeric | coefficient of miRNA:target interactions (degradation efficiency)|
+| `afff factor` | numeric| coefficient scaled and combined affinity factor |
+| `degg factor` | numeric |coefficient scaled and combined degradation factor| 
+| `comp_count_list` | list | list of competing expression for each iteration | 
+| `comp_count` | numeric | _pre: competing expression at previous iteration; _current: competing expression at present iteration |
+| `mirna_count_list` | list | list of miRNA expression for each iteration | 
+| `mirna_count` | numeric | _pre: miRNA expression at previous iteration; _current: miRNA expression at present iteration |
+| `effect` | numeric | _pre: total miRNA reppressive effect on individual target at previous iteration ; _current: miRNA reppressive effect on individual target at present iteration |
+| `effect_list` | list | list of miRNA reppressive effect on individual target for each iteration | 
+
+Table: The context graph object during the process.
+
+
 
 
 ## REFERENCES
