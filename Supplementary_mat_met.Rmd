@@ -1,6 +1,8 @@
 ---
 title: "Supplementary Materials And Methods"
-author: "Selcen Ari"
+author: 
+- Selcen Ari
+- Alper Yilmaz 
 date: "7 Nisan 2019"
 output:
   pdf_document: default
@@ -42,6 +44,8 @@ library(tidygraph)
 library(dplyr)
 library(tidyr)
 library(stringr)
+library(readr)
+knitr::opts_chunk$set(tidy.opts=list(width.cutoff=50),tidy=TRUE)
 
 ```
 
@@ -173,7 +177,7 @@ find_node_perturbation(sample_graph, how = 2, cycle = 3, limit = 0.1)
 
 This section describes how to apply `ceRNAnetsim` package on a breast cancer patient miRNA:target interaction dataset. Before the approach, we obtained three datasets and combined them.
 
-```{r, echo=FALSE, message= FALSE, warning=FALSE}
+```{r, echo=FALSE, message= FALSE, warning=FALSE, eval=FALSE}
 # Install the packages which is necessary to obtain and process datasets.
 #install.packages("BiocManager")
 #BiocManager::install("SummarizedExperiment")
@@ -241,7 +245,7 @@ We have used `TCGAbiolinks` package to obtain miRNA expression quantification. T
 We downloaded the mirbase release 21 dataset from [mirbase](http://www.mirbase.org/ftp.shtml) and processed the patient mirna expression datasets as following:
 
 ```{r, message= FALSE, warning=FALSE}
-library(readr)
+
 read_tsv("hsa_mirna.txt", comment = "#", col_names = FALSE)%>%
   dplyr::select(mirna_type= X3, definition = X9)%>%
   filter(!endsWith(mirna_type, "primary_transcript"))%>%
@@ -410,12 +414,12 @@ The dynamics of the approach are shown in package  [vignettes](https://selcenari
 So, we offered an approach about to find iteration. `find_iteration` function does not give the iteration to gain steady-state, but it gives the iteration which has maximum affected node counts. The function is applied as following:
 
 ```{r}
-library(ceRNAnetsim)
+
 as.data.frame(E9GE_mirnagenenormal)%>%
  priming_graph(competing_count = GE_normal, miRNA_count = mirna_RPM, aff_factor = c(Energy, seed_type_effect), deg_factor = region_effect)%>%
  update_how("SERPINE2",2.75)%>%
  simulate(50) %>%
- find_iteration(limit=0, plot= FALSE)
+ find_iteration(limit=1, plot= FALSE)
  
 ```
 
@@ -427,7 +431,7 @@ We tried to apply two fold of the point that SERPINE2 has maximum affected genes
 as.data.frame(E9GE_mirnagenenormal)%>%
   priming_graph(competing_count = GE_normal, miRNA_count = mirna_RPM, aff_factor = c(Energy, seed_type_effect), deg_factor = region_effect)%>%
   update_how("SERPINE2",2.75)%>%
-  simulate(32)
+  simulate(62)
 
 ```
 
@@ -435,7 +439,7 @@ as.data.frame(E9GE_mirnagenenormal)%>%
 as.data.frame(E9GE_mirnagenenormal)%>%
   priming_graph(competing_count = GE_normal, miRNA_count = mirna_RPM, aff_factor = c(Energy, seed_type_effect), deg_factor = region_effect)%>%
   update_how("SERPINE2",2.75)%>%
-  simulate(32)%>%
+  simulate(62)%>%
   as_tibble()%>%
   dplyr::select(name, initial_count, count_current)->simulation_results
 ```
@@ -452,4 +456,3 @@ E9GE_mirnagenetumor%>%
 
 Actually, we have developed to provide a new approach mirna mediated regulation networks. This approach may not explain the whole regulation behaviors between miRNAs and targets but can be first step to more detailed and coherent miRNA:target regulation approach.
 
-# 3. REFERENCES

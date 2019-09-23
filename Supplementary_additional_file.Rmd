@@ -1,6 +1,8 @@
 ---
 title: "Supplementary Experimental Data File"
-author: "Selcen Arı"
+author: 
+- Selcen Ari
+- Alper Yilmaz 
 date: "22 09 2019"
 output:
   pdf_document: default
@@ -21,6 +23,7 @@ library(tidyr)
 library(stringr)
 library(readr)
 library(readxl)
+knitr::opts_chunk$set(tidy.opts=list(width.cutoff=50),tidy=TRUE)
 
 ```
 
