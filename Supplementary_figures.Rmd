@@ -38,6 +38,11 @@ library(ceRNAnetsim)
 
 ## *minsamp* dataset analysis at lack of interaction factors.
 
+```{r}
+minsamp<-readRDS("data/minsamp.RDS")
+```
+
+
 ```{r, message=FALSE, warning=FALSE, fig.cap= "Minimal Dataset in Steady-state", fig.width=5, fig.height=4}
 priming_graph(minsamp, competing_count = Competing_expression, miRNA_count = miRNA_expression)%>%
   vis_graph(Competing_color = "navajowhite3", mirna_color = "ivory4",
@@ -122,7 +127,7 @@ priming_graph(minsamp, competing_count = Competing_expression, miRNA_count = miR
 ## Determination of iteration for Upregulation of SERPINE2 gene from Breast cancer patient dataset
 
 ```{r}
-E9GE_mirnagenenormal<-readRDS("data/E9GE_mirnagenenormal.rda")
+E9GE_mirnagenenormal<-readRDS("data/E9GE_mirnagenenormal.RDS")
 head(E9GE_mirnagenenormal)
 ```
 

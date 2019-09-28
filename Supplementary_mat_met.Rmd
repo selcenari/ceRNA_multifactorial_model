@@ -58,7 +58,7 @@ library(ceRNAnetsim)
 + load *minsamp* data
 
 ```{r}
-data("minsamp")
+minsamp<-readRDS("data/minsamp.RDS")
 
 minsamp
 ```
@@ -362,9 +362,7 @@ BCPME_mirnanormal%>%
 
 
 ```{r}
-#saveRDS(E9GE_mirnagenenormal, "data/E9GE_mirnagenenormal.rda")
-
-E9GE_mirnagenenormal<-readRDS("data/E9GE_mirnagenenormal.rda")
+E9GE_mirnagenenormal<-readRDS("data/E9GE_mirnagenenormal.RDS")
 head(E9GE_mirnagenenormal)
 ```
 
@@ -378,9 +376,9 @@ BCPME_mirnatumor%>%
 ```
 
 ```{r}
-#saveRDS(E9GE_mirnagenetumor, "data/E9GE_mirnagenetumor.rda")
+#saveRDS(E9GE_mirnagenetumor, "data/E9GE_mirnagenetumor.RDS")
 
-E9GE_mirnagenetumor<-readRDS("data/E9GE_mirnagenetumor.rda")
+E9GE_mirnagenetumor<-readRDS("data/E9GE_mirnagenetumor.RDS")
 head(E9GE_mirnagenetumor)
 ```
 
