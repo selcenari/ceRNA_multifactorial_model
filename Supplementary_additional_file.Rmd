@@ -253,6 +253,8 @@ bind_rows(clashelwakfinal, clearclipfinal)%>%distinct() -> experimentalmirnagene
 
 ## Adding Coefficients of Interaction factors
 
+Numeric valuesof interaction factors are shown at Table S2-3 in Supplementary Tables file.
+
 ```{r,  eval=FALSE}
 experimentalmirnagene <- experimentalmirnagene%>%
   mutate(region2  = str_replace_all(region, "NA", ""), region3 = str_replace_all(region2, "\\|", ""), region = str_replace_all(region3, c("3'UTR"="3UTR", "5'UTR"="5UTR")))%>%

@@ -65,7 +65,7 @@ minsamp
 
 See Table S1 in Supplementary Tables file.
 
-## *minsamp* dataset analysis in lack of interaction factors.
+# 2. *minsamp* dataset analysis in lack of interaction factors.
 
 Firstly, we have analysed minimal data without interaction factors between miRNA:target.
 
@@ -105,7 +105,7 @@ priming_graph(minsamp, competing_count = Competing_expression, miRNA_count = miR
   unnest()
 ```
 
-## *minsamp* dataset analysis with interaction factors.
+# 3. *minsamp* dataset analysis with interaction factors.
 
 We have made the same analysis in presence of interaction factors (Sequentially shown at Figure S5-7 in Supplementary Figures).
 
@@ -139,9 +139,9 @@ priming_graph(minsamp, competing_count = Competing_expression, miRNA_count = miR
   unnest()
 ```
 
-## Common target perturbation in *minsamp* dataset.
+# 4. Common target perturbation in *minsamp* dataset.
 
-Genes targeted by multiple miRNAs (referred to as "common target") are of special interest since they are subject to cooperative effect. Also, they perturb more than one neighborhood. In our small dataset, minsamp, Gene4 is regulated by two miRNAs. Let's simulate perturbation effects triggered by Gene4 (Shown at Figure S8 in Supplementary Figures .
+Genes targeted by multiple miRNAs (referred to as "common target") are of special interest since they are subject to cooperative effect. Also, they perturb more than one neighborhood. In our small dataset, minsamp, Gene4 is regulated by two miRNAs. Let's simulate perturbation effects triggered by Gene4 (Shown at Figure S8 in Supplementary Figures) .
 
 ```{r, message=FALSE, warning=FALSE}
 
@@ -162,7 +162,7 @@ priming_graph(minsamp, competing_count = Competing_expression, miRNA_count = miR
   unnest()
 ```
 
-## Determination of perturbation efficiencies of elements in system.
+# 5. Determination of perturbation efficiencies of elements in system.
 
 ```{r, message=FALSE, warning=FALSE}
 
@@ -173,7 +173,7 @@ find_node_perturbation(sample_graph, how = 2, cycle = 3, limit = 0.1)
 ```
 
 
-# 2. Obtaining breast cancer dataset and integration
+# 6. Obtaining breast cancer dataset and integration
 
 This section describes how to apply `ceRNAnetsim` package on a breast cancer patient miRNA:target interaction dataset. Before the approach, we obtained three datasets and combined them.
 
@@ -186,7 +186,7 @@ library(TCGAbiolinks)
 library(SummarizedExperiment)
 ```
 
-## 2.1 How to get gene expression counts of TCGA-E9-A1N5 patient.
+## 6.1 How to get gene expression counts of TCGA-E9-A1N5 patient.
 
 We have obtained the gene expression values of patient using [TCGAbiolinks](https://www.bioconductor.org/packages/release/bioc/html/TCGAbiolinks.html) package from [Bioconductor](https://www.bioconductor.org/). For this process, we have followed the instructions of the package. `TCGAbiolinks` package provides to obtain data for whole number of given barcode(s) at once. But, we preferred to download them separately to show datasets.
 
@@ -236,7 +236,7 @@ head(TCGA_E9_A1N5_normal)
 
 ```
 
-## 2.2 How to get miRNA expression counts of TCGA-E9-A1N5 patient.
+## 6.2 How to get miRNA expression counts of TCGA-E9-A1N5 patient.
 
 We have used `TCGAbiolinks` package to obtain miRNA expression quantification. The query gives read count of miRNA as isoform chromosome coordination. The data also contains mature miRNA information. So, we processed data to attain -5p -3p isoform information using mirbase release21 dataset.
 
@@ -314,7 +314,7 @@ head(BCPME_mirnanormal)
 ```
 
 
-## 2.3 Get the high-throughput experimental miRNA:target dataset.
+## 6.3 Get the high-throughput experimental miRNA:target dataset.
 
 There are various datasets about miRNA:target pairs such as miRTarBase, DianaTools, miRecords, miRWalk etc. Some of these present the experimentally supported miRNA target pairs or only predicted ones. The experimentally supported datasets generally provides weak evidence for interactions. For these reasons, we obtained the high-throughput experimental miRNA:target dataset from two studies performed by Helwak et al. and Moore et al. These steps were not handle in this file because they contain many processes. 
 
@@ -324,7 +324,7 @@ Briefly these datasets contain various common information about miRNA:target int
 + It was provided that the datasets are converted to same human genome build.
 + The seed type information was organized as the same style.
 + The datasets were combined.
-+ We committed the interaction factors as numeric values according to previous studies. (We added the interaction factors and their numeric values at Supplementary files, Process on miRNA:target pairs dataset for process codes and Supplementary Tables for used numeric values)
++ We committed the interaction factors as numeric values according to previous studies. (We added the interaction factors and their numeric values. The codes about integration of high-throughput experimental studies are available at Supplementary additional file and numeric values of interaction factors can be found at Table S2-3 in Supplementary Tables file.)
 
 Finally, we have obtained the experimentally supported miRNA:target dataset. 
 
@@ -349,7 +349,7 @@ experimentalmirnagene%>%
 head(tocombine_mirnagene)
 ```
 
-## 2.4 Combine the dataset
+## 6.4 Combine the dataset
 
 ```{r, message= FALSE, warning=FALSE, eval=FALSE}
 BCPME_mirnanormal%>%
@@ -382,7 +382,7 @@ E9GE_mirnagenetumor<-readRDS("data/E9GE_mirnagenetumor.RDS")
 head(E9GE_mirnagenetumor)
 ```
 
-## 2.5 Selection of trigger node
+## 6.5 Selection of trigger node
 
 We have determined the most important nodes of network. We applied `find_node_perturbation` function. We only defined nodes that affect the other nodes more than 1.05 fold change with 10 iteration when they increase 3 fold. 
 
@@ -399,11 +399,11 @@ perturbationofnetwork%>%
 ```
 This dataset, perturbationofnetwork, includes totally 423 effective nodes. We selected SERPINE2 gene to perturb the network because it is the most efficient node gene in network.
 
-## 2.5 Approach of Method into Combined Datasets
+## 6.6 Approach of Method into Combined Datasets
 
 We selected SERPINE2 gene for simulation of regulation on network.
 
-### 2.5.1 Find iteration of simulation
+### 6.6.1 Find iteration of simulation
 
 The node amount of changed gene on the system in terms of percentage were shown at Figure S9 in Supplementary Figures. As seen, firstly, the changed gene count increase. The system which contains the hundreds of miRNAs and thousands of genes can slowly gain the steady-state again. At first glance, it can be assumed that when all nodes in the system are reached, stable state will be provided. However, although all nodes are reached, the nodes competing with each other cause the edits to continue for a while.
 
@@ -421,7 +421,7 @@ as.data.frame(E9GE_mirnagenenormal)%>%
  
 ```
 
-### 2.5.2 Simulation of dataset
+### 6.6.2 Simulation of dataset
 
 We tried to apply two fold of the point that SERPINE2 has maximum affected genes on network.
 
@@ -442,7 +442,7 @@ as.data.frame(E9GE_mirnagenenormal)%>%
   dplyr::select(name, initial_count, count_current)->simulation_results
 ```
 
-### 2.5.3 Comparison of simulation results and tumor tissue expression values
+### 6.6.3 Comparison of simulation results and tumor tissue expression values
 ```{r}
 E9GE_mirnagenetumor%>%
   dplyr::select(hgnc_symbol, GE_tumor)%>%

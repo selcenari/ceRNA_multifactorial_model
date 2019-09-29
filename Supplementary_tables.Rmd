@@ -38,7 +38,7 @@ library(gt)
 | `Gene5`   | `Mir2` | 5000  | 2000 | 0.05 | 0.40 | -11 |
 | `Gene6`   | `Mir2` | 10000 | 2000 | 0.01 | 0.80 | -25 |
 
-Table: *minsamp* sample dataset that includes interaction factors.
+Table: *minsamp* sample dataset that includes interaction factors. The parameters which affect miRNA:target interactions (i.e. seed type, region, energy) are provided in sample dataset.
 
 
 Note: Energy values in miRNA:target pairs are represented by high-throughput studies [@helwak_mapping_2013; @moore_mirnatarget_2015] which are utilized in this study. On the other hand, we have specified the other interaction factors, seed type and location of binding region on the target, as numeric values based on the previous studies.[@grimson_microrna_2007] have compared the seed types' effect on target repression with few miRNA had canonical seed pairing in their study. Additionally, [@bartel_micrornas:_2009] and [@betel2010comprehensive] have studied on functional and non-functional seed interactions. Based on results of these studies we have arranged seed types of miRNA:target interactions as numeric values. We also have redefined location of binding region on the target as numeric values, based on studies of [@hausser_analysis_2013] and [@helwak_mapping_2013]. With this process, we have handled this entegrated dataset in context of competitor behaviours and functionality of interactions. 
@@ -141,7 +141,7 @@ Table: Example of E9GE_mirnagenenormal dataset.
 \end{table}
 
 
-As a result of simulation a dataset, a graph object is obtained that includes various variables in edge and node data. A graph object includes variables at followings.
+As a result of simulation a dataset, a graph object is obtained that includes various variables in edge and node data. A graph object includes variables at following.
 
  \begin{table}[ht]
 \centering

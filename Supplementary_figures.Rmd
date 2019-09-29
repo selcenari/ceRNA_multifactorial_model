@@ -104,7 +104,7 @@ priming_graph(minsamp, competing_count = Competing_expression, miRNA_count = miR
 
 ## Common target perturbation in *minsamp* dataset.
 
-```{r, message=FALSE, warning=FALSE, out.width='50%', fig.asp=1, fig.ncol = 2, fig.show='hold', fig.cap = "Perturbation of Gene4 on minsamp data with interaction factors. a) Netwrk at steady-state. b) Upregulation of Gene4. c) Primary response of network to upregulation of Gene4. d) Re-regulation of whole nodes on system (3th iteration)"}
+```{r, message=FALSE, warning=FALSE, out.width='50%', fig.asp=1, fig.ncol = 2, fig.show='hold', fig.cap = "Perturbation of Gene4 on minsamp data with interaction factors. a) Network at steady-state. b) Upregulation of Gene4. c) Primary response of network to upregulation of Gene4. d) Re-regulation of whole nodes on system (3th iteration)"}
 
 priming_graph(minsamp, competing_count = Competing_expression, miRNA_count = miRNA_expression, aff_factor = c(energy, seed_type), deg_factor = region)%>%
   vis_graph(Competing_color = "navajowhite3", mirna_color = "ivory4", Upregulation = "red", title = "a)")
