@@ -57,17 +57,17 @@ priming_graph(minsamp, competing_count = Competing_expression, miRNA_count = miR
             title = "Gene2 Upregulation without interaction factors")
 ```
 
-```{r, message=FALSE, warning=FALSE, out.width='50%', fig.asp=1, fig.ncol = 2,  fig.show='hold', fig.cap = "Sequential iteration of minsamp data. a) First response of system to Gene2 upregulation (2nd iteration). b) Spreading of perturbation on system (3th iteration)", fig.subcap= NULL}
+```{r, message=FALSE, warning=FALSE, out.width='50%', fig.asp=1, fig.ncol = 2,  fig.show='hold', fig.cap = "Sequential iteration of minsamp data. A) First response of system to Gene2 upregulation (2nd iteration). B) Spreading of perturbation on system (3th iteration)", fig.subcap= NULL}
 
 priming_graph(minsamp, competing_count = Competing_expression, miRNA_count = miRNA_expression)%>%
   update_how("Gene2", 2)%>%
   simulate(cycle=1)%>%
-  vis_graph(Competing_color = "navajowhite3", mirna_color = "ivory4", Upregulation = "red", Downregulation = "blue", title = "a)")
+  vis_graph(Competing_color = "navajowhite3", mirna_color = "ivory4", Upregulation = "red", Downregulation = "blue", title = "A")
 
 priming_graph(minsamp, competing_count = Competing_expression, miRNA_count = miRNA_expression)%>%
   update_how("Gene2", 2)%>%
   simulate(2)%>%
-  vis_graph(Competing_color = "navajowhite3", mirna_color = "ivory4", Upregulation = "red", Downregulation = "blue", title = "b)")
+  vis_graph(Competing_color = "navajowhite3", mirna_color = "ivory4", Upregulation = "red", Downregulation = "blue", title = "B")
 
 ```
 
@@ -88,40 +88,40 @@ priming_graph(minsamp, competing_count = Competing_expression, miRNA_count = miR
             title = "Gene2 Upregulation with interaction factors")
 ```
 
-```{r, message=FALSE, warning=FALSE, out.width='50%', fig.asp=1, fig.ncol = 2, fig.show='hold', fig.cap = "Sequential iteration of minsamp data with interaction factors a)First response of system to Gene2 upregulation (2nd iteration). b)Spreading of perturbation on system (3th iteration)"}
+```{r, message=FALSE, warning=FALSE, out.width='50%', fig.asp=1, fig.ncol = 2, fig.show='hold', fig.cap = "Sequential iteration of minsamp data with interaction factors A)First response of system to Gene2 upregulation (2nd iteration). B)Spreading of perturbation on system (3th iteration)"}
 priming_graph(minsamp, competing_count = Competing_expression, miRNA_count = miRNA_expression, aff_factor = c(energy, seed_type), deg_factor = region)%>%
   update_how("Gene2", 2)%>%
   simulate(cycle = 1)%>%
-  vis_graph(Competing_color = "navajowhite3", mirna_color = "ivory4", Upregulation = "red", Downregulation = "blue", title = "a)")
+  vis_graph(Competing_color = "navajowhite3", mirna_color = "ivory4", Upregulation = "red", Downregulation = "blue", title = "A")
 
 priming_graph(minsamp, competing_count = Competing_expression, miRNA_count = miRNA_expression, aff_factor = c(energy, seed_type), deg_factor = region)%>%
   update_how("Gene2", 2)%>%
   simulate(cycle = 2)%>%
-  vis_graph(Competing_color = "navajowhite3", mirna_color = "ivory4", Upregulation = "red", Downregulation = "blue", title = "b)")
+  vis_graph(Competing_color = "navajowhite3", mirna_color = "ivory4", Upregulation = "red", Downregulation = "blue", title = "B")
   
   
 ```
 
 ## Common target perturbation in *minsamp* dataset.
 
-```{r, message=FALSE, warning=FALSE, out.width='50%', fig.asp=1, fig.ncol = 2, fig.show='hold', fig.cap = "Perturbation of Gene4 on minsamp data with interaction factors. a) Network at steady-state. b) Upregulation of Gene4. c) Primary response of network to upregulation of Gene4. d) Re-regulation of whole nodes on system (3th iteration)"}
+```{r, message=FALSE, warning=FALSE, out.width='50%', fig.asp=1, fig.ncol = 2, fig.show='hold', fig.cap = "Perturbation of Gene4 on minsamp data with interaction factors. A) Network at steady-state. B) Upregulation of Gene4. C) Primary response of network to upregulation of Gene4. D) Re-regulation of whole nodes on system (3th iteration)"}
 
 priming_graph(minsamp, competing_count = Competing_expression, miRNA_count = miRNA_expression, aff_factor = c(energy, seed_type), deg_factor = region)%>%
-  vis_graph(Competing_color = "navajowhite3", mirna_color = "ivory4", Upregulation = "red", title = "a)")
+  vis_graph(Competing_color = "navajowhite3", mirna_color = "ivory4", Upregulation = "red", title = "A")
 
 priming_graph(minsamp, competing_count = Competing_expression, miRNA_count = miRNA_expression, aff_factor = c(energy, seed_type), deg_factor = region)%>%
   update_how("Gene4", 2)%>%
-  vis_graph(Competing_color = "navajowhite3", mirna_color = "ivory4", Upregulation = "red", title = "b)")
+  vis_graph(Competing_color = "navajowhite3", mirna_color = "ivory4", Upregulation = "red", title = "B")
 
 priming_graph(minsamp, competing_count = Competing_expression, miRNA_count = miRNA_expression, aff_factor = c(energy, seed_type), deg_factor = region)%>%
   update_how("Gene4", 2)%>%
   simulate(cycle=1)%>%
-  vis_graph(Competing_color = "navajowhite3", mirna_color = "ivory4", Upregulation = "red", title = "c)")
+  vis_graph(Competing_color = "navajowhite3", mirna_color = "ivory4", Upregulation = "red", title = "C")
 
 priming_graph(minsamp, competing_count = Competing_expression, miRNA_count = miRNA_expression, aff_factor = c(energy, seed_type), deg_factor = region)%>%
   update_how("Gene4", 2)%>%
   simulate(cycle=2)%>%
-  vis_graph(Competing_color = "navajowhite3", mirna_color = "ivory4", Upregulation = "red", title = "d)")
+  vis_graph(Competing_color = "navajowhite3", mirna_color = "ivory4", Upregulation = "red", title = "D")
 ```
 
 ## Determination of iteration for Upregulation of SERPINE2 gene from Breast cancer patient dataset

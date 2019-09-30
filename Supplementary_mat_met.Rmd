@@ -18,6 +18,7 @@ header-includes:
 \beginsupplement
 
 # 1. Functions defined for ceRNA models and workflow of method
+
 We defined the functions that can be used with R programming. Briefly, these functions process a given miRNA:gene dataset and convert to graph object. All values that are significant in miRNA:target interactions are stored in edge variables and processed with formulations that are given in previous section. The functions and steps of approach are explained as following (Figure S1 in Supplementary Figures) :
 
 
@@ -359,7 +360,8 @@ BCPME_mirnanormal%>%
   dplyr::select(hgnc_symbol, miRNA_name, mirna_RPM= reads_per_million_miRNA_mapped, GE_normal, Energy, seed_type_effect, region_effect)-> E9GE_mirnagenenormal
 
 ```
-
+ 
+ A part of dataset can be found at Table S4 in Supplementary Tables.
 
 ```{r}
 E9GE_mirnagenenormal<-readRDS("data/E9GE_mirnagenenormal.RDS")
@@ -409,7 +411,7 @@ The node amount of changed gene on the system in terms of percentage were shown 
 
 The dynamics of the approach are shown in package  [vignettes](https://selcenari.github.io/ceRNAnetsim/articles/convenient_iteration.html). 
 
-So, we offered an approach about to find iteration. `find_iteration` function does not give the iteration to gain steady-state, but it gives the iteration which has maximum affected node counts. The function is applied as following:
+So, we offered an approach about to find iteration. `find_iteration` function does not give the iteration to gain steady-state, but it gives the iteration which has maximum affected node counts . The function is applied as following:
 
 ```{r}
 

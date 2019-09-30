@@ -162,42 +162,43 @@ miRNA and target pairs per line should be provided as edge list to
 construct the network. At each line minimum required information is
 expression levels of miRNA and the target. If available, additional data
 about factors effecting binding or efficiency of miRNA can be provided
-as separate columns (see Figure S1 in Supplementary Tables). After
+as separate columns (see Table S1 in Supplementary Tables). After
 construction of the network, amount of miRNA per target is calculated
 and kept as edge data. Simply, a target will sequester miRNA
 proportional to its ratio amount among other targets. If additional
 criteria effecting the binding of miRNA to its target is provided,
-distribution of miRNA will be calculated accordingly. Target can be mRNA
-or any other ceRNA (circRNA, ncRNA, etc.) thus, throughout the
-manuscript terms target, gene and ceRNA are used interchangeably.
+distribution of miRNA will be calculated accordingly (available at Table
+S6 in Supplementary Tables). Target can be mRNA or any other ceRNA
+(circRNA, ncRNA, etc.) thus, throughout the manuscript terms target,
+gene and ceRNA are used interchangeably.
 
 \subsection{Triggering perturbation and subsequent calculations}
 
 Initially, the network is assumed in steady-state (Figure
-\ref{fig:fig1}A) condition and needs least one trigger for initiating
-calculations. The trigger can be a change in expression level of one or
-more genes (Figure \ref{fig:fig1}B). After a trigger, the network
-undergoes iterative cycle of calculations at each of which distribution
-of miRNA in local neighborhood is recalculated (Figure \ref{fig:fig1}C).
-Based on new miRNA distribution, expression level of each node
-(i.e.~ceRNA) is updated. This update results in change of expression
-value of common target (G4) in system. In this case, the common target
-acts as trigger for the other group (the targets interacted with M2
-miRNA) in the network. Due to common targeted elements, the change in
-one neighborhood spreads to other neighborhoods (Figure
-\ref{fig:fig1}D), consequently have potential to affect whole network
-due to ``ripple effect'' (see Section 2 in Supplementary Materials and
-Methods).
+\ref{fig:fig1}A and Figure S2) condition and needs least one trigger for
+initiating calculations. The trigger can be a change in expression level
+of one or more genes (Figure \ref{fig:fig1}B and Figure S3). After a
+trigger, the network undergoes iterative cycle of calculations at each
+of which distribution of miRNA in local neighborhood is recalculated
+(Figure \ref{fig:fig1}C and Figure S4A). Based on new miRNA
+distribution, expression level of each node (i.e.~ceRNA) is updated.
+This update results in change of expression value of common target (G4)
+in system. In this case, the common target acts as trigger for the other
+group (the targets interacted with M2 miRNA) in the network. Due to
+common targeted elements, the change in one neighborhood spreads to
+other neighborhoods (Figure \ref{fig:fig1}D and Figure S4B),
+consequently have potential to affect whole network due to ``ripple
+effect'' (see Section 2 in Supplementary Materials and Methods).
 
 \begin{figure*}[ht]
 \begin{center}
 \includegraphics[width=15cm,height=10cm]{Fig1.jpg}
 \end{center}
 \caption{Schematic presentation of mechanism of network based model. 
-    \textbf{A)} In steady state, miRNAs (M: triangles) repress targets (G: circles) according to proportion of target expression level. 
-    \textbf{B)} Two fold increase in transcript level of Gene2 (G2) acts as a trigger (shown in red). 
-    \textbf{C)} Distribution of miRNA1 (M1) changes. 
-    \textbf{D)} The change at expression of common target affects changes of proportional distribution of miRNA2 (M2). Expression values are rounded to integers for simplicity. Gray values on edges indicate initial distribution, red values indicate increase and blue values indicate decrease in distribution. Shades of circles indicate different levels of increase.}
+    (\textbf{A}) In steady state, miRNAs (M: triangles) repress targets (G: circles) according to proportion of target expression level. 
+    (\textbf{B}) Two fold increase in transcript level of Gene2 (G2) acts as a trigger (shown in red). 
+    (\textbf{C}) Distribution of miRNA1 (M1) changes. 
+    (\textbf{D)}) The change at expression of common target affects changes of proportional distribution of miRNA2 (M2). Expression values are rounded to integers for simplicity. Gray values on edges indicate initial distribution, red values indicate increase and blue values indicate decrease in distribution. Shades of circles indicate different levels of increase.}
 \label{fig:fig1}
 \end{figure*}
 
@@ -232,8 +233,7 @@ factors dictate degradation efficiency of miRNA on its target and define
 amount of target to be degraded. In other words, binding factors exert
 their influence before or during binding, efficiency factors exert their
 influence after binding. In the literature, binding free energy
-\citetext{\citealp[
-]{cao_predicting_2012}; \citealp{helwak_mapping_2013}} and seed type
+\citep{cao_predicting_2012, helwak_mapping_2013} and seed type
 \citep{werfel_preferential_2017} in miRNA:target interactions are
 described as factors effecting binding affinity. Also, binding region
 (e.g, 5'UTR, 3'UTR, CDS) was shown to drastically affect miRNA
@@ -271,8 +271,7 @@ as binding region. Exact repression efficiency of miRNA is calculated
 according to equation \eqref{eq:4} (Figure \ref{fig:fig2}D);
 \(RE^\prime_{gi}\), normalized values of region efficiency coefficient
 between miRNA and gene. The cooperative repression activity of miRNAs to
-their common targets is figured out as shown in Figure \ref{fig:fig2}E
-(see Section 3 in Supplementary Materials and Methods).
+their common targets is figured out as shown in Figure \ref{fig:fig2}E.
 
 \subsection{Breast cancer patient dataset}
 
@@ -286,12 +285,12 @@ target pairs with interaction factors
 available at Section 6 in Supplementary Materials and Methods). We have
 combined miRNA and gene expression datasets via miRNA:target gene
 dataset retrieved from published datasets
-\citep{helwak_mapping_2013, moore_mirnatarget_2015}. Detailed
-description of network construction and its code is available in
-Supplementary Materials and Methods. SERPINE2, one of the most effective
-nodes, has been used as trigger in ceRNA network simulation in breast
-cancer patient network. Relevant steps and codes are available at
-Supplementary Materials and Methods.
+\citep{helwak_mapping_2013, moore_mirnatarget_2015} (Section 6 in
+Supplementary Materials and Methods and Table S4 in Supplementary
+Tables). SERPINE2, one of the most effective nodes, has been used as
+trigger in ceRNA network simulation in breast cancer patient network.
+Relevant steps and codes are available at Supplementary Materials and
+Methods.
 
 \section{RESULTS}
 
@@ -334,10 +333,10 @@ previous findings
 \includegraphics[width=15cm,height=8cm]{Fig3.jpg}
 \end{center}
 \caption{Target regulations with interaction parameters. 
-     \textbf{A)} In the steady-state the repression activity of miRNAs on the targets after binding and repression efficiency. 
-     \textbf{B)} The changes the repression activities after increasing of G2 expression. 
-     \textbf{C)} Perturbation of primary neighborhoods of M1 miRNA (M1 miRNA group). 
-     \textbf{D)} Regulation of gene expression of other gene group via triggering target (common target between M1 and M2)}
+     (\textbf{A}) In the steady-state the repression activity of miRNAs on the targets after binding and repression efficiency. 
+     (\textbf{B}) The changes the repression activities after increasing of G2 expression. 
+     (\textbf{C}) Perturbation of primary neighborhoods of M1 miRNA (M1 miRNA group). 
+     (\textbf{D}) Regulation of gene expression of other gene group via triggering target (common target between M1 and M2)}
 \label{fig:fig3}
 \end{figure*}
 
@@ -359,17 +358,19 @@ seed base pairing \citep{bosson_endogenous_2014}. Therefore, we have
 integrated aforementioned interaction parameters that could be useful
 for predicting miRNA repression activity more accurately. The sample
 dataset used in Figure \ref{fig:fig1} is recalculated with additional
-factors Table \ref{tab:one} in effect with same trigger, two fold
-increase in Gene2 (Figure \ref{fig:fig3}). When the factors were taken
-into account in the system, miRNA efficiencies varied as shown in Figure
-\ref{fig:fig3}A. Although the miRNA:target expression ratios in
-steady-state were same in comparison with the sample dataset without
-factors, efficiency of binding and repression have changed. On the other
-hand, changes in expression levels of G4 and G1 differ although they
-have same initial conditions (Detailed codes are available at Sections
-3-4 in Supplementary Materials and Methods). This is due to fact that G4
-is targeted by two miRNAs, M1 and M2 (Figures \ref{fig:fig3}D) and
-changed interaction factors.
+factors Table \ref{tab:one} in effect with same trigger (Detailed codes
+can be found at Section 3 in Supplementary Materials and Methods), two
+fold increase in Gene2 (Figure \ref{fig:fig3}B, and Figure S6). When the
+factors were taken into account in the system, miRNA efficiencies varied
+as shown in Figure \ref{fig:fig3}A (Figure S5). Although the
+miRNA:target expression ratios in steady-state were same in comparison
+with the sample dataset without factors, efficiency of binding and
+repression have changed. On the other hand, changes in expression levels
+of G4 (Detailed codes are available at Section 4 in Supplementary
+Materials and Methods; and Figure S8) and G1 differ although they have
+same initial conditions. This is due to fact that G4 is targeted by two
+miRNAs, M1 and M2 (Figures \ref{fig:fig3}D) and changed interaction
+factors.
 
 When the model run based on expression values of miRNAs and ceRNAs
 (genes), proportional distribution of miRNA on targets is determined in
@@ -408,9 +409,9 @@ account of these interaction factors could cause increasing miRNA
 repression activity like in miRNA2:Gene4 interaction Figure
 \ref{fig:fig3}A. When expression of Gene2 (G2) increased, expression
 values of all genes also changed differentially because of contribution
-of efficiency factors (Figure \ref{fig:fig3} B,C,D). We have considered
-that in our approach energy and seed type of pairs is significant for
-binding and targeted region is important for repression.
+of efficiency factors (Figure \ref{fig:fig3} B,C,D and Figure S6-7). We
+have considered that in our approach energy and seed type of pairs is
+significant for binding and targeted region is important for repression.
 
 \begin{table*}[ht]
 \centering
@@ -431,25 +432,25 @@ binding and targeted region is important for repression.
 \label{tab:one}
 \end{table*}
 
-In regulation of miRNA target sample system (Figure \ref{fig:fig3}),
-miRNA (M1) repressive efficiency on the primary triggering gene (G2) is
-low in steady-state. So it has been observed that the regulatory
-activities of miRNA on the targets are weak after the increase of miRNA
-target G2. When model is triggered with two fold increase in expression
-level of common target (G4), more prominent changes were observed in
-gene expression levels in network compared to changes caused by G2
-increase. Furthermore, change in expression level of target gene that
-has strong miRNA repression efficiency resulted in evident perturbation
-in network. On the other hand, it was observed that Gene2 was weakly
-affected from change of Gene4 expression because of its weak interaction
-factors. Since perturbation efficiency of each gene is different, we
-have developed a function which screens each gene in the network for
-their perturbation efficiencies (Detailed codes are available at Section
-4 in Supplementary Materials and Methods). On the other hand, when we
-applied the method on the minimal dataset (i.e.~Gene4 is trigger
-element), Gene4 has been found to be the most efficient element in terms
-of number of perturbed elements and miRNA2 (M2) has been found to be
-causing the highest mean in expression changes.
+In regulation of miRNA target sample system (Figure \ref{fig:fig3} and
+Figure S5-7), miRNA (M1) repressive efficiency on the primary triggering
+gene (G2) is low in steady-state. So it has been observed that the
+regulatory activities of miRNA on the targets are weak after the
+increase of miRNA target G2. When model is triggered with two fold
+increase in expression level of common target (G4), more prominent
+changes were observed in gene expression levels in network compared to
+changes caused by G2 increase. Furthermore, change in expression level
+of target gene that has strong miRNA repression efficiency resulted in
+evident perturbation in network. On the other hand, it was observed that
+Gene2 was weakly affected from change of Gene4 expression because of its
+weak interaction factors. Since perturbation efficiency of each gene is
+different, we have developed a function which screens each gene in the
+network for their perturbation efficiencies. When we applied the method
+on the minimal dataset (i.e.~Gene4 is trigger element), Gene4 has been
+found to be the most efficient element in terms of number of perturbed
+elements and miRNA2 (M2) has been found to be causing the highest mean
+in expression changes (see Section 5 in Supplementary Materials and
+Methods).
 
 \subsection{Simulation of large and realistic network}
 
@@ -489,10 +490,16 @@ We have analysed the realistic network in context of perturbation
 efficiencies of nodes. This process were run with 3 fold upregulation
 and 10 iteration in conditions where elements that have less than five
 percent change are not taken into account (Codes are found at Section
-6.5 in Supplementary Materials and methods). With this approach, SERPINE
-is found as one of the most effective gene nodes in network. We have
-observed that the results of simulation with SERPINE2 gene, a serine
-protease inhibitor, one of the overexpressed genes of breast cancer
+6.5 in Supplementary Materials and methods). With this approach,
+SERPINE2 has been found as one of the most effective gene nodes in
+network. We have observed that gaining steady-state in realistic network
+takes a lot of time because of complex interactions, as expected, and
+SERPINE2 exhibit highest efficiency at iteration 31 with given
+conditions (see Section 6.6 in Supplementary Materials and Methos and
+Figure S9 in Supplementary Figures). We ran the model with two fold of
+iteration which is observed as most effective. We have observed that the
+results of simulation with SERPINE2 gene, a serine protease inhibitor,
+one of the overexpressed genes of breast cancer
 \citep{yang2018expression, candia2006protease} is not convenient with
 tumor tissue expression values, when we compared the tumor gene
 expression dataset retrieved from TCGA and simulation results obtained
