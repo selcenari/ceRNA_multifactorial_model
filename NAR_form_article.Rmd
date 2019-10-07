@@ -49,7 +49,7 @@ Initially, the network is assumed in steady-state (Figure \ref{fig:fig1}A and Fi
 
 \begin{figure*}[ht]
 \begin{center}
-\includegraphics[width=15cm,height=10cm]{Fig1.jpg}
+\includegraphics[width=16cm,height=9cm]{Fig1.eps}
 \end{center}
 \caption{Schematic presentation of mechanism of network based model. 
     (\textbf{A}) In steady state, miRNAs (M: triangles) repress targets (G: circles) according to proportion of target expression level. 
@@ -84,7 +84,7 @@ Eff_{gi}= Eff_{gi}\times RE^\prime_{gi} \tag{4}\label{eq:4}
 
 \begin{figure}[ht]
 \begin{center}
-\includegraphics[width=9cm,height=17cm]{Fig2.jpg}
+\includegraphics[width=9cm,height=17cm]{Fig2.eps}
 \end{center}
 \caption{Calculations to determine of miRNA binding and repression efficiency. $G$, Gene; $M$, miRNA; $STE$, seed type effect; $RE$, Region Effect; $E$, Energy; $STE^\prime$, normalized values of seed type efficiency coefficient; $RE^\prime$, normalized values of region efficiency coefficient; $E^\prime$, normalized values of energy coefficient. Numbering on edges match the pair order in Table \ref{tab:one} }
 \label{fig:fig2}
@@ -108,7 +108,7 @@ Genes targeted by multiple miRNAs act as a trigger for adjacent local neighborho
 
 \begin{figure*}[ht]
 \begin{center}
-\includegraphics[width=15cm,height=8cm]{Fig3.jpg}
+\includegraphics[width=15cm,height=8cm]{Fig3.eps}
 \end{center}
 \caption{Target regulations with interaction parameters. 
      (\textbf{A}) In the steady-state the repression activity of miRNAs on the targets after binding and repression efficiency. 
