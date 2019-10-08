@@ -90,14 +90,10 @@ Eff_{gi}= Eff_{gi}\times RE^\prime_{gi} \tag{4}\label{eq:4}
 \label{fig:fig2}
 \end{figure}
 
-
 Not all miRNA:target binding events result in degradation of target. The degradation of target by bound miRNA depends on efficiency factors such as binding region. Exact repression efficiency of miRNA is calculated according to equation \eqref{eq:4} (Figure \ref{fig:fig2}D); $RE^\prime_{gi}$, normalized values of region efficiency coefficient between miRNA and gene. The cooperative repression activity of miRNAs to their common targets is figured out as shown in Figure \ref{fig:fig2}E.
 
 ## Breast cancer patient dataset
-
 We have applied our model in a real dataset for which experimental measurements of various factors were available. Expression levels of miRNA and genes in tumor and normal tissue of single patient are retrieved from TCGA Research Network https://www.cancer.gov/tcga. High-throughput experimental datasets which are provided miRNA:gene target pairs with interaction factors [@helwak_mapping_2013; @moore_mirnatarget_2015] (Detailed codes are available at Section 6 in Supplementary Materials and Methods). We have combined miRNA and gene expression datasets via miRNA:target gene dataset retrieved from published datasets [@helwak_mapping_2013; @moore_mirnatarget_2015] (Section 6 in Supplementary Materials and Methods and Table S4 in Supplementary Tables). SERPINE2, one of the most effective nodes, has been used as trigger in ceRNA network simulation in breast cancer patient network. Relevant steps and codes are available at Supplementary Materials and Methods.
-
-[#TODO]: <> "about formulas, 2) in formulas eq:1 and eq:2, C_m or Eff_gi is not intuitive, is there consensus terms about effect or nth gene?"
 
 # RESULTS
 
@@ -120,8 +116,6 @@ Genes targeted by multiple miRNAs act as a trigger for adjacent local neighborho
 
 ## ceRNA:Target networks based on interaction factors
 Earlier studies reported that miRNA regulatory interactions are affected by different parameters. For example, Xu et al. have investigated the importance of seed pairing type between miRNAs and their targets and target site location by using proteomics dataset [@xu_characterization_2014]. They have proposed that the features of binding between miRNA and target can be critical for miRNA efficiency. In addition, binding energy between miRNA and targets is a significant determinant for miRNA efficiency and it has been reported that strength of miRNA:target interactions is depended on binding energy of complexes [@breda_quantifying_2015]. Similarly, another study revealed that affinity is correlated with seed pairing of miRNA:target pairs and suggested that affinity is correlated with number of canonical seed base pairing [@bosson_endogenous_2014]. Therefore, we have integrated aforementioned interaction parameters that could be useful for predicting miRNA repression activity more accurately. The sample dataset used in Figure \ref{fig:fig1} is recalculated with additional factors Table \ref{tab:one} in effect with same trigger (Detailed codes can be found at Section 3 in Supplementary Materials and Methods), two fold increase in Gene2 (Figure \ref{fig:fig3}B, and Figure S6). When the factors were taken into account in the system, miRNA efficiencies varied as shown in Figure \ref{fig:fig3}A (Figure S5). Although the miRNA:target expression ratios in steady-state were same in comparison with the sample dataset without factors, efficiency of binding and repression have changed.  On the other hand, changes in expression levels of G4 (Detailed codes are available in Figure S8 and Section 4 in Supplementary Materials and Methods) and G1 differ although they have same initial conditions. This is due to fact that G4 is targeted by two miRNAs, M1 and M2 (Figure \ref{fig:fig3}D) and changed interaction factors.
-
-[#TODO]: <> "figure1, 2 ve 3 uzerinden farkli dagilim ve degradasyon açıklaması buraya. G2 uzerinden olmasa iyi olur"
 
 When the model run based on expression values of miRNAs and ceRNAs (genes), proportional distribution of miRNA on targets is determined in accordance with equations \eqref{eq:1} \eqref{eq:2}. In that case, the system is observed as shown in Figure \ref{fig:fig1}A at steady-state. However, if interaction factors are taken into account in the approach, specified interaction factors (i.e, binding factors such as seed type and energy) affect distribution of miRNA on targets as calculated in equation \eqref{eq:3} (shown in Figure \ref{fig:fig2}C). After distributed miRNA efficiency was re-calculated with degradation factor(s) (i.e region effect) according to equation \eqref{eq:4}, steady-state condition of network is obtained (shown in Figure \ref{fig:fig2}D and Figure \ref{fig:fig3}A). For instance, proportional distribution of G1:M1 interaction in Figure \ref{fig:fig1}A is calculated lower than the same pair (G1:M1) in the other approach that includes interaction factors (Figure \ref{fig:fig2}C). But, a decrease is observed in repression efficiency of M1 miRNA on G1 in interaction factor based network approach (Figure \ref{fig:fig2}D and \ref{fig:fig3}A). 
 
@@ -170,11 +164,6 @@ In our approach, we have not taken into account transcription, degradation or bi
 The main advantage of ceRNAnetsim package is providing various functions which can be run in accordance with user data. For example, the functions can work without interaction factors or with a simple interaction factor that is specified by user. Furthermore, it can also be operated according to a different parameter(s) provided by the user.In this study, we have preferred to run model, shown in *Multifactorial calculations in miRNA:target network* section. 
 
 In the future, with developments in experimental techniques about miRNAs:target interaction dynamics, more accurate results can be obtained from our model. Also, our model can integrate emerging miRNA effectors such as circRNAs. Consequently, our package may lead to better understanding and predictions of abnormal regulations and pathways underlying diseases or conditions.
-
-# ACKNOWLEDGEMENTS
-
-Text. Text. Text. Text. Text. Text. Text. Text. Text. Text. Text.
-Text. Text. Text. Text.
 
 
 ### Conflict of interest statement. 
