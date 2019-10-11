@@ -61,7 +61,7 @@ clashelwak <- clashelwak%>%
 
 ```
 
-MiRNA releases are obtained from [miRBase](http://www.mirbase.org/ftp.shtml). In this step, release 21 (in Human genome 38) is utilised.
+MiRNA releases are obtained from [miRBase](http://www.mirbase.org/ftp.shtml). In this step, release 21 (in Human genome 38) was downloaded.
 
 ```{r, eval=FALSE}
 read.table("mirbasehg38.txt", comment.char = "#")%>%
@@ -72,7 +72,7 @@ read.table("mirbasehg38.txt", comment.char = "#")%>%
 
 ```
 
-CLASH dataset is published in miRBase erlease 15 and Human Genome 19 version.
+CLASH dataset is published in miRBase release 15 and Human Genome 19 version.
 
 ```{r, eval=FALSE}
 read_tsv("mirna_mature.txt", col_names = FALSE)%>%
@@ -145,6 +145,8 @@ clashelwakfinal$seed_type2 <- as.numeric(clashelwakfinal$seed_type2)
 clashelwakfinal$seed_type3 <- as.character(clashelwakfinal$seed_type3)
 ```
 
+<!-- #TODO maybe purrr can be used, instead of repeating as.character -->
+
 ## Interpreting the CLASH seed structures in dataset
 
 ```{r,  eval=FALSE}
@@ -160,7 +162,7 @@ clashelwakfinal%>%
 
 ## Arrangement of CLEAR-CLiP Dataset [@moore_mirnatarget_2015]
 
-CLASH dataset was retrieved from [Nature web page](nature.com/articles/ncomms9864)
+CLASH dataset was retrieved from [Nature article](nature.com/articles/ncomms9864)
 
 ```{r,  eval=FALSE}
 clearclip <- read_xlsx("CLEAR-CLIP.xlsx")
@@ -251,9 +253,12 @@ bind_rows(clashelwakfinal, clearclipfinal)%>%distinct() -> experimentalmirnagene
 
 ```
 
+<!-- #TODO the sections above needs some text explaining what is done -->
+
+
 ## Adding Coefficients of Interaction factors
 
-Numeric valuesof interaction factors are shown at Table S2-3 in Supplementary Tables file.
+Numeric values of interaction factors are shown in Table S2-3 in Supplementary Tables file.
 
 ```{r,  eval=FALSE}
 experimentalmirnagene <- experimentalmirnagene%>%
@@ -286,6 +291,6 @@ readRDS("data/experimentalmirnagene.RDS")->experimentalmirnagene
 experimentalmirnagene
 ```
 
-The context of dataset is shown at Table S5 in Supplementary Tables.
+The context of dataset is shown in Table S5 in Supplementary Tables.
 
 # REFERENCES

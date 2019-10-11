@@ -36,7 +36,7 @@ knitr::opts_chunk$set(tidy.opts=list(width.cutoff=50),tidy=TRUE)
 library(ceRNAnetsim)
 ```
 
-## *minsamp* dataset analysis at lack of interaction factors.
+## *minsamp* dataset analysis in absence of interaction factors.
 
 ```{r}
 minsamp<-readRDS("data/minsamp.RDS")
@@ -59,15 +59,27 @@ priming_graph(minsamp, competing_count = Competing_expression, miRNA_count = miR
 
 ```{r, message=FALSE, warning=FALSE, out.width='50%', fig.asp=1, fig.ncol = 2,  fig.show='hold', fig.cap = "Sequential iteration of minsamp data. A) First response of system to Gene2 upregulation (2nd iteration). B) Spreading of perturbation on system (3th iteration)", fig.subcap= NULL}
 
-priming_graph(minsamp, competing_count = Competing_expression, miRNA_count = miRNA_expression)%>%
-  update_how("Gene2", 2)%>%
-  simulate(cycle=1)%>%
-  vis_graph(Competing_color = "navajowhite3", mirna_color = "ivory4", Upregulation = "red", Downregulation = "blue", title = "A")
+priming_graph(minsamp, 
+              competing_count = Competing_expression, 
+              miRNA_count = miRNA_expression) %>%
+  update_how("Gene2", 2) %>%
+  simulate(cycle=1) %>%
+  vis_graph(Competing_color = "navajowhite3", 
+            mirna_color = "ivory4", 
+            Upregulation = "red", 
+            Downregulation = "blue", 
+            title = "A")
 
-priming_graph(minsamp, competing_count = Competing_expression, miRNA_count = miRNA_expression)%>%
+priming_graph(minsamp, 
+              competing_count = Competing_expression, 
+              miRNA_count = miRNA_expression)%>%
   update_how("Gene2", 2)%>%
   simulate(2)%>%
-  vis_graph(Competing_color = "navajowhite3", mirna_color = "ivory4", Upregulation = "red", Downregulation = "blue", title = "B")
+  vis_graph(Competing_color = "navajowhite3", 
+            mirna_color = "ivory4", 
+            Upregulation = "red", 
+            Downregulation = "blue", 
+            title = "B")
 
 ```
 

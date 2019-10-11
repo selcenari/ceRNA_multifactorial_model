@@ -36,7 +36,7 @@ We defined the functions that can be used with R programming. Briefly, these fun
 **Simulation of competing behavior of targets**: After the change in the steady-state conditions, the network elements try to gain steady-state again. This process progresses as repeating of regulations after the spreading the changes in the network. In this step, simulation of regulations according to given cycle count in simulate function is applied. After each simulation cycle, the miRNA repression values are re-calculated and the current values of competing elements are found and saved. The process is performed in the edge data and at the same time outputs of the calculations are carried from edge to node data.
 
 
-The node elements in the dataset are handled as two type; repressive (miRNAs) and competing (targets). It is assumed in approach that while targets are degrading or inhibiting by miRNAs continuously, miRNAs reversibly used. If the trigger of the network is a miRNA, it maintains the current value of amount that provides by user. On the contrary, it tries to help this process to provide steady-state through the regulations on its amount, if a competing element is used as a trigger. The functions that are used in the approach are developed with R programming so as can be used with other packages. These are can be found in the Github repository [ceRNAnetsim Github page](https://github.com/selcenari/ceRNAnetsim) and improved with contributions from others.
+The node elements in the dataset are handled as two type; repressive (miRNAs) and competing (targets). It is assumed in approach that while targets are degrading or inhibiting by miRNAs continuously, miRNAs reversibly used. If the trigger of the network is a miRNA, it maintains the current value of amount that provides by user. On the contrary, it tries to help this process to provide steady-state through the regulations on its amount, if a competing element is used as a trigger. The functions that are used in the this study are developed with R and their source code is available in [Github repository](https://github.com/selcenari/ceRNAnetsim).
 
 
 ```{r, include=FALSE, message=FALSE, warning=FALSE}
@@ -128,7 +128,7 @@ priming_graph(minsamp, competing_count = Competing_expression, miRNA_count = miR
   simulate(cycle=2)
 ```
 
-When the graphs which were resulted from analyses were examined, it was observed that behaviors were same. But, when the results were analysed in terms of expression values, the regulation differences can be observed.
+When the graphs were examined, it was observed that behaviors were same. But, when the results were analysed in terms of expression values, the regulation differences can be observed.
 
 ```{r, message=FALSE, warning=FALSE}
 priming_graph(minsamp, competing_count = Competing_expression, miRNA_count = miRNA_expression, aff_factor = c(energy, seed_type), deg_factor = region)%>%
@@ -243,7 +243,7 @@ We have used `TCGAbiolinks` package to obtain miRNA expression quantification. T
 
 + Get the mirbase id of mature miRNA:
 
-We downloaded the mirbase release 21 dataset from [mirbase](http://www.mirbase.org/ftp.shtml) and processed the patient mirna expression datasets as following:
+We downloaded the mirbase release 21 dataset from [mirbase](http://www.mirbase.org/ftp.shtml) and processed the patient miRNA expression datasets as following:
 
 ```{r, message= FALSE, warning=FALSE}
 
@@ -361,7 +361,7 @@ BCPME_mirnanormal%>%
 
 ```
  
- A part of dataset can be found at Table S4 in Supplementary Tables.
+A part of dataset can be found at Table S4 in Supplementary Tables.
 
 ```{r}
 E9GE_mirnagenenormal<-readRDS("data/E9GE_mirnagenenormal.RDS")
@@ -399,7 +399,7 @@ perturbationofnetwork%>%
   filter(type== "Competing")%>%
   arrange(desc(perturbation_efficiency))
 ```
-This dataset, perturbationofnetwork, includes totally 423 effective nodes. We selected SERPINE2 gene to perturb the network because it is the most efficient node gene in network.
+This dataset, `perturbationofnetwork`, includes totally 423 effective nodes. We selected SERPINE2 gene to perturb the network because it is the most efficient node gene in network.
 
 ## 6.6 Approach of Method into Combined Datasets
 
@@ -454,5 +454,5 @@ E9GE_mirnagenetumor%>%
 ```
 
 
-Actually, we have developed to provide a new approach mirna mediated regulation networks. This approach may not explain the whole regulation behaviors between miRNAs and targets but can be first step to more detailed and coherent miRNA:target regulation approach.
+Actually, we have developed to provide a new approach miRNA mediated regulation networks. This approach may not explain the whole regulation behaviors between miRNAs and targets but can be first step to more detailed and coherent miRNA:target regulation approach.
 

@@ -41,7 +41,7 @@ library(gt)
 Table: *minsamp* sample dataset that includes interaction factors. The parameters which affect miRNA:target interactions (i.e. seed type, region, energy) are provided in sample dataset.
 
 
-Note: Energy values in miRNA:target pairs are represented by high-throughput studies [@helwak_mapping_2013; @moore_mirnatarget_2015] which are utilized in this study. On the other hand, we have specified the other interaction factors, seed type and location of binding region on the target, as numeric values based on the previous studies.[@grimson_microrna_2007] have compared the seed types' effect on target repression with few miRNA had canonical seed pairing in their study. Additionally, [@bartel_micrornas:_2009] and [@betel2010comprehensive] have studied on functional and non-functional seed interactions. Based on results of these studies we have arranged seed types of miRNA:target interactions as numeric values. We also have redefined location of binding region on the target as numeric values, based on studies of [@hausser_analysis_2013] and [@helwak_mapping_2013]. With this process, we have handled this entegrated dataset in context of competitor behaviours and functionality of interactions. 
+Note: Energy values in miRNA:target pairs are represented by high-throughput studies [@helwak_mapping_2013; @moore_mirnatarget_2015] which are utilized in this study. On the other hand, we have specified the other interaction factors, seed type and location of binding region on the target, as numeric values based on the previous studies.[@grimson_microrna_2007] have compared the seed types' effect on target repression with few miRNA had canonical seed pairing in their study. Additionally, [@bartel_micrornas:_2009] and [@betel2010comprehensive] have studied on functional and non-functional seed interactions. Based on results of these studies we have arranged seed types of miRNA:target interactions as numeric values. We also have redefined location of binding region on the target as numeric values, based on studies of [@hausser_analysis_2013] and [@helwak_mapping_2013]. With this process, we have handled this integrated dataset in context of competitor behaviors and functionality of interactions. 
 
 
 \begin{table}[ht]
@@ -119,20 +119,20 @@ Table: Example of E9GE_mirnagenenormal dataset.
  Variable & Structure & Means \\
   \hline
    cluster    & character & Barcode from experimentally method \\
-   chromosome    & character & Chromosome of Terget gene from raw data \\
+   chromosome    & character & Chromosome of Target gene from raw data \\
    start\_position    & numeric & Gene start position from raw data \\
    end\_position     & numeric & Gene end position from raw data \\
-   strand     & chracter & Gene strand \\
+   strand     & character & Gene strand \\
    hgnc\_symbol     & character & Gene name (Symbol) \\
    Ensembl\_Gene\_Id     & character & Ensembl Gene Id of gene \\
    Ensembl\_Transcript\_Id   & character & Ensembl transcript id of mRNA of Target gene \\
    target\_seq   & character & mRNA sequences targeted by miRNA \\
-   miRNA   & character & miRNA id (from miRBase vesion 21 ) \\
+   miRNA   & character & miRNA id (from miRBase version 21 ) \\
    miR\_seq   & character & miRNA sequence \\
    seed\_type   & character & seed type of miRNA:target interaction \\
    Energy   & numeric & Energy of miRNA:target binding \\
    HG38build\_loc   & character & Recent chromosomal location of Gene \\
-   Genom\_build   & character& Genom build of given chromosome, start and end positions \\
+   Genome\_build   & character& Genome build of given chromosome, start and end positions \\
    region   & character & interaction location on target \\ 
    region\_effect   & numeric & Coefficient of location on target \\ 
    seed\_type\_effect   & numeric & Coefficient for seed sequence of miRNA:target interaction \\
