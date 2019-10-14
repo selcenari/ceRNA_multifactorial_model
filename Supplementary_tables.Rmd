@@ -40,8 +40,11 @@ library(gt)
 
 Table: *minsamp* sample dataset that includes interaction factors. The parameters which affect miRNA:target interactions (i.e. seed type, region, energy) are provided in sample dataset.
 
+Some of information about miRNA:target interactions were exhibited directly by high-throughput studies. On the other haned, we were examined other interacion factors based on different studies.
 
-Note: Energy values in miRNA:target pairs are represented by high-throughput studies [@helwak_mapping_2013; @moore_mirnatarget_2015] which are utilized in this study. On the other hand, we have specified the other interaction factors, seed type and location of binding region on the target, as numeric values based on the previous studies.[@grimson_microrna_2007] have compared the seed types' effect on target repression with few miRNA had canonical seed pairing in their study. Additionally, [@bartel_micrornas:_2009] and [@betel2010comprehensive] have studied on functional and non-functional seed interactions. Based on results of these studies we have arranged seed types of miRNA:target interactions as numeric values. We also have redefined location of binding region on the target as numeric values, based on studies of [@hausser_analysis_2013] and [@helwak_mapping_2013]. With this process, we have handled this integrated dataset in context of competitor behaviors and functionality of interactions. 
++ [@helwak_mapping_2013; @moore_mirnatarget_2015] reported the energy values in miRNA:target interactions.
++ Comparisons of canonical seed types were evaluated by study of [@grimson_microrna_2007], while functional and non-functional seed interactions were studied by [@bartel_micrornas:_2009] and [@betel2010comprehensive]. 
++ Numeric definition of target region location effect was performed based on studies of [@hausser_analysis_2013] and [@helwak_mapping_2013]
 
 
 \begin{table}[ht]

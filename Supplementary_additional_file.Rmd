@@ -23,22 +23,25 @@ library(tidyr)
 library(stringr)
 library(readr)
 library(readxl)
+library(biomaRt)
 knitr::opts_chunk$set(tidy.opts=list(width.cutoff=50),tidy=TRUE)
 
 ```
 
-# Arrangement of CLASH dataset [@helwak_mapping_2013]
+# Arrangement of CLASH dataset 
 
-CLASH dataset was retrieved from [PubMed](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3650559/)
+CLASH dataset was retrieved from [PubMed](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3650559/) [@helwak_mapping_2013].
 
 ```{r, eval=FALSE}
 
-clashelwak <- read.table("mmc1.txt", comment.char = "#", header = TRUE, skip = 1)
+clashelwak <- read.table("mmc1.txt", comment.char = "#", header = TRUE, skip = 1, stringsAsFactors = FALSE)
 
 #hg19
 ```
 
 ## Query of Human Genome 19.
+
+Human genome 19 information was handled through biomaRt package.
 
 ```{r,  eval=FALSE}
 #HG19
@@ -93,7 +96,12 @@ read_tsv("mirna_mature.txt", col_names = FALSE)%>%
 
 ## Converting CLASH data to human genome 38 build.
 
+There are different liftover methods for conversion among Human Genome builds. We preffered to use [UCSC liftover tool](https://genome.ucsc.edu/cgi-bin/hgLiftOver)
+
 ```{r,  eval=FALSE}
+
+#Obtaining chromosomal locations from miRNA:target interaction dataset.
+
 lift19 <- clashelwakfinal%>%
   dplyr::select(1,2,3)%>%
   unite(start_end, c("start_position", "end_position"), sep = "-")%>%
@@ -102,7 +110,7 @@ lift19 <- clashelwakfinal%>%
 
 write_tsv(lift19, "lift19.txt")
 
-# Lift over process is made via UCSC liftover tool. (https://genome.ucsc.edu/cgi-bin/hgLiftOver)
+#After we searched this file in UCSC browser, the output loaded (lift19_del deleted regions on the HG38 genome build; hg38clashcomp new locations of the genes on HG38)
 
 lift19_del <- read_tsv("deleted_lift19.txt")
 colnames(lift19_del)[1] <- "chromosome_loc"
@@ -115,11 +123,15 @@ lift19_del <- lift19_del%>%
 lift19_del$Start <- as.numeric(lift19_del$Start)
 lift19_del$End <- as.numeric(lift19_del$End)
 
+#removing deleted location from CLASH dataset
+
 clashelwakfinal <-clashelwakfinal%>%
   mutate(Chromosome = paste0("chr",chromosome_name, ""))%>%
   dplyr::anti_join(lift19_del, by = c("Chromosome"="Chr", "start_position"="Start", "end_position"="End"))
 
-hg38clash <- read.delim("hg38clashcomp.txt", header = FALSE)
+hg38clash <- read.delim("hg38clashcomp.txt", header = FALSE, stringsAsFactors = FALSE)
+
+# adding new location information:
 
 clashelwakfinal <- clashelwakfinal%>% 
   bind_cols(hg38clash)
@@ -128,24 +140,16 @@ colnames(clashelwakfinal)[18] <- "HG38build_loc"
 
 clashelwakfinal <- clashelwakfinal%>%
   dplyr::mutate(Genom_build= rep("hg19"))
-str(clashelwakfinal)
-
 
 # Arrangement in dataset
 
 clashelwakfinal%>% dplyr::select(cluster=seq_ID, chromosome = Chromosome, start_position, end_position, strand, hgnc_symbol = Hugo_Symbol, Ensembl_Gene_Id, Ensembl_Transcript_Id, target_seq = mRNA_seq_extended, miRNA= Name, miR_seq =miRNA_seq, seed_type, seed_type2= seed_basepairs, seed_type3= folding_class, Energy = folding_energy, HG38build_loc, Genom_build, region) -> clashelwakfinal
 
-clashelwakfinal$cluster <- as.character(clashelwakfinal$cluster)
-clashelwakfinal$strand <- as.character(clashelwakfinal$strand)
-clashelwakfinal$target_seq <- as.character(clashelwakfinal$target_seq)
-clashelwakfinal$miR_seq <- as.character(clashelwakfinal$miR_seq)
-clashelwakfinal$seed_type <- as.character(clashelwakfinal$seed_type)
-clashelwakfinal$HG38build_loc <- as.character(clashelwakfinal$HG38build_loc)
-clashelwakfinal$seed_type2 <- as.numeric(clashelwakfinal$seed_type2)
-clashelwakfinal$seed_type3 <- as.character(clashelwakfinal$seed_type3)
-```
 
-<!-- #TODO maybe purrr can be used, instead of repeating as.character -->
+clashelwakfinal$strand <- as.character(clashelwakfinal$strand)
+
+str(clashelwakfinal)
+```
 
 ## Interpreting the CLASH seed structures in dataset
 
@@ -194,12 +198,17 @@ clearclipfinal <- hg18%>%
 ## Converting human genome build 
 
 ```{r,   eval=FALSE}
+
+#Obtaining chromosomal locations from miRNA:target interaction dataset.
+
 lift18 <- clearclipfinal%>%
   unite(start_end, c("start_position", "end_position"), sep = "-")%>%
   unite(location, c("chr","start_end"), sep = ":")%>%
   dplyr::select(location)
 
 write_tsv(lift18, "lift18.txt")
+
+#After we searched this file in UCSC browser, the output loaded (deleted_lift18 deleted regions on the HG38 genome build; hg38clearclip new locations of the genes on HG38)
 
 deleted_lift18 <- read_tsv("deleted_lift18.txt")
 
@@ -213,24 +222,33 @@ deleted_lift18 <- deleted_lift18%>%
 deleted_lift18$Start <- as.numeric(deleted_lift18$Start)
 deleted_lift18$End <- as.numeric(deleted_lift18$End)
 
+#removing deleted location from CLEAR-CLiP dataset
+
 clearclipfinal <- clearclipfinal%>%
   dplyr::anti_join(deleted_lift18, by = c("chr"="Chr", "start_position"="Start", "end_position"="End"))
 
-hg38clearclip<- read.delim("hg38clearclip.txt", header = FALSE)
+hg38clearclip<- read.delim("hg38clearclip.txt", header = FALSE, stringsAsFactors = FALSE)
 
 clearclipfinal <- clearclipfinal%>% 
   bind_cols(hg38clearclip)
 
 colnames(clearclipfinal)[28] <- "HG38build_loc"
 
+# adding new location information:
+
 clearclipfinal <- clearclipfinal%>%
   dplyr::mutate(Genom_build= rep("hg18"))
 
+# Arrangement in dataset
+
 clearclipfinal%>%
   dplyr::select(cluster=cluster.ID, chromosome = chr, start_position, end_position, strand = strand.y, hgnc_symbol, Ensembl_Gene_Id =ensembl_gene_id, Ensembl_Transcript_Id =ensembl_transcript_id, target_seq = target.map, miRNA, miR_seq = miR.map, seed_type = 'seed match', Energy = MFE, HG38build_loc, Genom_build, region) -> clearclipfinal
+
 ```
 
-## Seed type manipulation
+## Seed type manipulation in CLEAR-CLiP dataset
+
+In CLEAR-CLiP dataset, seed types were shown in detail. We adjusted as canonical and non-canonical.
 
 ```{r,  eval=FALSE}
 data_frame(seed_type= c("5mer_1","5mer_2", "5mer_3", "6mer", "6mer.indel", "6mer.mm", "6mer_off.mm", "6merA1", "6merA1.indel", "6merA1.mm", "7merA1", "7merA1.indel", "7merA1.mm", "7merm8", "7merm8.indel", "7merm8,mm", "8mer", "8mer.indel", "8mer.mm", "NA" ),
@@ -239,9 +257,6 @@ data_frame(seed_type= c("5mer_1","5mer_2", "5mer_3", "6mer", "6mer.indel", "6mer
 clearclipfinal%>%
   inner_join(clipdata_seed, by = "seed_type")%>%
   dplyr::select(1:11, seed_type = seed_type_com, Energy, HG38build_loc, Genom_build, region)-> clearclipfinal
-
-
-clearclipfinal$HG38build_loc <- as.character(clearclipfinal$HG38build_loc)
 
 ```
 
@@ -253,12 +268,13 @@ bind_rows(clashelwakfinal, clearclipfinal)%>%distinct() -> experimentalmirnagene
 
 ```
 
-<!-- #TODO the sections above needs some text explaining what is done -->
-
-
 ## Adding Coefficients of Interaction factors
 
-Numeric values of interaction factors are shown in Table S2-3 in Supplementary Tables file.
+Energy values in miRNA:target pairs are represented by high-throughput studies [@helwak_mapping_2013; @moore_mirnatarget_2015] which are utilized in this study. On the other hand, we have specified the other interaction factors, seed type and location of binding region on the target, as numeric values based on the previous studies.[@grimson_microrna_2007] have compared the seed types' effect on target repression with few miRNA had canonical seed pairing in their study. Additionally, [@bartel_micrornas:_2009] and [@betel2010comprehensive] have studied on functional and non-functional seed interactions. Based on results of these studies we have arranged seed types of miRNA:target interactions as numeric values. We also have redefined location of binding region on the target as numeric values, based on studies of [@hausser_analysis_2013] and [@helwak_mapping_2013]. With this process, we have handled this integrated dataset in context of competitor behaviors and functionality of interactions. 
+
+In this step we added numeric intraction values at followings
+
+Fistly, we organized these values due to the fact that the regions were defined differently in two datasets. After that, region effect was added as numeric values (shown in Table S3). 
 
 ```{r,  eval=FALSE}
 experimentalmirnagene <- experimentalmirnagene%>%
@@ -268,6 +284,7 @@ experimentalmirnagene <- experimentalmirnagene%>%
 
 ```
 
+Secondly, we organized seed type interactions in *Seed type manipulation* section for CLEAR-CLiP dataset to show as found in CLASH dataset. Same type formatted values added dataset as numeric values (shown in Table S2).
 
 ```{r,  eval=FALSE}
 
