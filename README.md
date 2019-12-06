@@ -1,2 +1,2 @@
-# ceRNA_multifatorial_model
+# ceRNA_multifactorial_model
 Article files

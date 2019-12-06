@@ -54,6 +54,7 @@ knitr::opts_chunk$set(tidy.opts=list(width.cutoff=50),tidy=TRUE)
 #install.packages("devtools")
 #devtools::install_github("selcenari/ceRNAnetsim")
 library(ceRNAnetsim)
+library(stringr)
 ```
 
 + load *minsamp* data
@@ -270,6 +271,7 @@ BCP_mirnatumor <- GDCquery(project = "TCGA-BRCA",
 
 GDCdownload(BCP_mirnatumor)
 
+
 GDCprepare(BCP_mirnatumor)%>%
   as.data.frame()%>%
   dplyr::select(miRNA_ID, read_count, reads_per_million_miRNA_mapped, miRNA_region)%>%
@@ -399,7 +401,7 @@ perturbationofnetwork%>%
   filter(type== "Competing")%>%
   arrange(desc(perturbation_efficiency))
 ```
-This dataset, `perturbationofnetwork`, includes totally 423 effective nodes. We selected SERPINE2 gene to perturb the network because it is the most efficient node gene in network.
+This dataset, `perturbationofnetwork`, includes totally 420 effective nodes. We selected SERPINE2 gene to perturb the network because it is the most efficient node gene in network.
 
 ## 6.6 Approach of Method into Combined Datasets
 

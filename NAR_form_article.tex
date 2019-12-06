@@ -9,11 +9,7 @@
 
 %\articlesubtype{This is the article type (optional)}
 
-\usepackage{float}
-
-\floatplacement{figure}{H}
-
-\usepackage[colorlinks=true, linkcolor=blue, urlcolor=blue, citecolor=blue]{hyperref} \usepackage[T1]{fontenc}
+\usepackage{float} \floatplacement{figure}{H} \usepackage[colorlinks=true, linkcolor=blue, urlcolor=blue, citecolor=blue]{hyperref} \usepackage[T1]{fontenc}
 
 \begin{document}
 
@@ -69,22 +65,22 @@ between elements in miRNA:target network where abundance of target and
 sponge effect are taken into account. The model is scalable and can be
 plugged in with emerging miRNA effectors such as circRNAs. The model is
 available as R package ceRNAnetsim
-\url{https://github.com/selcenari/ceRNAnetsim}.
+(\url{https://github.com/selcenari/ceRNAnetsim}).
 \end{abstract}
 
-\section{INTRODUCTION}
+\section{\texorpdfstring{\textbf{INTRODUCTION}}{}}
 
 MicroRNAs (miRNAs) are a family of short non-coding RNAs which are key
 regulator of gene expression through various post-transcriptional
-mechanisms. Although the mechanisms by which miRNA represses are not
-fully understood, miRNAs predominantly repress their targets. Repressive
-activities of miRNAs vary depending on many factors that are significant
-to miRNA:target interactions. These factors include miRNA:target binding
-energy, binding location in target sequence, base pairing types between
-miRNA and target, abundance of miRNAs and targets
-\citep{grimson_microrna_2007}. Binding energies of miRNA:target
-complexes vary based on nucleotide context and determine folding
-stability of complex \citep{cao_predicting_2012}. It has been
+mechanisms \citep{brennecke2005principles}. Although the mechanisms by
+which miRNA represses are not fully understood, miRNAs predominantly
+repress their targets. Repressive activities of miRNAs vary depending on
+many factors that are significant to miRNA:target interactions. These
+factors include miRNA:target binding energy, binding location in target
+sequence, base pairing types between miRNA and target, abundance of
+miRNAs and targets \citep{grimson_microrna_2007}. Binding energies of
+miRNA:target complexes vary based on nucleotide context and determine
+folding stability of complex \citep{cao_predicting_2012}. It has been
 demonstrated that the binding energy between miRNA and target indicates
 stability or affinity of complex \citep{helwak_mapping_2013} and does
 not directly determine repressive activity of miRNA
@@ -154,7 +150,7 @@ gene expression changes in recent algorithm
 approach can be useful for ceRNA studies and published their approach as
 an R package.
 
-\section{MATERIALS AND METHODS}
+\section{\texorpdfstring{\textbf{MATERIALS AND METHODS}}{}}
 
 \subsection{Construction of miRNA:target network}
 
@@ -198,7 +194,7 @@ effect'' (see Section 2 in Supplementary Materials and Methods).
     (\textbf{A}) In steady state, miRNAs (M: triangles) repress targets (G: circles) according to proportion of target expression level. 
     (\textbf{B}) Two fold increase in transcript level of Gene2 (G2) acts as a trigger (shown in red). 
     (\textbf{C}) Distribution of miRNA1 (M1) changes. 
-    (\textbf{D)}) The change at expression of common target affects changes of proportional distribution of miRNA2 (M2). Expression values are rounded to integers for simplicity. Gray values on edges indicate initial distribution, red values indicate increase and blue values indicate decrease in distribution. Shades of circles indicate different levels of increase.}
+    (\textbf{D}) The change at expression of common target affects changes of proportional distribution of miRNA2 (M2). Expression values are rounded to integers for simplicity. Gray values on edges indicate initial distribution, red values indicate increase and blue values indicate decrease in distribution. Shades of circles indicate different levels of increase.}
 \label{fig:fig1}
 \end{figure*}
 
@@ -257,14 +253,6 @@ Eff_{gi}= C_m \times E^\prime_{gi} \times STE^\prime_{gi} \times C_{gi}/(\sum_{1
 Eff_{gi}= Eff_{gi}\times RE^\prime_{gi} \tag{4}\label{eq:4}
 \end{equation}
 
-\begin{figure}[ht]
-\begin{center}
-\includegraphics[width=9cm,height=17cm]{fig2_new.eps}
-\end{center}
-\caption{Calculations to determine of miRNA binding and repression efficiency. $G$, Gene; $M$, miRNA; $STE$, seed type effect; $RE$, Region Effect; $E$, Energy; $STE^\prime$, normalized values of seed type efficiency coefficient; $RE^\prime$, normalized values of region efficiency coefficient; $E^\prime$, normalized values of energy coefficient. Numbering on edges match the pair order in Table \ref{tab:one} }
-\label{fig:fig2}
-\end{figure}
-
 Not all miRNA:target binding events result in degradation of target. The
 degradation of target by bound miRNA depends on efficiency factors such
 as binding region. Exact repression efficiency of miRNA is calculated
@@ -273,12 +261,20 @@ according to equation \eqref{eq:4} (Figure \ref{fig:fig2}D);
 between miRNA and gene. The cooperative repression activity of miRNAs to
 their common targets is figured out as shown in Figure \ref{fig:fig2}E.
 
+\begin{figure}[ht]
+\begin{center}
+\includegraphics[width=9cm,height=17cm]{fig2_new.eps}
+\end{center}
+\caption{Calculations to determine of miRNA binding and repression efficiency. $G$, Gene; $M$, miRNA; $STE$, seed type effect; $RE$, Region Effect; $E$, Energy; $STE^\prime$, normalized values of seed type efficiency coefficient; $RE^\prime$, normalized values of region efficiency coefficient; $E^\prime$, normalized values of energy coefficient. Numbering on edges match the pair order in Table \ref{tab:one} }
+\label{fig:fig2}
+\end{figure}
+
 \subsection{Breast cancer patient dataset}
 
 We have applied our model in a real dataset for which experimental
 measurements of various factors were available. Expression levels of
 miRNA and genes in tumor and normal tissue of single patient are
-retrieved from TCGA Research Network \url{https://www.cancer.gov/tcga}.
+retrieved from TCGA Research Network; \url{https://www.cancer.gov/tcga}.
 High-throughput experimental datasets which are provided miRNA:gene
 target pairs with interaction factors
 \citep{helwak_mapping_2013, moore_mirnatarget_2015} (Detailed codes are
@@ -292,7 +288,7 @@ trigger in ceRNA network simulation in breast cancer patient network.
 Relevant steps and codes are available at Supplementary Materials and
 Methods.
 
-\section{RESULTS}
+\section{\texorpdfstring{\textbf{RESULTS}}{}}
 
 \subsection{Network with miRNA:ceRNA expression level}
 
@@ -418,7 +414,7 @@ significant for binding and targeted region is important for repression.
 \caption{Expression values of elements and interaction factors of miRNA:target interactions} 
 \begin{tabular}{rllrrrrr}
   \hline
- & competing & miRNA & Competing expression & miRNA expression & seed type & region & energy \\ 
+ & Competing & miRNA & Competing Expression & miRNA Expression & Seed Type & Region & Energy \\ 
   \hline
    & Gene1 & Mir1 & 10000.00 & 1000.00 & 0.43 & 0.30 & -20.00 \\ 
    & Gene2 & Mir1 & 10000.00 & 1000.00 & 0.43 & 0.01 & -15.00 \\ 
@@ -515,7 +511,39 @@ expression values before and after the regulation of a known gene at
 existing tissue, and miRNA expression values of this tissue at initial
 conditions.
 
-\section{DISCUSSION}
+\section{Additions to be fixed}
+
+Additionally, miRNA:gene expression dataset which was integrated via
+miRTarBase \citep{chou2017mirtarbase} was analysed in mean of
+perturbation efficiency to determine crucial genes on the network. We
+have observed that two miRNAs and 488 genes are effective in terms of
+perturbation efficiency, when we ran our model with more than 15\%
+efficiency on target expression. miR-10b was investigated via HMDD
+database \citep{huang2018hmdd} and mostly found as metastatic biomarker.
+On the other hand, it was observed that miR-148a is critical for
+promotion of apoptosis and supression of breast cancer cell growth.
+Additionaly, to obtain the number of genes in a narrow range, the model
+was ran with 17\% efficency on target expression and 297 genes and one
+miRNA were observed as highly perturbation-effective. We analysed these
+genes via eDGAR, a database of Disease-Gene Associations with annotated
+Relationships among genes \citep{babbi2017edgar} that supplies different
+observations about crucial genes such as direct physical interactions,
+other shared genes with these interactions, protein-protein
+interactions, GO terms etc. With our model, we obtained 3 (TP53, BRCA1,
+AKT1) of 27 critical breast cancer genes and these genes show direct
+physical interaction with 21 genes. 33 shared genes which are observed
+on these direct interactions were also found in our effective
+perturbation elements.We have obtained 7 (KLF4, TP53, BRCA1, CREB, ID4,
+GATA3, CTBP1) transcription factors (TFs) that are common in 44 critical
+TFs which are provided by eDGAR dataset. 44 of regulated genes via these
+TFs were found in our highly effective genes. it has been observed that
+these genes cover 22.5\% of 297 perturbation-effective genes.
+
+When we analysed these genes via biomaRt OMIM query, it has been
+observed that our model provides enriched 1.45 fold results with
+hypergeometric p-values 3.19e-05.
+
+\section{\texorpdfstring{\textbf{DISCUSSION}}{}}
 
 Network based approaches for analyzing miRNA:target interactions have
 been developed in earlier studies. An initial attempt demonstrated the
@@ -552,7 +580,7 @@ and transcription factors are ignored but the network structure is
 flexible and can integrate additional regulation elements as they become
 available.
 
-\section{CONCLUSION}
+\section{\texorpdfstring{\textbf{CONCLUSION}}{}}
 
 The main advantage of ceRNAnetsim package is providing various functions
 which can be run in accordance with user data. For example, the
@@ -572,8 +600,6 @@ underlying diseases or conditions.
 \subsubsection{Conflict of interest statement.}
 
 None declared.
-
-\newpage
 
 \bibliographystyle{nar}
 \bibliography{NAR-sample.bib}
