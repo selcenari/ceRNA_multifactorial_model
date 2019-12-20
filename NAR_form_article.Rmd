@@ -1,7 +1,7 @@
 ---
 title: Network based multifactorial modelling microRNA-target interaction.
 author:
-  - name: Selcen Ari
+  - name: Selcen Ari Yuka
     affiliation: "1"
   - name: Alper Yilmaz
     affiliation: "1"
@@ -164,6 +164,8 @@ When we analysed these genes via biomaRt OMIM query, it has been observed that o
 Network based approaches for analyzing miRNA:target interactions have been developed in earlier studies. An initial  attempt demonstrated the ceRNA crosstalk in a network-like minimal interaction structure with concentrations of ceRNA and miRNAs [@figliuzzi_micrornas_2013]. Next, a network based kinetic model integrating miRNA and target rates of transcription, degradation, binding and unbinding was developed [@nitzan_interactions_2014] using high throughput experimental dataset about miR-92a depletion [@helwak_mapping_2013]. It was demonstrated that distant ceRNAs can interact with each other via indirect links, and the interactions are affected depending on distance between ceRNAs or topological features of network [@nitzan_interactions_2014]. More recently, an approach to detect ceRNA interaction by using the miRNA expression, gene expression and common miRNAs between gene targets was developed [@markus_list_sponge_2017] which was effective in analyzing genes through miRNAs. Based on the observations that a miRNA can exhibit strong functionality to a target but may not against an other, the authors have concluded that existing miRNA based approach may not be suitable for understanding regulations of ceRNA interactions. Additionally, miRmapper package [@da2018mirmapper] utilizes an adjacency matrix to associate miRNAs using differentially expressed genes and identifies significant miRNAs in network. 
 
 In our approach, we have not taken into account transcription, degradation or binding rates of elements in network. Because, although it is known as the miRNAs are highly stable, the transcription and degradation rates of miRNAs change depending on cellular conditions [@ruegger_microrna_2012]. However, due to lack of datasets including degradation and transcription rates of miRNAs at specific cellular conditions, such factors are neglected in our model. Additionally, other regulation parameters such as gene-gene interactions and transcription factors are ignored but the network structure is flexible and can integrate additional regulation elements as they become available. 
+
+In breast cancer sample, all the genes with high perturbation efficiency were found to be all connected to miR10b. This can be explained by very high expression level of that miRNA. In a large network where miRNAs have balanced expression, perturbation analysis have potential to reveal genes with high perturbation efficiency more widsespread and dispersed in the network.
 
 # \textbf{CONCLUSION}
 
