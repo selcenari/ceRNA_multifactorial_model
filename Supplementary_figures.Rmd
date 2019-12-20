@@ -153,3 +153,7 @@ as.data.frame(E9GE_mirnagenenormal)%>%
 #limit=0 describes the change that is not taken into account.
 ```
 
+## Highly effective perturbing elements in network
+
+![Interactions of genes that have high perturbation efficiency. Critical gene, represents crucial genes for breast cancer,provided by eDGAR; TFs, transcription factors;  Regulated by TFs, regulated genes with these transcription factors; Physical interaction with critical genes; shared genes in physical interactions between critical genes ](highly_effective_genes.png){#figs10}
+
