@@ -206,13 +206,13 @@
 \newcommand\contentsname{Contents}
 \newcommand\listfigurename{List of Figures}
 \newcommand\listtablename{List of Tables}
-\newcommand\refname{REFERENCES}
+\newcommand\refname{\bfseries{REFERENCES}}
 \newcommand\indexname{Index}
 \newcommand\figurename{Figure}
 \newcommand\tablename{Table}
 \newcommand\partname{Part}
 \newcommand\appendixname{Appendix}
-\newcommand\abstractname{Abstract}
+\newcommand\abstractname{ABSTRACT}
 \newcommand\ackname{Acknowledgements}
 \newcommand\keywordname{Keywords}
 \def\today{\ifcase\month\or
@@ -310,6 +310,7 @@
   \let\@evenfoot\@empty}
 %
 %%%%%%%%%%%%%%%%%%%% ** LOCAL FONT DEFINITIONS ** %%%%%%%%%%%%%%%%%%%
+\usepackage{helvet}
 %
 % Running head, foot, pageno & other info.
 \def\lrhfont{\fontfamily{\rmdefault}\fontshape{it}\fontsize{10.16}{10.16}\selectfont}
@@ -323,8 +324,9 @@
 \def\subtitlefont{\fontfamily{\sfdefault}\fontsize{14}{18}\fontseries{m}\selectfont\leftskip0pt\rightskip0pt plus1fill}
 \def\authorfont{\reset@font\fontfamily{\sfdefault}\fontsize{12}{14}\fontseries{b}\selectfont\leftskip0pt\rightskip0pt plus1fill}
 \def\addressfont{\reset@font\fontfamily{\sfdefault}\fontsize{10}{12}\fontseries{n}\selectfont\leftskip0pt\rightskip0pt plus1fill}
-\def\abstractfont{\fontfamily{\sfdefault}\fontsize{10}{12}\fontseries{b}\selectfont\leftskip0pt\rightskip0pt}
-\def\abstractheadfont{\normalfont\bf\selectfont}
+
+\def\abstractfont{\fontfamily{\sfdefault}\fontsize{10}{12}\fontseries{b}\bfseries\selectfont\leftskip0pt\rightskip0pt}
+\def\abstractheadfont{\normalfont\selectfont\bfseries}
 \def\keywordheadfont{\fontfamily{\rmdefault}\fontsize{8}{10}\selectfont\itshape}
 \def\keywordfont{\fontfamily{\rmdefault}\fontsize{8}{10}\selectfont\leftskip0pt\rightskip0pt}
 \def\historyfont{\fontfamily{\sfdefault}\fontsize{8}{10}\fontseries{n}\selectfont\leftskip0pt\rightskip0pt plus1fill}
@@ -353,7 +355,7 @@
 \def\listlabelfont{\normalfont}
 \def\mclistfont{\fontsize{10}{13}\selectfont}
 % Biliography
-\def\bibfont{\fontsize{8}{9}\selectfont}
+\def\bibfont{\fontfamily{\rmdefault}\fontsize{8}{9}\selectfont}
 % Index
 \def\indexfont{\fontsize{9}{11}\selectfont}
 % OTHERS
@@ -1683,10 +1685,11 @@ doi:10.1093/nar/\@shortjname\@artid
          {Citation `\@citeb' on page \thepage \space undefined}}%
        {{\csname b@\@citeb\endcsname}}}}{#1}}
 \def\@cite#1#2{{#1\if@tempswa , #2\fi}}
-\def\@biblabel#1{}
+\def\@biblabel{#1}
 \else
 % \usepackage[authoryear,sort,comma]{NAR-natbib}
-\usepackage[numbers,sort,round]{natbib}
+\usepackage[round, sort&compress, numbers]{natbib}
+\renewcommand\@biblabel[1]{#1.}
 \let\mycite\cite
 \let\cite\citep
 \setlength{\bibhang}{11pt}

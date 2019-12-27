@@ -1,14 +1,14 @@
 ---
 title: "Supplementary Materials And Methods"
 author: 
-- Selcen Ari
+- Selcen Ari Yuka
 - Alper Yilmaz 
-date: "7 Nisan 2019"
+date: "`r Sys.Date()`"
 output:
   pdf_document: default
   html_document: default
   word_document: default
-bibliography: ref.bib
+bibliography: NAR-sample.bib
 header-includes: 
   \usepackage{float} \floatplacement{figure}{H} 
   \newcommand{\beginsupplement}{\setcounter{table}{0}  \renewcommand{\thetable}{S\arabic{table}} \setcounter{figure}{0}     \renewcommand{\thefigure}{S\arabic{figure}}}
@@ -46,7 +46,7 @@ library(dplyr)
 library(tidyr)
 library(stringr)
 library(readr)
-knitr::opts_chunk$set(tidy.opts=list(width.cutoff=50),tidy=TRUE)
+#knitr::opts_chunk$set(tidy.opts=list(width.cutoff=50),tidy=TRUE)
 
 ```
 
@@ -74,13 +74,17 @@ Firstly, we have analysed minimal data without interaction factors between miRNA
 - 1. We have evaluated graph in the steady state conditions as followings (Figure S2 in Supplementary Figures):
 
 ```{r, message=FALSE, warning=FALSE}
-priming_graph(minsamp, competing_count = Competing_expression, miRNA_count = miRNA_expression)
+priming_graph(minsamp, 
+              competing_count = Competing_expression, 
+              miRNA_count = miRNA_expression)
 ```
 
 - 2. We have obtained graph after change on Gene2 expression as following (Figure S3 in Supplementary Figures):
 
 ```{r, message=FALSE, warning=FALSE}
-priming_graph(minsamp, competing_count = Competing_expression, miRNA_count = miRNA_expression)%>%
+priming_graph(minsamp, 
+              competing_count = Competing_expression, 
+              miRNA_count = miRNA_expression)%>%
   update_how("Gene2", 2)
 ```
 
@@ -89,7 +93,9 @@ priming_graph(minsamp, competing_count = Competing_expression, miRNA_count = miR
 
 ```{r, message=FALSE, warning=FALSE}
 
-priming_graph(minsamp, competing_count = Competing_expression, miRNA_count = miRNA_expression)%>%
+priming_graph(minsamp, 
+              competing_count = Competing_expression, 
+              miRNA_count = miRNA_expression)%>%
   update_how("Gene2", 2)%>%
   simulate(cycle= 2)
 
@@ -98,7 +104,9 @@ priming_graph(minsamp, competing_count = Competing_expression, miRNA_count = miR
 Note that the regulations are colored according to expression changes of present and a previous value. So, it can be observed that whole gene expressions increase in comparison of initial steady-state. The overall regulations of gene expressions are as followings:
 
 ```{r, message=FALSE, warning=FALSE}
-priming_graph(minsamp, competing_count = Competing_expression, miRNA_count = miRNA_expression)%>%
+priming_graph(minsamp, 
+              competing_count = Competing_expression, 
+              miRNA_count = miRNA_expression)%>%
   update_how("Gene2", 2)%>%
   simulate(2)%>%
   activate(edges)%>%
@@ -112,19 +120,31 @@ priming_graph(minsamp, competing_count = Competing_expression, miRNA_count = miR
 We have made the same analysis in presence of interaction factors (Sequentially shown at Figure S5-7 in Supplementary Figures).
 
 ```{r, message=FALSE, warning=FALSE}
-priming_graph(minsamp, competing_count = Competing_expression, miRNA_count = miRNA_expression, aff_factor = c(energy, seed_type), deg_factor = region)
+priming_graph(minsamp, 
+              competing_count = Competing_expression, 
+              miRNA_count = miRNA_expression, 
+              aff_factor = c(energy, seed_type), 
+              deg_factor = region)
 
 ```
 
 ```{r, message=FALSE, warning=FALSE}
 
-priming_graph(minsamp, competing_count = Competing_expression, miRNA_count = miRNA_expression, aff_factor = c(energy, seed_type), deg_factor = region)%>%
+priming_graph(minsamp, 
+              competing_count = Competing_expression, 
+              miRNA_count = miRNA_expression, 
+              aff_factor = c(energy, seed_type), 
+              deg_factor = region)%>%
   update_how("Gene2", 2)
 ```
 
 ```{r, message=FALSE, warning=FALSE}
 
-priming_graph(minsamp, competing_count = Competing_expression, miRNA_count = miRNA_expression, aff_factor = c(energy, seed_type), deg_factor = region)%>%
+priming_graph(minsamp, 
+              competing_count = Competing_expression, 
+              miRNA_count = miRNA_expression, 
+              aff_factor = c(energy, seed_type), 
+              deg_factor = region)%>%
   update_how("Gene2", 2)%>%
   simulate(cycle=2)
 ```
@@ -132,7 +152,11 @@ priming_graph(minsamp, competing_count = Competing_expression, miRNA_count = miR
 When the graphs were examined, it was observed that behaviors were same. But, when the results were analysed in terms of expression values, the regulation differences can be observed.
 
 ```{r, message=FALSE, warning=FALSE}
-priming_graph(minsamp, competing_count = Competing_expression, miRNA_count = miRNA_expression, aff_factor = c(energy, seed_type), deg_factor = region)%>%
+priming_graph(minsamp, 
+              competing_count = Competing_expression, 
+              miRNA_count = miRNA_expression, 
+              aff_factor = c(energy, seed_type), 
+              deg_factor = region)%>%
   update_how("Gene2", 2)%>%
   simulate(3)%>%
   activate(edges)%>%
@@ -147,7 +171,11 @@ Genes targeted by multiple miRNAs (referred to as "common target") are of specia
 
 ```{r, message=FALSE, warning=FALSE}
 
-priming_graph(minsamp, competing_count = Competing_expression, miRNA_count = miRNA_expression, aff_factor = c(energy, seed_type), deg_factor = region)%>%
+priming_graph(minsamp, 
+              competing_count = Competing_expression, 
+              miRNA_count = miRNA_expression, 
+              aff_factor = c(energy, seed_type), 
+              deg_factor = region)%>%
   update_how("Gene4", 2)%>%
   simulate(cycle = 2)
 ```
@@ -155,7 +183,11 @@ priming_graph(minsamp, competing_count = Competing_expression, miRNA_count = miR
 The common target perturbation  (increasing to two fold at Gene4 expression in presence of interaction factors) resulted in more prominent efficiency at the same conditions (shown in following).
 
 ```{r, message=FALSE, warning=FALSE}
-priming_graph(minsamp, competing_count = Competing_expression, miRNA_count = miRNA_expression, aff_factor = c(energy, seed_type), deg_factor = region)%>%
+priming_graph(minsamp, 
+              competing_count = Competing_expression, 
+              miRNA_count = miRNA_expression, 
+              aff_factor = c(energy, seed_type), 
+              deg_factor = region)%>%
   update_how("Gene4", 2)%>%
   simulate(3)%>%
   activate(edges)%>%
@@ -168,7 +200,11 @@ priming_graph(minsamp, competing_count = Competing_expression, miRNA_count = miR
 
 ```{r, message=FALSE, warning=FALSE}
 
-priming_graph(minsamp, competing_count = Competing_expression, miRNA_count = miRNA_expression, aff_factor = c(energy, seed_type), deg_factor = region)-> sample_graph
+priming_graph(minsamp, 
+              competing_count = Competing_expression, 
+              miRNA_count = miRNA_expression, 
+              aff_factor = c(energy, seed_type), 
+              deg_factor = region)-> sample_graph
 
 find_node_perturbation(sample_graph, how = 2, cycle = 3, limit = 0.1)
 
@@ -207,7 +243,8 @@ BCPGE_tumor <- GDCprepare(BCP_tumor)
 
 as.data.frame(assay(BCPGE_tumor))%>%
   mutate(ensembl_gene_id = rownames(.))%>%
-  dplyr::inner_join(as.data.frame(rowData(BCPGE_tumor)), by = "ensembl_gene_id")%>%
+  dplyr::inner_join(as.data.frame(rowData(BCPGE_tumor)), 
+                    by = "ensembl_gene_id")%>%
   dplyr::select(ensembl_gene_id, external_gene_name, 1)-> TCGA_E9_A1N5_tumor
 
 colnames(TCGA_E9_A1N5_tumor)[3] <- "GE_tumor"
@@ -229,7 +266,8 @@ BCPGE_normal <- GDCprepare(BCP_normal)
 
 as.data.frame(assay(BCPGE_normal))%>%
   mutate(ensembl_gene_id = rownames(.))%>%
-  dplyr::inner_join(as.data.frame(rowData(BCPGE_normal)), by = "ensembl_gene_id")%>%
+  dplyr::inner_join(as.data.frame(rowData(BCPGE_normal)), 
+                    by = "ensembl_gene_id")%>%
   dplyr::select(ensembl_gene_id, external_gene_name, 1)-> TCGA_E9_A1N5_normal
 
 colnames(TCGA_E9_A1N5_normal)[3] <- "GE_normal"
@@ -278,10 +316,14 @@ GDCprepare(BCP_mirnatumor)%>%
   dplyr::filter(startsWith(miRNA_region, "mature"))%>%
   dplyr::mutate(mirbase_id =str_remove(miRNA_region, "mature,"))%>%
   dplyr::select(-miRNA_region)%>%
-  dplyr::inner_join(mirbase_id_conv, by = c("mirbase_id"="ID"))%>%
-  dplyr::select(miRNA_name = Name, read_count, reads_per_million_miRNA_mapped)%>%
+  dplyr::inner_join(mirbase_id_conv, 
+                    by = c("mirbase_id"="ID"))%>%
+  dplyr::select(miRNA_name = Name, 
+                read_count, 
+                reads_per_million_miRNA_mapped)%>%
   dplyr::group_by(miRNA_name)%>%
-  mutate(read_count= sum(read_count), reads_per_million_miRNA_mapped = sum(reads_per_million_miRNA_mapped))%>%
+  mutate(read_count= sum(read_count), 
+         reads_per_million_miRNA_mapped = sum(reads_per_million_miRNA_mapped))%>%
   dplyr::ungroup()%>%
   distinct() -> BCPME_mirnatumor
 
@@ -302,14 +344,21 @@ GDCdownload(BCP_mirnanormal)
 
 GDCprepare(BCP_mirnanormal)%>%
   as.data.frame()%>%
-  dplyr::select(miRNA_ID, read_count, reads_per_million_miRNA_mapped, miRNA_region)%>%
+  dplyr::select(miRNA_ID, 
+                read_count, 
+                reads_per_million_miRNA_mapped, 
+                miRNA_region)%>%
   dplyr::filter(startsWith(miRNA_region, "mature"))%>%
   dplyr::mutate(mirbase_id =str_remove(miRNA_region, "mature,"))%>%
   dplyr::select(-miRNA_region)%>%
-  dplyr::inner_join(mirbase_id_conv, by = c("mirbase_id"="ID"))%>%
-  dplyr::select(miRNA_name = Name, read_count, reads_per_million_miRNA_mapped)%>%
+  dplyr::inner_join(mirbase_id_conv, 
+                    by = c("mirbase_id"="ID"))%>%
+  dplyr::select(miRNA_name = Name, 
+                read_count, 
+                reads_per_million_miRNA_mapped)%>%
   dplyr::group_by(miRNA_name)%>%
-  mutate(read_count= sum(read_count), reads_per_million_miRNA_mapped = sum(reads_per_million_miRNA_mapped))%>%
+  mutate(read_count= sum(read_count), 
+         reads_per_million_miRNA_mapped = sum(reads_per_million_miRNA_mapped))%>%
   dplyr::ungroup()%>%
   distinct() -> BCPME_mirnanormal
 
@@ -319,7 +368,7 @@ head(BCPME_mirnanormal)
 
 ## 6.3 Get the high-throughput experimental miRNA:target dataset.
 
-There are various datasets about miRNA:target pairs such as miRTarBase, DianaTools, miRecords, miRWalk etc. Some of these present the experimentally supported miRNA target pairs or only predicted ones. The experimentally supported datasets generally provides weak evidence for interactions. For these reasons, we obtained the high-throughput experimental miRNA:target dataset from two studies performed by Helwak et al. and Moore et al. These steps were not handle in this file because they contain many processes. 
+There are various datasets about miRNA:target pairs such as miRTarBase, DianaTools, miRecords, miRWalk etc. Some of these present the experimentally supported miRNA target pairs or only predicted ones. The experimentally supported datasets generally provides weak evidence for interactions. For these reasons, we obtained the high-throughput experimental miRNA:target dataset from two studies performed by Helwak et al. [-@helwak_mapping_2013] and Moore et al. [-@moore_mirnatarget_2015] These steps were not handle in this file because they contain many processes. 
 
 Briefly these datasets contain various common information about miRNA:target interactions such as the miRNA name, miRNAsequence, target name, target sequence, their chromosomal locations, binding location on the target sequence, binding free energy, seed structure. But these datasets provides the informations with different data structures.So we followed the steps:
 
@@ -346,7 +395,11 @@ experimentalmirnagene%>%
   dplyr::select(miRNA, Ensembl_Gene_Id, hgnc_symbol, Energy, seed_type_effect, region_effect)%>%
   distinct()%>%
   group_by(Ensembl_Gene_Id, miRNA)%>%
-  mutate(seed_type_effect= ifelse(seed_type_effect==max(seed_type_effect), seed_type_effect, max(seed_type_effect)), Energy = ifelse(Energy==min(Energy), Energy, min(Energy)), region_effect= ifelse(region_effect==max(region_effect), region_effect, max(region_effect)))%>%
+  mutate(seed_type_effect= ifelse(seed_type_effect==max(seed_type_effect), 
+                                  seed_type_effect, max(seed_type_effect)), 
+         Energy = ifelse(Energy==min(Energy), Energy, min(Energy)), 
+         region_effect= ifelse(region_effect==max(region_effect), 
+                               region_effect, max(region_effect)))%>%
   distinct()-> tocombine_mirnagene
 
 head(tocombine_mirnagene)
@@ -356,10 +409,19 @@ head(tocombine_mirnagene)
 
 ```{r, message= FALSE, warning=FALSE, eval=FALSE}
 BCPME_mirnanormal%>%
-  dplyr::inner_join(tocombine_mirnagene, by = c("miRNA_name"="miRNA"))%>%
-  dplyr::inner_join(TCGA_E9_A1N5_normal, by = c("Ensembl_Gene_Id"="ensembl_gene_id", "hgnc_symbol"="external_gene_name"))%>%
+  dplyr::inner_join(tocombine_mirnagene, 
+                    by = c("miRNA_name"="miRNA"))%>%
+  dplyr::inner_join(TCGA_E9_A1N5_normal, 
+                    by = c("Ensembl_Gene_Id"="ensembl_gene_id", 
+                           "hgnc_symbol"="external_gene_name"))%>%
   distinct()%>%
-  dplyr::select(hgnc_symbol, miRNA_name, mirna_RPM= reads_per_million_miRNA_mapped, GE_normal, Energy, seed_type_effect, region_effect)-> E9GE_mirnagenenormal
+  dplyr::select(hgnc_symbol, 
+                miRNA_name, 
+                mirna_RPM= reads_per_million_miRNA_mapped, 
+                GE_normal, 
+                Energy, 
+                seed_type_effect, 
+                region_effect)-> E9GE_mirnagenenormal
 
 ```
  
@@ -373,9 +435,17 @@ head(E9GE_mirnagenenormal)
 ```{r, message= FALSE, warning=FALSE, eval=FALSE}
 BCPME_mirnatumor%>%
   dplyr::inner_join(tocombine_mirnagene, by = c("miRNA_name"="miRNA"))%>%
-  dplyr::inner_join(TCGA_E9_A1N5_tumor, by = c("Ensembl_Gene_Id"="ensembl_gene_id", "hgnc_symbol"="external_gene_name"))%>%
+  dplyr::inner_join(TCGA_E9_A1N5_tumor, 
+                    by = c("Ensembl_Gene_Id"="ensembl_gene_id", 
+                           "hgnc_symbol"="external_gene_name"))%>%
   distinct()%>%
-  dplyr::select(hgnc_symbol, miRNA_name, mirna_RPM= reads_per_million_miRNA_mapped, GE_tumor, Energy, seed_type_effect, region_effect)-> E9GE_mirnagenetumor
+  dplyr::select(hgnc_symbol, 
+                miRNA_name, 
+                mirna_RPM= reads_per_million_miRNA_mapped, 
+                GE_tumor, 
+                Energy, 
+                seed_type_effect, 
+                region_effect)-> E9GE_mirnagenetumor
 
 ```
 
@@ -393,7 +463,10 @@ We have determined the most important nodes of network. We applied `find_node_pe
 ```{r, include=FALSE, eval=FALSE}
 
 as_data_frame(E9GE_mirnagenenormal)%>%
-  priming_graph(competing_count = GE_normal, miRNA_count = mirna_RPM, aff_factor = c(Energy, seed_type_effect), deg_factor = region_effect)%>%
+  priming_graph(competing_count = GE_normal, 
+                miRNA_count = mirna_RPM, 
+                aff_factor = c(Energy, seed_type_effect), 
+                deg_factor = region_effect)%>%
   find_node_perturbation(how = 3, cycle = 10, fast = 5)%>%
   filter(!is.na(perturbation_efficiency))->perturbationofnetwork
 
@@ -418,7 +491,10 @@ So, we offered an approach about to find iteration. `find_iteration` function do
 ```{r}
 
 as.data.frame(E9GE_mirnagenenormal)%>%
- priming_graph(competing_count = GE_normal, miRNA_count = mirna_RPM, aff_factor = c(Energy, seed_type_effect), deg_factor = region_effect)%>%
+ priming_graph(competing_count = GE_normal, 
+               miRNA_count = mirna_RPM, 
+               aff_factor = c(Energy, seed_type_effect), 
+               deg_factor = region_effect)%>%
  update_how("SERPINE2",2.75)%>%
  simulate(50) %>%
  find_iteration(limit=1, plot= FALSE)
@@ -431,7 +507,10 @@ We tried to apply two fold of the point that SERPINE2 has maximum affected genes
 
 ```{r}
 as.data.frame(E9GE_mirnagenenormal)%>%
-  priming_graph(competing_count = GE_normal, miRNA_count = mirna_RPM, aff_factor = c(Energy, seed_type_effect), deg_factor = region_effect)%>%
+  priming_graph(competing_count = GE_normal, 
+                miRNA_count = mirna_RPM, 
+                aff_factor = c(Energy, seed_type_effect), 
+                deg_factor = region_effect)%>%
   update_how("SERPINE2",2.75)%>%
   simulate(62)
 
@@ -439,7 +518,10 @@ as.data.frame(E9GE_mirnagenenormal)%>%
 
 ```{r}
 as.data.frame(E9GE_mirnagenenormal)%>%
-  priming_graph(competing_count = GE_normal, miRNA_count = mirna_RPM, aff_factor = c(Energy, seed_type_effect), deg_factor = region_effect)%>%
+  priming_graph(competing_count = GE_normal, 
+                miRNA_count = mirna_RPM, 
+                aff_factor = c(Energy, seed_type_effect), 
+                deg_factor = region_effect)%>%
   update_how("SERPINE2",2.75)%>%
   simulate(62)%>%
   as_tibble()%>%
@@ -450,11 +532,14 @@ as.data.frame(E9GE_mirnagenenormal)%>%
 ```{r}
 E9GE_mirnagenetumor%>%
   dplyr::select(hgnc_symbol, GE_tumor)%>%
-  dplyr::inner_join((E9GE_mirnagenenormal%>%dplyr::select(hgnc_symbol, GE_normal)), by ="hgnc_symbol")%>%
-  inner_join(simulation_results, by= c("hgnc_symbol"="name"))%>%
+  dplyr::inner_join((E9GE_mirnagenenormal%>%dplyr::select(hgnc_symbol, GE_normal)), 
+                    by ="hgnc_symbol")%>%
+  inner_join(simulation_results, 
+             by= c("hgnc_symbol"="name"))%>%
   distinct()
 ```
 
 
 Actually, we have developed to provide a new approach miRNA mediated regulation networks. This approach may not explain the whole regulation behaviors between miRNAs and targets but can be first step to more detailed and coherent miRNA:target regulation approach.
 
+# REFERENCES

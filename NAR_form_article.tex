@@ -1,25 +1,26 @@
 \documentclass[a4,center,fleqn]{NAR}
 
 % Enter dates of publication
-\copyrightyear{2008}
-\pubdate{31 July 2009}
-\pubyear{2009}
-\jvolume{37}
-\jissue{12}
+\copyrightyear{X}
+\pubdate{X}
+\pubyear{X}
+\jvolume{X}
+\jissue{X}
 
 %\articlesubtype{This is the article type (optional)}
 
 \usepackage{float} \floatplacement{figure}{H} \usepackage[colorlinks=true, linkcolor=blue, urlcolor=blue, citecolor=blue]{hyperref} \usepackage[T1]{fontenc}
+
+%\usepackage[scaled]{helvet}
+%\renewcommand\familydefault{\sfdefault} 
 
 \begin{document}
 
 \title{Network based multifactorial modelling microRNA-target interaction.}
 
 \author{
-    Selcen Ari\,$^{1}$
-   and Alper Yilmaz\,$^{1}$ \footnote{To whom correspondence should be addressed. Phone: +90 212 383 4627 Fax:
-+90 212 383 4625 Email:
-\href{mailto:alyilmaz@yildiz.edu.tr}{\nolinkurl{alyilmaz@yildiz.edu.tr}}} 
+    Selcen Ari Yuka\,$^{1}$ \footnote{To whom correspondence should be addressed. Email: selcenay@yildiz.edu.tr}
+   and Alper Yilmaz\,$^{1}$ \footnote{Correspondence may also be addressed to Wieteke Alper Yilmaz. Phone: +90 212 383 4627 Fax: +90 212 383 4625 Email: alyilmaz@yildiz.edu.tr}
 }
         
 
@@ -29,43 +30,35 @@ Turkey
 }
 
 \history{%
-Received January 1, 2009;
-Revised February 1, 2009;
-Accepted March 1, 2009}
+X;
+X;
+X}
 
 
 \maketitle
 
 \begin{abstract}
 Competing endogenous RNA (ceRNA) regulations and crosstalk between
-various types of non-coding RNA in human is remarkable in means of miRNA
-regulation. Many studies have pointed out that an alteration in
-miRNA:target interaction can result in unexpected changes due to
-indirect and complex interactions. In this paper, we defined a new
-network-based model that handles miRNA:ceRNA interactions with
-expression values. Our model is able to handle miRNA interaction factors
-such as seed type, binding energy, if provided. Our approach is able to
-reveal that a perturbation in an element of network affects whole
-competing elements differently and cooperative efficiencies of miRNAs on
-common targets could be calculated. Our findings emphasized importance
-of miRNA:target ratios being crucial, as reported by previous studies.
-We have showed that the competing elements which have the same or close
-expression values may not be affected equally from the perturbation
-because of repression functionality depended on interaction factors of
-miRNA target pairs. We applied the model to real sample consisting of
-breast cancer gene and miRNA expression dataset and experimental
-miRNA:target interaction dataset all generated via high throughput
-sequencing methods. A gene over-expressed in tumor tissue, namely
-\emph{SERPINE2}, is used as perturbing element. We have observed that
-change in expression level of single gene in miRNA:target network is
-sufficient to perturb regulations in whole network, due to unforeseen
-and unpredicted regulation which are only visible when considered in
-network context. Therefore, this model helps unveiling the crosstalk
-between elements in miRNA:target network where abundance of target and
-sponge effect are taken into account. The model is scalable and can be
-plugged in with emerging miRNA effectors such as circRNAs. The model is
-available as R package ceRNAnetsim
-(\url{https://github.com/selcenari/ceRNAnetsim}).
+various types of non-coding RNA in human is an important and
+under-explored subject. Several studies have pointed out that an
+alteration in miRNA:target interaction can result in unexpected changes
+due to indirect and complex interactions. In this paper, we defined a
+new network-based model that incorporates miRNA:ceRNA interactions with
+expression values. Our approach is able to calculate network-wide
+effects after a perturbation in expression level of a single element
+while utilizing miRNA interaction factors such as seed type, binding
+energy. We applied the model to existing breast cancer mRNA, miRNA
+expression and high throughput experimental miRNA:target interaction
+dataset. A gene over-expressed in tumor tissue, namely \emph{SERPINE2},
+was identified as a perturbing element which affect regulation of many
+nodes in whole network when its expression level changes. To conclude,
+this model helps unveiling the crosstalk between elements in
+miRNA:target network where abundance of target and sponge effect are
+taken into account. The model has potential to reveal unforeseen and
+unpredicted regulation which are only visible when considered in network
+context. Our tool is scalable and can be plugged in with emerging miRNA
+effectors such as circRNAs and available as R package ceRNAnetsim
+(\url{https://github.com/selcenari/ceRNAnetsim})
 \end{abstract}
 
 \section{\texorpdfstring{\textbf{INTRODUCTION}}{}}
@@ -113,14 +106,16 @@ competing endogenous RNAs (ceRNAs)
 \citep{ala_integrated_2013, cesana_deciphering_2013}, against their
 miRNAs. Briefly, Ala et al.~have explained the ceRNA hypothesis as
 disturbance of the other target when one of the targets on a
-steady-state system that included one miRNA and two target was perturbed
-with expression change \citep{ala_integrated_2013}. Regarding
-interaction between miRNAs and their target in a cell, explaining and
-predicting results of an individual perturbation is difficult due to
-complexity of interactions. Various computational and experimental
-studies have tackled the problem of unraveling ceRNA:miRNA interactions.
+steady-state system that included one miRNA
 
 \enlargethispage{-65.1pt}
+
+and two target was perturbed with expression change
+\citep{ala_integrated_2013}. Regarding interaction between miRNAs and
+their target in a cell, explaining and predicting results of an
+individual perturbation is difficult due to complexity of interactions.
+Various computational and experimental studies have tackled the problem
+of unraveling ceRNA:miRNA interactions.
 
 It has been observed that when abundance of one of the targets of
 miR-122 was increased, the other targets' expression also slightly
@@ -448,7 +443,7 @@ elements and miRNA2 (M2) has been found to be causing the highest mean
 in expression changes (see Section 5 in Supplementary Materials and
 Methods).
 
-\subsection{Simulation of large and realistic network}
+\subsection{Simulation of a large and realistic network}
 
 Apart from tools predicting miRNA:target pairs, there are databases that
 provide experimentally validated miRNA:target interaction datasets. The
@@ -511,37 +506,31 @@ expression values before and after the regulation of a known gene at
 existing tissue, and miRNA expression values of this tissue at initial
 conditions.
 
-\section{Additions to be fixed}
+\subsection{Genes causing widespread perturbation}
 
 Additionally, miRNA:gene expression dataset which was integrated via
 miRTarBase \citep{chou2017mirtarbase} was analysed in mean of
 perturbation efficiency to determine crucial genes on the network. We
-have observed that two miRNAs and 488 genes are effective in terms of
-perturbation efficiency, when we ran our model with more than 15\%
-efficiency on target expression. miR-10b was investigated via HMDD
-database \citep{huang2018hmdd} and mostly found as metastatic biomarker.
-On the other hand, it was observed that miR-148a is critical for
-promotion of apoptosis and supression of breast cancer cell growth.
-Additionaly, to obtain the number of genes in a narrow range, the model
-was ran with 17\% efficency on target expression and 297 genes and one
-miRNA were observed as highly perturbation-effective. We analysed these
-genes via eDGAR, a database of Disease-Gene Associations with annotated
-Relationships among genes \citep{babbi2017edgar} that supplies different
-observations about crucial genes such as direct physical interactions,
-other shared genes with these interactions, protein-protein
-interactions, GO terms etc. With our model, we obtained 3 (TP53, BRCA1,
-AKT1) of 27 critical breast cancer genes and these genes show direct
-physical interaction with 21 genes. 33 shared genes which are observed
-on these direct interactions were also found in our effective
-perturbation elements.We have obtained 7 (KLF4, TP53, BRCA1, CREB, ID4,
-GATA3, CTBP1) transcription factors (TFs) that are common in 44 critical
-TFs which are provided by eDGAR dataset. 44 of regulated genes via these
-TFs were found in our highly effective genes. it has been observed that
-these genes cover 22.5\% of 297 perturbation-effective genes.
-
-When we analysed these genes via biomaRt OMIM query, it has been
-observed that our model provides enriched 1.45 fold results with
-hypergeometric p-values 3.19e-05.
+have observed that one miRNA and 297 genes have high perturbation
+efficiency, when we ran our model with more than 17\% efficiency on
+target expression. The miRNA, miR-10b was investigated via HMDD database
+\citep{huang2018hmdd} and was found as metastatic biomarker. The genes
+with high perturbation efficiency were analysed via eDGAR, a database of
+Disease-Gene Associations with annotated relationships among genes
+\citep{babbi2017edgar} that supplies different observations about
+crucial genes such as direct physical interactions, other shared genes
+with these interactions, protein-protein interactions, GO terms etc.
+With our model, we obtained 3 (TP53, BRCA1, AKT1) of 27 critical breast
+cancer genes and these genes show direct physical interaction with 21
+genes (Figure S10). 33 shared genes which are observed on these direct
+interactions were also found in our effective perturbation elements. We
+have obtained 7 (KLF4, TP53, BRCA1, CREB, ID4, GATA3, CTBP1)
+transcription factors (TFs) that are common in 44 critical TFs which are
+provided by eDGAR dataset (Figure S10). 44 of regulated genes via these
+TFs were found in our highly effective genes. It has been observed that
+these genes cover 22.5\% of 297 perturbation-effective genes.When we 
+analysed these genes via biomaRt OMIM query, they show 1.45 fold 
+enrichment of OMIM genes (hypergeometric p-value 3.19e-05).
 
 \section{\texorpdfstring{\textbf{DISCUSSION}}{}}
 
@@ -580,6 +569,13 @@ and transcription factors are ignored but the network structure is
 flexible and can integrate additional regulation elements as they become
 available.
 
+In breast cancer sample, all the genes with high perturbation efficiency
+were found to be all connected to miR10b. This can be explained by very
+high expression level of that miRNA. In a large network where miRNAs
+have balanced expression, perturbation analysis have potential to reveal
+genes with high perturbation efficiency more widsespread and dispersed
+in the network.
+
 \section{\texorpdfstring{\textbf{CONCLUSION}}{}}
 
 The main advantage of ceRNAnetsim package is providing various functions
@@ -601,7 +597,7 @@ underlying diseases or conditions.
 
 None declared.
 
-\bibliographystyle{nar}
-\bibliography{NAR-sample.bib}
+\bibliographystyle{NAR-natbib}
+\bibliography{NAR-sample}
 
 \end{document}

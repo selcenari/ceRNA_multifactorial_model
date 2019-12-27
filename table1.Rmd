@@ -1,0 +1,35 @@
+---
+bibliography: NAR-sample.bib
+output: pdf_document
+header-includes: 
+  \usepackage{float} \floatplacement{figure}{H} 
+  \usepackage[T1]{fontenc}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+
+\begin{table*}[ht]
+\centering
+\caption{Expression values of elements and interaction factors of miRNA:target interactions} 
+\begin{tabular}{rllrrrrr}
+  \hline
+ & Competing & miRNA & Competing Expression & miRNA Expression & Seed Type & Region & Energy \\ 
+  \hline
+   & Gene1 & Mir1 & 10000.00 & 1000.00 & 0.43 & 0.30 & -20.00 \\ 
+   & Gene2 & Mir1 & 10000.00 & 1000.00 & 0.43 & 0.01 & -15.00 \\ 
+   & Gene3 & Mir1 & 5000.00 & 1000.00 & 0.32 & 0.40 & -14.00 \\ 
+   & Gene4 & Mir1 & 10000.00 & 1000.00 & 0.23 & 0.50 & -10.00 \\ 
+   & Gene4 & Mir2 & 10000.00 & 2000.00 & 0.35 & 0.90 & -12.00 \\ 
+   & Gene5 & Mir2 & 5000.00 & 2000.00 & 0.05 & 0.40 & -11.00 \\ 
+   & Gene6 & Mir2 & 10000.00 & 2000.00 & 0.01 & 0.80 & -25.00 \\ 
+   \hline
+\end{tabular}
+\label{tab:one}
+\end{table*}
+
+
+
+

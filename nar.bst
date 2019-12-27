@@ -219,7 +219,7 @@ FUNCTION {format.names}
   s num.names$ 'numnames :=
   numnames 'namesleft :=
     { namesleft #0 > }
-    { s nameptr "{ff~}{vv~}{ll}{, jj}" format.name$ 't :=
+    { s nameptr "{vv~}{ll}{, jj}{, f.}" format.name$ 't :=
       nameptr #1 >
         { namesleft #1 >
             { ", " * t * }
@@ -241,6 +241,8 @@ FUNCTION {format.names}
     }
   while$
 }
+
+
 
 FUNCTION {format.key}
 { empty$
@@ -414,19 +416,23 @@ FUNCTION {n.dashify}
   while$
 }
 
+
 FUNCTION {format.date}
-{ year duplicate$ empty$
-    { "empty year in " cite$ * warning$
-       pop$ "" }
-    'skip$
-  if$
-  month empty$
-    'skip$
-    { month
-      " " * swap$ *
+{ year empty$
+    { month empty$
+	{ "" }
+	{ "there's a month but no year in " cite$ * warning$
+	  month
+	}
+      if$
+    }
+    { month empty$
+%	'year originally
+	{ "(" year ")" * * } % TDS
+	{ month " " * year * }
+      if$
     }
   if$
-  extra.label *
 }
 
 FUNCTION {format.btitle}
@@ -448,13 +454,24 @@ FUNCTION {either.or.check}
   if$
 }
 
+FUNCTION {bold}
+{ duplicate$ empty$
+    {pop$ "" }
+    { "{\bfseries " swap$ * "}" * }
+  if$
+}
+
+
 FUNCTION {format.bvolume}
 { volume empty$
     { "" }
-    { "volume" volume tie.or.space.connect
+%    { "volume" volume tie.or.space.connect % TDS
+    { "volume" "{ " volume "}, " * * tie.or.space.connect
+    % TDS add a comma and bold
       series empty$
-        'skip$
-        { " of " * series emphasize * }
+	'skip$
+	%{ " of " * series emphasize * } TDS
+	{ " of " * series  } % TDS book titles not emphasized for NAR
       if$
       "volume and number" number either.or.check
     }
@@ -464,17 +481,17 @@ FUNCTION {format.bvolume}
 FUNCTION {format.number.series}
 { volume empty$
     { number empty$
-        { series field.or.null }
-        { output.state mid.sentence =
-            { "number" }
-            { "Number" }
-          if$
-          number tie.or.space.connect
-          series empty$
-            { "there's a number but no series in " cite$ * warning$ }
-            { " in " * series * }
-          if$
-        }
+	{ series field.or.null }
+	{ output.state mid.sentence =
+	    { "number" }
+	    { "Number" }
+	  if$
+	  number tie.or.space.connect
+	  series empty$
+	    { "there's a number but no series in " cite$ * warning$ }
+	    { " in " * series * }
+	  if$
+	}
       if$
     }
     { "" }
@@ -533,7 +550,7 @@ FUNCTION {format.eid}
 }
 
 FUNCTION {format.vol.num.pages}
-{ volume field.or.null
+{ volume bold field.or.null
   number empty$
     'skip$
     { "\penalty0 (" number * ")" * *
@@ -699,6 +716,7 @@ FUNCTION {format.incoll.inproc.crossref}
 FUNCTION {article}
 { output.bibitem
   format.authors "author" output.check
+  format.date "year" output.check
   author format.key output
   new.block
   format.title "title" output.check
@@ -709,7 +727,6 @@ FUNCTION {article}
         { format.vol.num.pages output }
         { format.vol.num.eid output }
       if$
-      format.date "year" output.check
     }
     { format.article.crossref output.nonnull
       eid empty$
@@ -718,9 +735,6 @@ FUNCTION {article}
       if$
     }
   if$
-  format.issn output
-  format.doi output
-  format.url output
   new.block
   note output
   fin.entry
