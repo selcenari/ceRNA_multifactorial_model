@@ -1,0 +1,635 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+```{r}
+library(janitor)
+library(tidyverse)
+library(purrr)
+library(readr)
+library(biomaRt)
+library(TCGAbiolinks)
+library(ceRNAnetsim)
+library(dplyr)
+library(xlsx)
+#install.packages("installr")
+#library(installr)
+#install.MikTeX(page_with_download_url = "https://miktex.org/download")
+library(latexpdf)
+library(tinytex)
+```
+
+```{r}
+list.files("mirtarbase_lim_1/results")
+
+read_tsv("mirtarbase_lim_1/results/TCGA-A7-A0CE-01A_1_perturbation_test.tsv")%>%
+ select(name)->node_mirtarbase
+
+#3265 gen, 581 miRNA  
+
+mirtarbasegene_mat
+
+```
+
+#Parsing
+
+```{r}
+for ( i in list.files("mirtarbase_lim_1/results")){
+  
+  file <- as_tibble(readr::read_tsv(paste0("mirtarbase_lim_1/results/", i)))
+  
+  colnames(file)[2] <- paste0(substr(i, 0, nchar(i)-23), "PE")
+  colnames(file)[3] <- paste0(substr(i, 0, nchar(i)-23), "PC")
+  
+  node_mirtarbase <- node_mirtarbase%>%
+    left_join(file, by = "name")
+  
+}
+
+node_mirtarbase
+```
+#87 hasta sonuçları
+
+```{r}
+node_mirtarbase%>%
+  pivot_longer(cols = contains("TCGA"), names_to = "situation", values_to = "values")%>%
+  separate(situation, into = c("patient_id", "analysis_situ"), sep = "_")%>%
+  mutate(analysis_situ = ifelse(analysis_situ == "PE", "perturbation_efficiency", "perturbed_node_count"))%>%
+  filter(patient_id %in% matched_patients$patient_ids)-> mirtarbase_lim1_res
+
+mirtarbase_lim1_res
+```
+
+```{r}
+mirtarbase_lim1_res%>%
+  pivot_wider(id_cols = c("name", "patient_id"), names_from = "analysis_situ", values_from= "values")
+
+```
+
+
+#Venn diagram
+
+
+```{r}
+mirtarbase_lim1_res%>%
+  filter(analysis_situ== "perturbed_node_count")%>%
+  mutate(tissue_type = ifelse(endsWith(patient_id, "11A"), "Normal", "Tumor"))%>%
+  filter(tissue_type == "Tumor")->tumor_perturbed_count_lim1
+
+
+mirtarbase_lim1_res%>%
+  filter(analysis_situ== "perturbed_node_count")%>%
+  mutate(tissue_type = ifelse(endsWith(patient_id, "11A"), "Normal", "Tumor"))%>%
+  filter(tissue_type == "Normal")->normal_perturbed_count_lim1
+```
+
+
+```{r}
+tumor_perturbed_count_lim1%>%
+  filter(!is.na(values))%>%
+  group_by(name)%>%
+  count(name)%>%
+  filter(n> 50)%>%
+  select(name)%>%
+  filter(!startsWith(name, "ENS"))%>%
+  pull()->lim1_tumor_mirna
+
+normal_perturbed_count_lim1%>%
+  filter(!is.na(values))%>%
+  group_by(name)%>%
+  count(name)%>%
+  filter(n> 50)%>%
+  select(name)%>%
+  filter(!startsWith(name, "ENS"))%>%
+  pull()-> lim1_normal_mirna
+```
+
+```{r}
+#install.packages("VennDiagram")
+#install.packages("RColorBrewer")
+library(VennDiagram)
+library(RColorBrewer)
+
+
+myCol <- brewer.pal(4, "Pastel2")
+my_plot2 <- venn.diagram(
+  x = list(lim1_tumor_gene,lim1_normal_gene, lim1_tumor_mirna, lim1_normal_mirna),
+  category.names = c("Genes in tumor" , "Genes in normal " , "miRNAs in tumor", "miRNAs in normal"),
+  filename = NULL,
+ 
+  output=TRUE,
+  
+  lwd = 2,
+  lty = 'blank',
+  fill = myCol,
+  
+  cat.fontface = "bold",
+  cat.default.pos = "outer",
+  cat.pos = c(-57, -27, 25, 57),
+  cat.dist = c(0.055, 0.055, 0.085, 0.085),
+  #cat.col = myCol,
+  cat.fontfamily = "Helvetica",
+  main.fontfamily ="Helvetica",
+  fontfamily = "Helvetica"
+)
+
+ggsave(my_plot2, filename = 'lim1_perturbation_efficiency_mirtarbase.eps', width = 8, height = 6, device=cairo_ps)
+```
+
+# Specifity analysis
+
+experimental olanda mirna ve gen ayrı yapmıştım. Bunda birleştirip yaptım.  BU arkadaşların orijinalleri recovering1 dosyasında var gerekirse bakabilirsin.
+
+```{r}
+bind_rows(tumor_perturbed_count_lim1%>%
+  filter(!is.na(values))%>%
+  group_by(name)%>%
+  count(name)%>%
+  filter(n> 50)%>%
+  #filter(startsWith(name, "ENS"))%>%
+  mutate(rank = n/87, tissue= "tumor")%>%
+    ungroup(),
+  normal_perturbed_count_lim1%>%
+  filter(!is.na(values))%>%
+  group_by(name)%>%
+  count(name)%>%
+  filter(n> 50)%>%
+  #filter(startsWith(name, "ENS"))%>%
+  mutate(rank = n/87, tissue= "normal")%>%
+    ungroup())%>%
+  dplyr::select(-n)%>%
+  group_by(name)%>%
+  count(name)->speciality
+  
+bind_rows(tumor_perturbed_count_lim1%>%
+  filter(!is.na(values))%>%
+  group_by(name)%>%
+  count(name)%>%
+  filter(n> 50)%>%
+  #filter(startsWith(name, "ENS"))%>%
+  mutate(rank = n/87, tissue= "tumor")%>%
+    ungroup(),
+  normal_perturbed_count_lim1%>%
+  filter(!is.na(values))%>%
+  group_by(name)%>%
+  count(name)%>%
+  filter(n> 50)%>%
+  #filter(startsWith(name, "ENS"))%>%
+  mutate(rank = n/87, tissue= "normal")%>%
+    ungroup())%>%
+  left_join(speciality, by ="name")%>%
+  unite(type, n.y, tissue)%>%
+  mutate(speciality = ifelse(startsWith(type, "2"), "common_both", type), 
+         speciality = ifelse(startsWith(speciality, "1"), paste(substr(type, 3, nchar(speciality)), "_specific"), speciality),
+         count_intissue = paste0(substr(type, 3, nchar(type)), ": ", n.x))%>%
+  select(1, count_intissue, ceRNAnetsim_rank =rank, speciality)%>%
+  arrange(name)%>%
+  mutate(name = str_trim(name, side="both"))-> special_nodes_mirtar_lim1
+
+```
+
+#hasta sayılarına göre 50 'den fazla hastada aktif olan nodelar
+
+```{r}
+mirtarbase_lim1_res%>%
+  mutate(tissue_type = ifelse(endsWith(patient_id, "11A"), "Normal", "Tumor"))%>%
+  filter(analysis_situ == "perturbation_efficiency")%>%
+  group_by(name, tissue_type)%>%
+  summarise(effective_sample_count=sum(!is.na(values)))%>%
+  pivot_wider(id_cols = name, names_from = tissue_type, values_from = effective_sample_count)%>%
+  #mutate_each(funs(./87))%>%
+  ungroup()%>%
+  filter(Normal> 50 | Tumor >50)-> high_efficient
+```
+
+
+# Tümör ve normal doku ayrımı
+
+```{r}
+mirtarbase_lim1_res%>%
+  mutate(tissue_type = ifelse(endsWith(patient_id, "11A"), "Normal", "Tumor"))%>%
+  filter(tissue_type =="Normal")%>%
+  mutate(patient_id = substr(patient_id, 0, nchar(patient_id)-4))%>%
+  pivot_wider(id_cols =c(name, patient_id), names_from = analysis_situ, values_from = values)->normal_tissue_lim1
+
+
+  
+
+mirtarbase_lim1_res%>%
+  mutate(tissue_type = ifelse(endsWith(patient_id, "11A"), "Normal", "Tumor"))%>%
+  filter(tissue_type =="Tumor")%>%
+  mutate(patient_id = substr(patient_id, 0, nchar(patient_id)-4))%>%
+  pivot_wider(id_cols =c(name, patient_id), names_from = analysis_situ, values_from = values)->tumor_tissue_lim1
+
+
+```
+
+# log2FC> 1 ve log2FC < -1
+
+```{r}
+tumor_tissue_lim1%>%
+    left_join(normal_tissue_lim1, by = c("name", "patient_id"), suffix = c("_tumor", "_normal"))%>%
+  mutate_at(vars(c("perturbation_efficiency_tumor", "perturbed_node_count_tumor", "perturbation_efficiency_normal", "perturbed_node_count_normal")),
+             funs(as.numeric(str_replace_na(., "0"))))%>%
+  filter( perturbed_node_count_tumor != 0 | perturbed_node_count_normal != 0 )%>%
+    mutate(perturbed_FC = log2((perturbed_node_count_tumor+1)/(perturbed_node_count_normal+1)))%>%
+  filter(name %in% high_efficient$name, startsWith(name, "hsa"))%>%
+  filter(perturbed_FC> 1 | perturbed_FC < -1 )      
+  
+  #-> lim1_mirna
+  
+  ggplot(aes(x = patient_id, y = name, fill = perturbed_FC))+
+  geom_tile(aes(colour = perturbed_FC, fill = perturbed_FC))+
+  theme_classic()+
+  theme(axis.text.x = element_text(angle = 90, vjust = 0, hjust=0))+
+  scale_colour_gradientn(colours = c("blue", "white", "red"), aesthetics = c("colour", "fill"))+
+  ylab("Highly pertubing miRNA nodes")+
+  xlab("Patient ids")+
+  ggsave("test.svg", width = 12, height = 5)
+```
+
+
+
+#DAVID QUERY: KEGG and Protein interaction analysis.
+
+Çok fazla gen olduğu için sadece tümör veya normal spesifik olanları analiz edeceğim. 
+
+Bu da çok saçma oluyor. Ben en iyisi FC analizine göre olanları bir analiz edeyim.
+
+
+```{r}
+special_nodes_mirtar_lim1%>%
+  select(name,type)%>%
+  filter(startsWith(name, "ENS"), str_detect(type, "specific"))%>%
+  distinct()%>%
+  left_join(hg19, by =c("name"="ensembl_gene_id"))->genes_lim1_toquery
+
+
+genes_lim1_toquery%>%
+  select(name)%>%
+  write_tsv("mirtarbase_david_query.tsv")
+
+
+special_nodes_mirtar_lim1%>%
+  filter(startsWith(name, "ENS"), str_detect(type, "specific"))%>%
+  select(name)%>%
+  mutate(name= str_trim(name, side = "both"))%>%
+  distinct()%>%
+  write_tsv("mirtarbase_david_query.tsv")
+
+
+tumor_tissue_lim1%>%
+    left_join(normal_tissue_lim1, by = c("name", "patient_id"), suffix = c("_tumor", "_normal"))%>%
+  mutate_at(vars(c("perturbation_efficiency_tumor", "perturbed_node_count_tumor", "perturbation_efficiency_normal", "perturbed_node_count_normal")),
+             funs(as.numeric(str_replace_na(., "0"))))%>%
+  filter( perturbed_node_count_tumor != 0 | perturbed_node_count_normal != 0 )%>%
+    mutate(perturbed_FC = log2((perturbed_node_count_tumor+1)/(perturbed_node_count_normal+1)))%>%
+  filter(name %in% high_efficient$name, !startsWith(name, "hsa"))%>%
+  filter(perturbed_FC> 1 | perturbed_FC < -1 )%>%
+  select(name)%>%
+  filter(startsWith(name, "ENSG"))%>%
+  mutate(name =str_trim(name, side ="both"))%>%
+  distinct()%>%                                        # pull()-> FC_genes
+  write_tsv("mirtarbase_david_query.tsv")
+
+
+#Buradan bir FC_genes elde ettim. Anlamlı olsun diye. Bunların kegg ve biogrid analizini yaptım.
+
+```
+
+Yukarıda üç tip analiz yaptım davidden. tümör ve normal specific, FC sınırı uygulanmış tüm genler ve tüm genler.
+
+Tümör ve normal spesifikler çok anlamsız olacaktı. FC sınırı uygulanmış ve uygulanmamış arasında çok anlamlı bir fark yoktu. ikisini de kullanabilirim. Bunlardan ben bir supplementary_data yaptım.
+
+
+*** Bu nedenle log2(FC) < -1 ve log2(FC) > 1 şartıyla olanlarla analize devam ettim. 2 katı ve yarısı anlamında
+
+
+
+
+#David Query at non-common nodes:
+
+```{r}
+special_nodes_mirtar_lim1%>%
+  filter(str_detect(speciality, "spec"), startsWith(name, "ENS"))%>%
+  select(name)%>%
+  write_tsv("mirtarbase_tissue_spe_david.tsv")
+
+# p<0.05 olan üç tane pathway buldu ????? O yüzden bunu yapmam dünya saçması.
+
+```
+
+
+# SUPPLEMENTARY DATA:
+
+Burada annotation summary oluşturdum. 1091 gen için bunu yaptım. log2(FC) < -1 ve log2(FC) > 1 : 1091 gen kaldı.
+
++ Excell'in ilk sayfasında hangi node'lar tümör spesifik,  normal spesifik veya iki dokuda ortak onu verdim.
++ İkinci sayfasında ise p_value < 0.05 olan kegg datası.
++ Üçüncü sayfasında p_value < 0.05 biogrid interaction datası.
+
+```{r}
+
+read_tsv("kegg_mirtarbase_lim1.txt")%>%
+  filter(PValue < 0.05)%>%
+  clean_names()%>%
+  select(term, Gene_Count = count, p_value, genes, fold_enrichment)%>%
+  mutate(genes2 = str_split(genes, ", "))%>%
+  unnest()%>%
+  mutate(genes2 = str_trim(genes2, side = "both"))%>%
+  left_join(hg19, by = c("genes2"="ensembl_gene_id"))%>%
+  select(genes2)%>%
+  distinct()%>%
+  pull()->kegg_vec
+
+read_tsv("biogrid_mirtarbase_lim1.txt")%>%
+  filter(PValue < 0.05)%>%
+  clean_names()%>%
+  select(term, Gene_Count = count, p_value, genes, fold_enrichment)%>%
+  mutate(genes2 = str_split(genes, ", "))%>%
+  unnest()%>%
+  mutate(genes2 = str_trim(genes2, side = "both"))%>%
+  left_join(hg19, by = c("genes2"="ensembl_gene_id"))%>%
+  select(genes2)%>%
+  distinct()%>%
+  pull()->biogrid_vec
+
+
+special_nodes_mirtar_lim1%>%
+  filter(startsWith(name, "ENSG"), name %in% FC_genes)%>%
+  left_join(hg19, by =c("name"="ensembl_gene_id"))%>%
+  mutate(name = str_trim(name, side = "both"))%>%
+  mutate(annotation = ifelse(name %in% kegg_vec, "KEGG_PATHWAY", ""),
+         annotation2 = ifelse(name %in% biogrid_vec, "Biogrid_Interaction", ""))%>%
+  mutate(annotation = str_c(annotation, annotation2, sep = ","),
+         annotation = ifelse(startsWith(annotation, ",") | endsWith(annotation, ",") , str_replace(annotation, ",", ""), annotation),
+         annotation = str_replace(annotation, ",", ", "))%>%
+  select(name, hgnc_symbol, count_intissue, ceRNAnetsim_rank, speciality, annotation)%>%
+  write.xlsx("Annotation_summary_supplement.xlsx", sheetName = "Effective_Genes")
+```
+
+```{r}
+
+
+read_tsv("kegg_mirtarbase_lim1.txt")%>%
+  filter(PValue < 0.05)%>%
+  clean_names()%>%
+  select(term, Gene_Count = count, p_value, genes, fold_enrichment)%>%
+  mutate(genes2 = str_split(genes, ", "))%>%
+  unnest()%>%
+  mutate(genes2 = str_trim(genes2, side = "both"))%>%
+  left_join(hg19, by = c("genes2"="ensembl_gene_id"))%>%
+  group_by(term, Gene_Count, p_value, fold_enrichment)%>%
+  summarize(gene_ensembl_id = paste(genes2,collapse=", "),  hgnc_symbol=paste(hgnc_symbol,collapse=", "))%>%
+  ungroup()%>%
+  arrange(desc(-p_value))%>%
+  write.xlsx("Annotation_summary_supplement.xlsx", sheetName = "KEGG_pathway_analysis", append = TRUE)
+```
+
+
+```{r}
+read_tsv("biogrid_mirtarbase_lim1.txt")%>%
+  filter(PValue < 0.05)%>%
+  clean_names()%>%
+  select(term, Gene_Count = count, p_value, genes, fold_enrichment)%>%
+  mutate(genes2 = str_split(genes, ", "))%>%
+  unnest()%>%
+  mutate(genes2 = str_trim(genes2, side = "both"))%>%
+  left_join(hg19, by = c("genes2"="ensembl_gene_id"))%>%
+  group_by(term, Gene_Count, p_value, fold_enrichment)%>%
+  summarize(gene_ensembl_id = paste(genes2,collapse=", "),  hgnc_symbol=paste(hgnc_symbol,collapse=", "))%>%
+  ungroup()%>%
+  arrange(desc(-p_value))%>%
+  write.xlsx("Annotation_summary_supplement.xlsx", sheetName = "Biogrid_protein_interaction_analysis", append = TRUE)
+```
+
+# Disgenet analysis
+
+```{r}
+
+lim1_gene%>%
+  select(name)%>%
+  distinct()%>%
+  left_join(hg19, by =c("name"="ensembl_gene_id"))->to_disgenet
+
+
+read_tsv("disgenet_breast_car.tsv")%>%
+  filter(!str_detect(Gene, "MIR"), !str_detect(Gene, "LNC"))%>%                        #6387 dan 672'sinin score 0,5
+  filter(Gene %in% to_disgenet$hgnc_symbol)#%>%
+  filter(Score_gda>0.1)    #score 0.1den büyük 105 adet ve 582 burada
+
+```
+
+#HMDD analysis
+
+```{r}
+lim1_mirna%>%
+  select(name)%>%
+  distinct()%>%
+ mutate(name= str_replace_all(name, "miR", "mir"))%>%
+  mutate(name= ifelse(str_detect(name,"miR"), str_replace(name, "miR", "mir"), name))%>%
+  separate(name, into =c("human", "value1", "value2", "isoform"), sep = "-")%>%
+  mutate(name= str_c(human, value1, value2, sep = "-"), name = paste0(name, ";"))%>%
+  select(name)%>%
+  distinct()%>%      #26'dan 24'e düştü.
+  write_tsv("HMDD_query_mirtarbase.tsv")
+```
+
+
+```{r}
+readxl::read_xls("HMDD_mirtarbase1.xls", col_names = FALSE)%>%
+  bind_rows(readxl::read_xls("HMDD_mirtarbase2.xls", col_names = FALSE))%>%
+  clean_names()%>%
+  filter(str_detect(x3, "Breast"))->HMDD_mirtarbase
+
+
+HMDD_mirtarbase%>%
+  #filter(x6 == "YES")%>%
+  select(x1)%>%
+  distinct()
+```
+
+
+
+```{r}
+22/24
+```
+
+
+--------------------------------------------------
+
+#Lim =5 analizi
+Önce node'ları bulalım:
+
+```{r}
+read_tsv("mirtarbase_lim_1/results/TCGA-A7-A0CE-01A_1_perturbation_test.tsv")%>%
+ select(name)->node_mirtarbase
+```
+
+
+```{r}
+
+list.files("mirtarbase_lim_5_20/results")%>%
+  as_tibble()%>%
+  filter(str_detect(value, "_5_"))%>%
+  pull()->lim5_patient
+
+
+for ( i in lim5_patient){
+  
+  file <- as_tibble(readr::read_tsv(paste0("mirtarbase_lim_5_20/results/", i)))
+  
+  colnames(file)[2] <- paste0(substr(i, 0, nchar(i)-23), "PE")
+  colnames(file)[3] <- paste0(substr(i, 0, nchar(i)-23), "PC")
+  
+  node_mirtarbase <- node_mirtarbase%>%
+    left_join(file, by = "name")
+  
+}
+
+node_mirtarbase
+
+
+```
+
+```{r}
+
+node_mirtarbase%>%
+  pivot_longer(cols = contains("TCGA"), names_to = "situation", values_to = "values")%>%
+  separate(situation, into = c("patient_id", "analysis_situ"), sep = "_")%>%
+  mutate(analysis_situ = ifelse(analysis_situ == "PE", "perturbation_efficiency", "perturbed_node_count"))%>%
+  filter(patient_id %in% matched_patients$patient_ids)-> mirtarbase_lim5_res
+
+```
+
+hasta sayılarına göre 50 'den fazla hastada aktif olan arkadaşlar
+
+```{r}
+mirtarbase_lim5_res%>%
+  mutate(tissue_type = ifelse(endsWith(patient_id, "11A"), "Normal", "Tumor"))%>%
+  filter(analysis_situ == "perturbation_efficiency")%>%
+  group_by(name, tissue_type)%>%
+  summarise(effective_sample_count=sum(!is.na(values)))%>%
+  pivot_wider(id_cols = name, names_from = tissue_type, values_from = effective_sample_count)%>%
+  #mutate_each(funs(./87))%>%
+  ungroup()%>%
+  filter(Normal> 50 | Tumor >50)-> high_efficient_lim5
+```
+
+
+# Lim=5 için mirna analizi
+
+```{r}
+mirtarbase_lim5_res%>%
+  mutate(tissue_type = ifelse(endsWith(patient_id, "11A"), "Normal", "Tumor"))%>%
+  filter(tissue_type =="Normal")%>%
+  mutate(patient_id = substr(patient_id, 0, nchar(patient_id)-4))%>%
+  pivot_wider(id_cols =c(name, patient_id), names_from = analysis_situ, values_from = values)->normal_tissue_lim5
+
+
+mirtarbase_lim5_res%>%
+  mutate(tissue_type = ifelse(endsWith(patient_id, "11A"), "Normal", "Tumor"))%>%
+  filter(tissue_type =="Tumor")%>%
+  mutate(patient_id = substr(patient_id, 0, nchar(patient_id)-4))%>%
+  pivot_wider(id_cols =c(name, patient_id), names_from = analysis_situ, values_from = values)->tumor_tissue_lim5
+
+
+```
+
+```{r}
+tumor_tissue_lim5%>%
+    left_join(normal_tissue_lim5, by = c("name", "patient_id"), suffix = c("_tumor", "_normal"))%>%
+  mutate_at(vars(c("perturbation_efficiency_tumor", "perturbed_node_count_tumor", "perturbation_efficiency_normal", "perturbed_node_count_normal")),
+             funs(as.numeric(str_replace_na(., "0"))))%>%
+  filter( perturbed_node_count_tumor != 0 | perturbed_node_count_normal != 0 )%>%
+    mutate(perturbed_FC = log2((perturbed_node_count_tumor+1)/(perturbed_node_count_normal+1)))%>%
+  filter(name %in% high_efficient$name, startsWith(name, "hsa"))%>%
+  filter(perturbed_FC> 1 | perturbed_FC < -1 )%>%
+  
+  #->lim5_mirna
+  
+  ggplot(aes(x = patient_id, y = name, fill = perturbed_FC))+
+  geom_tile(aes(colour = perturbed_FC, fill = perturbed_FC))+
+  theme_classic()+
+  theme(axis.text.x = element_text(angle = 90, vjust = 0, hjust=0))+
+  scale_colour_gradientn(colours = c("blue", "white", "red"), aesthetics = c("colour", "fill"))+
+  ylab("Highly pertubing miRNA nodes")+
+  xlab("Patient ids")#+ggsave("test.svg", width = 12, height = 5)
+```
+
+# Lim=1 ve Lim=5 için mirna FC analizi
+
+
+```{r}
+
+lim1_mirna%>%
+  full_join(lim5_mirna, by =c("name", "patient_id"), suffix= c("_lim1", "_lim5"))%>%
+  select(1,2, perturbed_FC_lim1, perturbed_FC_lim5)%>%
+  pivot_longer(cols = c("perturbed_FC_lim1", "perturbed_FC_lim5"), names_to = "situ", values_to = "FC_insitu")%>%
+  ggplot(aes(x = patient_id, y = name, fill = FC_insitu))+
+  geom_tile(aes(colour = FC_insitu, fill = FC_insitu))+
+  theme_test()+
+  theme(axis.text.x = element_text(angle = 90, vjust = 0, hjust=0),
+        plot.title = element_text(hjust = 0.5, size =20), axis.title = element_text(size =20))+
+  scale_colour_gradientn(colours = c("blue", "white", "red"), aesthetics = c("colour", "fill"), na.value = "white")+
+  ylab("Highly pertubing miRNA nodes")+
+  xlab("Patient ids")+
+  ggtitle( "miRNA perturbation efficiency comparison in the cases of lim = 1 and lim = 5")+
+  facet_grid(rows = "situ")+
+  ggsave("mirtarbase_mirna_lim1_lim5_comp.eps", width = 15, height = 8)
+
+```
+
+
+# Lim =1 ve Lim =5 için special gene analizi:
+
+
+Special yapmasam çok korkunç oluyor. Yapsam çok saçma
+
+```{r}
+tumor_tissue_lim5%>%
+    left_join(normal_tissue_lim5, by = c("name", "patient_id"), suffix = c("_tumor", "_normal"))%>%
+  mutate_at(vars(c("perturbation_efficiency_tumor", "perturbed_node_count_tumor", "perturbation_efficiency_normal", "perturbed_node_count_normal")),
+             funs(as.numeric(str_replace_na(., "0"))))%>%
+  filter( perturbed_node_count_tumor != 0 | perturbed_node_count_normal != 0 )%>%
+    mutate(perturbed_FC = log2((perturbed_node_count_tumor+1)/(perturbed_node_count_normal+1)))%>%
+  filter(name %in% high_efficient$name, !startsWith(name, "hsa"))%>%
+  filter(perturbed_FC> 1 | perturbed_FC < -1 )-> lim5_gene
+
+#Aynısını lim1 için de yaptık.
+#elde ettiğimiz genleri ise special olan genler olarak filtreledik.
+
+
+#special node'lar lim değerine göre değişmedi.
+special_nodes_mirtar_lim1%>%
+  filter(str_detect(speciality, "spec"))%>%
+  select(name)%>%
+  distinct()%>%pull()-> gene_spec
+
+
+
+lim1_gene%>%
+  full_join(lim5_gene, by =c("name", "patient_id"), suffix= c("_lim1", "_lim5"))%>%
+  select(1,2, perturbed_FC_lim1, perturbed_FC_lim5)%>%
+  pivot_longer(cols = c("perturbed_FC_lim1", "perturbed_FC_lim5"), names_to = "situ", values_to = "FC_insitu")%>%
+  #filter(name %in% gene_spec)%>%
+  ggplot(aes(x = patient_id, y = name, fill = FC_insitu))+
+  geom_tile(aes(colour = FC_insitu, fill = FC_insitu))+
+  theme_test()+
+  theme(axis.text.x = element_text(angle = 90, vjust = 0, hjust=0),
+        axis.text.y = element_text(angle = 0, vjust = 0, hjust=0, size = 5),
+        plot.title = element_text(hjust = 0.5, size =20), axis.title = element_text(size =20))+
+  scale_colour_gradientn(colours = c("blue", "white", "red"), aesthetics = c("colour", "fill"), na.value = "white")+
+  ylab("Highly pertubing miRNA nodes")+
+  xlab("Patient ids")+
+  ggtitle( "Gene perturbation efficiency comparison in the cases of lim = 1 and lim = 5")+
+  facet_grid()+
+  ggsave("mirtarbase_gene_lim1_lim5_ comp.svg", width = 12, height = 40)
+
+#güzel bir grafik olmadı görüğümüz gibi. Bunu supplementary datada vereceğim o yüzden.
+
+```
+
+# how 0.33 analizi
+

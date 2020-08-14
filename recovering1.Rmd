@@ -1,0 +1,629 @@
+---
+title: "First part"
+output: html_notebook
+---
+```{r}
+#install.packages("dplyr")
+#install.packages("tidyverse")
+#install.packages("tidygraph")
+#install.packages("janitor")
+library(janitor)
+library(tidyverse)
+library(purrr)
+library(readr)
+
+```
+
+```{r, eval=FALSE}
+if (!requireNamespace("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+
+BiocManager::install("ceRNAnetsim")
+```
+
+```{r}
+#BiocManager::install("TCGAbiolinks")
+#BiocManager::install("biomaRt")
+library(biomaRt)
+library(TCGAbiolinks)
+library(ceRNAnetsim)
+library(dplyr)
+```
+
+
+#Firstly, experimental miRNA:gene pairs analysis
+
+```{r}
+list.files("important_ceRNA_per_patient/") # Bu bizim ilk truba analizimiz.
+```
+
+```{r}
+
+list.files("experimental_lim_1") # tüm hastalar için experimental lim=1 olarak çalıştırdık.
+
+list.files("experimental_lim_2_50/") # Bu ise seksen yedi hastanın 2-50 aralığındaki sonuçlarını içeren data
+
+```
+
+
+```{r}
+readr::read_tsv("experimental_lim_1/TCGA-3C-AAAU-01A_perturbation.tsv")%>%
+  #dplyr::filter(!is.na(perturbation_efficiency))%>%
+  #filter(startsWith(name, "ENSG"))->test
+  as_tibble()%>%
+  dplyr::select(name)->nodes_experimental
+
+#örnek olarak 366 genden bahsediyoruz.
+nodes_experimental%>%
+  filter(startsWith(name, "hsa"))
+```
+
+```{r}
+list.files("experimental_lim_1")%>%
+  as_tibble()%>%
+  mutate(patient_ids= substr(value, 0, nchar(value)-17))%>%
+  dplyr::select(patient_ids)%>%
+  filter(str_detect(patient_ids, "-11A"))-> normal_tissues
+
+substr(normal_tissues$patient_ids,0, nchar(normal_tissues$patient_ids)-4)
+
+list.files("experimental_lim_1")%>%
+  as_tibble()%>%
+  mutate(patient_ids= substr(value, 0, nchar(value)-17))%>%
+  dplyr::select(patient_ids)%>%
+  filter(str_detect(patient_ids, "-01"))%>% #tumor
+  mutate(patient_barcode = substr(patient_ids,0, nchar(patient_ids)-4))%>%
+  filter(patient_barcode %in% substr(normal_tissues$patient_ids,0, nchar(normal_tissues$patient_ids)-4))%>%
+  filter(endsWith(patient_ids, "01A"))%>%
+  dplyr::select(patient_ids)->tumor_tissue #üc tane direkt normal doku var onları elemek için aşağıdakikomutları yazdım
+
+
+normal_tissues%>%
+  filter(substr(patient_ids,0, nchar(patient_ids)-4) %in% substr(tumor_tissue$patient_ids,0, nchar(tumor_tissue$patient_ids)-4))%>%
+  bind_rows(tumor_tissue)-> matched_patients
+
+write.csv(matched_patients, "matched_patients.csv")
+
+```
+
+
+
+```{r}
+for ( i in list.files("experimental_lim_1")){
+  
+  file <- as_tibble(readr::read_tsv(paste0("experimental_lim_1/", i)))
+  
+  colnames(file)[2] <- paste0(substr(i, 0, nchar(i)-16), "PE")
+  colnames(file)[3] <- paste0(substr(i, 0, nchar(i)-16), "PC")
+  
+  nodes_experimental <- nodes_experimental%>%
+    left_join(file, by = "name")
+  
+}
+
+nodes_experimental
+```
+
+#Tüm hasta sonuçları
+
+```{r}
+nodes_experimental%>%
+  pivot_longer(cols = contains("TCGA"), names_to = "situation", values_to = "values")%>%
+  separate(situation, into = c("patient_id", "analysis_situ"), sep = "_")%>%
+  mutate(analysis_situ = ifelse(analysis_situ == "PE", "perturbation_efficiency", "perturbed_node_count"))-> experimental_res_lim1
+```
+
+#87 hastanın sonuçları
+
+```{r}
+experimental_res_lim1%>%
+  filter(patient_id %in% matched_patients$patient_ids)-> experimental_res_lim1
+```
+
+
+```{r}
+experimental_res_lim1%>%
+  mutate(tissue_type = ifelse(endsWith(patient_id, "11A"), "Normal", "Tumor"))%>%
+  filter(analysis_situ == "perturbation_efficiency")%>%
+  group_by(name, tissue_type)%>%
+  summarise(effective_sample_count=sum(!is.na(values)))%>%
+  pivot_wider(id_cols = name, names_from = tissue_type, values_from = effective_sample_count)%>%
+  mutate_each(funs(./87))
+
+
+#durumu kıyaslayabilmek için üstteki komutu yazdım.
+
+#Alttaki de spesifikliğini belli edebilmek için
+
+experimental_res_lim1%>%
+  mutate(tissue_type = ifelse(endsWith(patient_id, "11A"), "normal", "tumor"))%>%
+  filter(analysis_situ == "perturbation_efficiency")%>%
+  group_by(name, tissue_type)%>%
+  summarise(effective_sample_count=sum(!is.na(values)))%>%
+  mutate(situ = ifelse(effective_sample_count>50, paste0(tissue_type, "_effective"), "non"))%>%
+  mutate(situ = ifelse(situ== "tumor_effective" & situ== "normal_effective", "effective_inboth", situ))
+  
+```
+
+```{r}
+experimental_res_lim1%>%
+  filter(analysis_situ== "perturbed_node_count")%>%
+  mutate(tissue_type = ifelse(endsWith(patient_id, "11A"), "Normal", "Tumor"))%>%
+  filter(tissue_type == "Tumor")->tumor_perturbed_count
+
+
+experimental_res_lim1%>%
+  filter(analysis_situ== "perturbed_node_count")%>%
+  mutate(tissue_type = ifelse(endsWith(patient_id, "11A"), "Normal", "Tumor"))%>%
+  filter(tissue_type == "Normal")->normal_perturbed_count
+```
+
+#Venn diagram
+
+```{r}
+tumor_perturbed_count%>%
+  filter(!is.na(values))%>%
+  group_by(name)%>%
+  count(name)%>%
+  filter(n> 50)%>%
+  select(name)%>%
+  filter(!startsWith(name, "ENS"))%>%
+  pull()->lim1_tumor_mirna
+#308 gen var 54 mirna
+
+normal_perturbed_count%>%
+  filter(!is.na(values))%>%
+  group_by(name)%>%
+  count(name)%>%
+  filter(n> 50)%>%
+  select(name)%>%
+  filter(!startsWith(name, "ENS"))%>%
+  pull()-> lim1_normal_mirna
+```
+
+```{r}
+#install.packages("VennDiagram")
+#install.packages("RColorBrewer")
+library(VennDiagram)
+library(RColorBrewer)
+
+
+myCol <- brewer.pal(4, "Pastel2")
+m_plot1 <- venn.diagram(
+  x = list(lim1_tumor_gene,lim1_normal_gene, lim1_tumor_mirna, lim1_normal_mirna),
+  category.names = c("Genes in tumor" , "Genes in normal " , "miRNAs in tumor", "miRNAs in normal"),
+  filename = NULL,
+ 
+  output=TRUE,
+  
+  lwd = 2,
+  lty = 'blank',
+  fill = myCol,
+  
+  cat.fontface = "bold",
+  cat.default.pos = "outer",
+  cat.pos = c(-57, -27, 25, 57),
+  cat.dist = c(0.055, 0.055, 0.085, 0.085),
+  #cat.col = myCol,
+  cat.fontfamily = "Helvetica",
+  main.fontfamily ="Helvetica",
+  fontfamily = "Helvetica"
+)
+
+ggsave(my_plot1, filename = 'lim1_perturbation_efficiency.png', width = 7, height = 6, device=cairo_ps)
+```
+
+
+```{r}
+tumor_perturbed_count%>%
+  mutate(patient_id = substr(patient_id, 0, nchar(patient_id)-4))%>%
+  left_join(mutate(normal_perturbed_count, patient_id = substr(patient_id, 0, nchar(patient_id)-4)), by = c("name", "patient_id", "analysis_situ"), suffix = c("_tumor", "_normal"))%>%
+  dplyr::select(-contains("tissue_type"))%>%
+  mutate(values_tumor = ifelse(is.na(values_tumor), 0, values_tumor), values_normal = ifelse(is.na(values_normal), 0, values_normal))%>%
+  mutate(FC= log2((values_tumor+1)/(values_normal+1)))
+```
+
+
+
+
+
+# lim 5 ile de yapalım: Heatmap'e gitmek için. OLMADIIIII
+
+```{r}
+readr::read_tsv("experimental_lim_2_50/TCGA-3C-AAAU-01A_5_perturbation.tsv")%>%
+  #dplyr::filter(!is.na(perturbation_efficiency))%>%
+  #filter(startsWith(name, "ENSG"))->test
+  as_tibble()%>%
+  dplyr::select(name)->nodes_experimental
+
+#örnek olarak 366 genden bahsediyoruz.
+nodes_experimental%>%
+  filter(startsWith(name, "hsa"))
+
+list.files("experimental_lim_2_50")%>%
+  as_tibble()%>%
+  filter(str_detect(value, "_2_"))
+```
+
+```{r}
+for ( i in list.files("experimental_lim_2_50")){
+  
+  file <- as_tibble(readr::read_tsv(paste0("experimental_lim_2_50/", i)))
+  
+  colnames(file)[2] <- paste0(substr(i, 0, nchar(i)-16), "PE")
+  colnames(file)[3] <- paste0(substr(i, 0, nchar(i)-16), "PC")
+     
+    nodes_experimental <- nodes_experimental%>%
+     left_join(file, by = "name")
+}
+
+nodes_experimental
+```
+
+#heat_map yapamadım. Neden dersek biz burada bir elli tümör dokusu için analiz yapmışız???? Neden????
+
+
+Bu nedenle aslında ben FC kıyaslaması yapamıyorum. Yani bu olmuyor.
+
+
+
+```{r}
+nodes_experimental%>%
+  dplyr::select(name, contains("_10_"))%>%
+  tidyr::pivot_longer(cols = contains("TCGA"), names_to = "situation", values_to = "values")%>%
+  tidyr::separate(situation, into = c("patient_id", "analysis_situ"), sep = "_")%>%
+  mutate(analysis_situ = ifelse(analysis_situ == "PE", "perturbation_efficiency", "perturbed_node_count"))%>%
+  dplyr::select(patient_id)%>%
+  distinct()
+```
+
+
+```{r}
+BiocManager::install("RDAVIDWebService")
+library(RDAVIDWebService)
+```
+
+```{r}
+
+bind_rows(tumor_perturbed_count%>%
+  filter(!is.na(values))%>%
+  group_by(name)%>%
+  count(name)%>%
+  filter(n> 50)%>%
+  filter(startsWith(name, "ENS"))%>%
+  mutate(rank = n/87, tissue= "tumor")%>%
+    ungroup(),
+  normal_perturbed_count%>%
+  filter(!is.na(values))%>%
+  group_by(name)%>%
+  count(name)%>%
+  filter(n> 50)%>%
+  filter(startsWith(name, "ENS"))%>%
+  mutate(rank = n/87, tissue= "normal")%>%
+    ungroup())%>%
+  dplyr::select(-n)%>%
+  group_by(name)%>%
+  count(name)->speciality
+  
+bind_rows(tumor_perturbed_count%>%
+  filter(!is.na(values))%>%
+  group_by(name)%>%
+  count(name)%>%
+  filter(n> 50)%>%
+  filter(startsWith(name, "ENS"))%>%
+  mutate(rank = n/87, tissue= "tumor")%>%
+    ungroup(),
+  normal_perturbed_count%>%
+  filter(!is.na(values))%>%
+  group_by(name)%>%
+  count(name)%>%
+  filter(n> 50)%>%
+  filter(startsWith(name, "ENS"))%>%
+  mutate(rank = n/87, tissue= "normal")%>%
+    ungroup())%>%
+  left_join(speciality, by ="name")%>%
+  unite(type, n.y, tissue)%>%
+  mutate(type = ifelse(startsWith(type, "2"), "common_both", type), 
+         type = ifelse(startsWith(type, "1"), paste(substr(type, 3, nchar(type)), "_specific"), type))%>%
+  dplyr::rename("sample_count"= n.x)%>%
+  mutate(name = str_trim(name, side="both"))->genes_lim1                                     #-> special_nodes_experimental
+
+genes_lim1%>%
+  select(name)%>%
+  distinct()%>%
+  left_join(hg19, by =c("name"="ensembl_gene_id"))->genes_lim1
+
+```
+
+
+```{r}
+bind_rows(tumor_perturbed_count%>%
+  filter(!is.na(values))%>%
+  group_by(name)%>%
+  count(name)%>%
+  filter(n> 50)%>%
+  filter(startsWith(name, "hsa"))%>%
+  mutate(rank = n/87, tissue= "tumor")%>%
+    ungroup(),
+  normal_perturbed_count%>%
+  filter(!is.na(values))%>%
+  group_by(name)%>%
+  count(name)%>%
+  filter(n> 50)%>%
+  filter(startsWith(name, "hsa"))%>%
+  mutate(rank = n/87, tissue= "normal")%>%
+    ungroup())%>%
+  dplyr::select(-n)%>%
+  group_by(name)%>%
+  count(name)->speciality
+
+bind_rows(tumor_perturbed_count%>%
+  filter(!is.na(values))%>%
+  group_by(name)%>%
+  count(name)%>%
+  filter(n> 50)%>%
+  filter(startsWith(name, "hsa"))%>%
+  mutate(rank = n/87, tissue= "tumor")%>%
+    ungroup(),
+  normal_perturbed_count%>%
+  filter(!is.na(values))%>%
+  group_by(name)%>%
+  count(name)%>%
+  filter(n> 50)%>%
+  filter(startsWith(name, "hsa"))%>%
+  mutate(rank = n/87, tissue= "normal")%>%
+    ungroup())%>%
+  left_join(speciality, by ="name")%>%
+  unite(type, n.y, tissue)%>%
+  mutate(type = ifelse(startsWith(type, "2"), "common_both", type), 
+         type = ifelse(startsWith(type, "1"), paste(substr(type, 3, nchar(type)), "_specific"), type))%>%
+  dplyr::rename("sample_count"= n.x)%>%
+  mutate(name = str_trim(name, side="both"))-> mirnas_lim1
+
+```
+
+# Experimental results network: ÇOK BÜYÜK.
+
+```{r}
+readRDS("important_ceRNA_per_patient/tocombinepairs.RDS")->tocombinepairs
+readRDS("important_ceRNA_per_patient/gene_exp_data.RDS")-> gene_exp_data
+readRDS("important_ceRNA_per_patient/mirna_exp_data.RDS")-> mirna_exp_data
+readRDS("important_ceRNA_per_patient/general_BRCA_ceRNAs.RDS")-> general_BRCA_ceRNAs
+
+colnames(gene_exp_data)[2] # bir hasta seçtim.
+  
+  
+tocombinepairs%>%
+  right_join(select(gene_exp_data, Ensembl_Gene_Id, 'TCGA-3C-AAAU-01A'), by="Ensembl_Gene_Id")%>%
+  right_join(select(mirna_exp_data, miRNA, 'TCGA-3C-AAAU-01A'), by ="miRNA", suffix= c("Gene_expression", "miRNA_expression"))%>%
+  select(Ensembl_Gene_Id, miRNA, Gene_expression= paste0('TCGA-3C-AAAU-01A', "Gene_expression"), miRNA_expression = paste0('TCGA-3C-AAAU-01A', "miRNA_expression"), Energy, seed_type_effect, region_effect)%>%
+  filter(Ensembl_Gene_Id %in% general_BRCA_ceRNAs$geneA, Ensembl_Gene_Id %in% special_nodes_experimental$name)%>%
+  priming_graph(competing_count = Gene_expression, 
+                miRNA_count = miRNA_expression, 
+                aff_factor = c(Energy, seed_type_effect),
+                deg_factor = region_effect)%>%
+  vis_graph()
+  
+  
+  
+```
+
+#David api sorunu çıkıyor. Ben de manuel yaptım. dosyalar: KEGG_experimental_lim1.txt ve Biogrid_int_experimental_lim1.txt
+
+```{r}
+genes_lim1%>%
+  dplyr::select(name)%>%
+  distinct()%>%
+  write_tsv("david_query.tsv")
+```
+
+```{r}
+read_tsv("Biogrid_int_experimental_lim1.txt")%>%
+  filter(PValue < 0.05)%>%
+  dplyr::select(Term, Genes)%>%
+  mutate(aaa=str_split(Genes, pattern = ","))%>%
+  unnest()%>%
+  mutate(gene = str_trim(aaa, side="both"))%>%
+  select(gene)%>%
+  distinct()%>%
+  left_join(hg19, by =c("gene"="ensembl_gene_id"))%>%
+  mutate(interaction="biogrid protein interaction")%>%
+  select(name=gene, 2,3)-> biogrid_int
+
+#238
+
+238/362
+
+# Yine ribozomal protein ağırlıklı olarak gözlenmiş.
+
+
+read_tsv("Biogrid_int_experimental_lim1.txt")%>%
+  filter(PValue < 0.05)%>%
+  filter(str_detect(Term, "ribosomal"))%>%
+   dplyr::select(Term, Genes)%>%
+  mutate(aaa=str_split(Genes, pattern = ","))%>%
+  unnest()%>%
+  dplyr::select(aaa)%>%
+  distinct()
+
+54/238
+
+```
+
+
+```{r}
+read_tsv("KEGG_experimental_lim1.txt")%>%
+  filter(PValue < 0.05)%>%
+  dplyr::select(Term, Genes)%>%
+  mutate(aaa=str_split(Genes, pattern = ","))%>%
+  unnest()%>%
+  dplyr::select(Term, gene=aaa)%>%
+  mutate(gene = str_trim(gene, side="both"))%>%
+  distinct()%>%
+  separate(Term, into= c("code", "pathway_name"), sep = ":")%>%
+  left_join(hg19, by =c("gene"="ensembl_gene_id"))%>%
+  select(name = gene, hgnc_symbol, interaction=pathway_name)->kegg_analysis
+
+
+69/362
+
+```
+
+
+# Edgar analizi
+
+Conversion için 
+
+```{r, eval=FALSE}
+#BiocManager::install("biomaRt")
+library(biomaRt)
+listEnsemblArchives()
+listMarts(host = "http://apr2020.archive.ensembl.org")
+ensembl_con = useMart(host = "http://apr2020.archive.ensembl.org", biomart = "ENSEMBL_MART_ENSEMBL", dataset = "hsapiens_gene_ensembl")
+hg19 <- getBM(attributes = c("ensembl_gene_id", "hgnc_symbol"), mart = ensembl_con)
+
+hg19
+```
+
+
+
+```{r}
+
+read_tsv("edgar_critical.txt")
+read_delim("edgar_critical.txt", delim = "\t", col_names = "text", skip = 1)%>%
+  separate(text, into = c("critical_gene", "OMIM", "Band", "assoc_dis_num", "disease_code"), sep = "\t")%>%
+  mutate(critical_gene = str_trim(critical_gene, side="both"))-> edgar_critcals
+
+```
+
+```{r}
+read_delim("string_TFs.txt", delim = "\t", col_names = "text", skip = 1)%>%
+  separate(text, into = c("critical_gene", "Gene2", "Direct", "Interaction", "shared_gene_num", "shared_genes"), sep = "\t")%>%
+  mutate(shared_gene = str_split(shared_genes, pattern = ","))%>%
+  unnest()%>%
+  select(critical_gene, Gene2, shared_gene)%>%
+  distinct()%>%
+  mutate(shared_gene=str_trim(shared_gene, side = "both"))->TFs
+
+```
+
+```{r}
+genes_lim1%>% #kritik gen yok
+  mutate(interaction = ifelse(hgnc_symbol %in% TFs$shared_gene, "TF associated", NA),
+         interaction = ifelse(hgnc_symbol %in% TFs$Gene2, "TFs", interaction),
+         interaction = ifelse(hgnc_symbol %in% edgar_critcals$critical_gene, "critical", interaction))%>%
+  bind_rows(kegg_analysis)%>%
+  filter(!is.na(interaction))->experimental_res
+
+
+
+```
+
+sankey diagram
+
+```{r}
+#install.packages("networkD3")
+#install.packages("svglite")
+#install.packages("htmlwidgets")
+library(svglite)
+library(networkD3)
+library(htmlwidgets)
+
+
+experimental_res%>%
+  select(source = hgnc_symbol, target = interaction)%>%
+  mutate(value = 1)->links
+
+nodes <- data.frame(
+  name=c(as.character(links$source), as.character(links$target)) %>% 
+    unique()
+)
+
+links$IDsource <- match(links$source, nodes$name)-1 
+links$IDtarget <- match(links$target, nodes$name)-1
+
+
+p<- sankeyNetwork(Links = links, Nodes = nodes, Source = "IDsource", Target = "IDtarget", 
+              Value = "value", NodeID = "name", fontSize = 75, nodeWidth = 50,
+              fontFamily = "sans-serif", iterations = 0,  width = 5000, height = 7000, margin = list("right" = 1000))
+
+
+#p <- htmlwidgets::prependContent(p, htmltools::tags$h1("Highly perturbing genes constructed from experimental miRNA:gene pairs"))
+
+p<- onRender(p,
+  '
+  function(el,x) {
+    d3.select(el)
+      .selectAll(".node text")
+      .attr("x", x.options.nodeWidth - 50)
+      .attr("text-anchor", "end")
+  }
+  '
+)
+
+
+
+saveWidget(p, file="sankeyColor1.html")
+```
+
+#disgenet analizi
+
+```{r}
+read_tsv("disgenet_breast_car.tsv")%>%
+  filter(!str_detect(Gene, "MIR"), !str_detect(Gene, "LNC"))%>%                        #6387 dan 672'sinin score 0,5
+  filter(Gene %in% genes_lim1$hgnc_symbol)%>%
+  filter(Score_gda>0.1)                   #25 tane 362'de 178 tanesi burada var.
+mirnas_lim1
+```
+
+
+# HMDD mirna analizi
+```{r}
+mirnas_lim1%>%
+  select(name)%>%
+  distinct()%>%
+ mutate(name= str_replace_all(name, "miR", "mir"))%>%
+  mutate(name= ifelse(str_detect(name,"miR"), str_replace(name, "miR", "mir"), name))%>%
+  separate(name, into =c("human", "value1", "value2", "isoform"), sep = "-")%>%
+  mutate(name= str_c(human, value1, value2, sep = "-"), name = paste0(name, ";"))%>%
+  select(name)%>%
+  distinct()      #62'den 56'e düştü.
+ # write_tsv("HMDD_query.tsv")
+
+#47'si meme kanseri ile ilişkilendirilmiş.
+
+readxl::read_xls("HMDD_res.xls", col_names = FALSE)%>%
+  bind_rows(readxl::read_xls("HMDD_res1.xls", col_names = FALSE))%>%
+  bind_rows(readxl::read_xls("HMDD_res2.xls", col_names = FALSE))%>%
+  clean_names()%>%
+  filter(str_detect(x3, "Breast"))->HMDD_res
+
+# meme kanseri ilişkili olanlar:
+
+mirnas_lim1%>%
+ mutate(name= str_replace_all(name, "miR", "mir"))%>%
+  mutate(name= ifelse(str_detect(name,"miR"), str_replace(name, "miR", "mir"), name))%>%
+  separate(name, into =c("human", "value1", "value2", "isoform"), sep = "-")%>%
+  mutate(name= str_c(human, value1, value2, sep = "-"))%>%
+  select(name, ceRNAetsim_rank = rank, type)%>%
+  left_join(HMDD_res, by = c("name"="x1"))%>%
+  #filter(is.na(x2))%>%
+  select(-x4)%>%
+  distinct()
+47/56
+
+# bulunamayanlar
+
+mirnas_lim1%>%
+ mutate(name= str_replace_all(name, "miR", "mir"))%>%
+  mutate(name= ifelse(str_detect(name,"miR"), str_replace(name, "miR", "mir"), name))%>%
+  separate(name, into =c("human", "value1", "value2", "isoform"), sep = "-")%>%
+  mutate(name= str_c(human, value1, value2, sep = "-"))%>%
+  select(name, ceRNAetsim_rank = rank, type)%>%
+  anti_join(HMDD_res, by = c("name"="x1"))%>%
+  select(name, type)%>%
+  distinct()
+
+
+
+```
