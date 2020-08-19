@@ -278,10 +278,7 @@ nodes_experimental%>%
 ```
 
 
-```{r}
-BiocManager::install("RDAVIDWebService")
-library(RDAVIDWebService)
-```
+#Special Genes
 
 ```{r}
 
@@ -335,6 +332,8 @@ genes_lim1%>%
 
 ```
 
+
+#Special mirnas
 
 ```{r}
 bind_rows(tumor_perturbed_count%>%
@@ -496,26 +495,52 @@ read_delim("edgar_critical.txt", delim = "\t", col_names = "text", skip = 1)%>%
 
 ```
 
+
+
+
 ```{r}
 read_delim("string_TFs.txt", delim = "\t", col_names = "text", skip = 1)%>%
-  separate(text, into = c("critical_gene", "Gene2", "Direct", "Interaction", "shared_gene_num", "shared_genes"), sep = "\t")%>%
-  mutate(shared_gene = str_split(shared_genes, pattern = ","))%>%
+  separate(text, into = c("TFs", "disease_assoc", "regulated_genes", "regulated_gene_assoc", "regulated_associated_genes"), sep = "\t")%>%
+  mutate(shared_gene = str_split(regulated_gene_assoc, pattern = ","))%>%
   unnest()%>%
-  select(critical_gene, Gene2, shared_gene)%>%
+  select(TFs, disease_assoc, shared_gene)%>%
   distinct()%>%
   mutate(shared_gene=str_trim(shared_gene, side = "both"))->TFs
+
+
+TFs%>%
+  left_join(hg19, by = c("shared_gene"="hgnc_symbol"))%>%
+  distinct()%>%
+  filter(!is.na(ensembl_gene_id), ensembl_gene_id %in% highest_efficient_nodes$name)%>%
+  mutate(interaction = "TF associated", term = paste0("TF_", TFs))%>%
+  select(term, genes2=ensembl_gene_id, hgnc_symbol = shared_gene, interaction)%>%
+  distinct()
+
 
 ```
 
 ```{r}
 genes_lim1%>% #kritik gen yok
   mutate(interaction = ifelse(hgnc_symbol %in% TFs$shared_gene, "TF associated", NA),
-         interaction = ifelse(hgnc_symbol %in% TFs$Gene2, "TFs", interaction),
+         interaction = ifelse(hgnc_symbol %in% TFs$TFs, "TFs", interaction),
          interaction = ifelse(hgnc_symbol %in% edgar_critcals$critical_gene, "critical", interaction))%>%
   bind_rows(kegg_analysis)%>%
   filter(!is.na(interaction))->experimental_res
 
 
+experimental_res%>%
+  filter(interaction != "TFs", interaction != "TF associated")%>%
+  select(name)%>%
+  distinct()
+
+
+experimental_res%>%
+  filter(interaction == "TFs"| interaction == "TF associated")%>%
+  left_join(TFs, by = c("hgnc_symbol"="shared_gene"))%>%
+  filter(disease_assoc == "YES")%>%
+  distinct(hgnc_symbol)
+
+#80'i edgar TF ve pathwaylerde bulunmuş, 41 TF ilşkili 4 ü zaten transkripsiyon faktörü, 47'si ise pathwaylerde olmak üzere.
 
 ```
 

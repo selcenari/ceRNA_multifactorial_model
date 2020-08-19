@@ -18,6 +18,10 @@ library(xlsx)
 #install.MikTeX(page_with_download_url = "https://miktex.org/download")
 library(latexpdf)
 library(tinytex)
+library(ggraph)
+library(ggplot2)
+library(igraph)
+library(tidygraph)
 ```
 
 ```{r}
@@ -26,9 +30,7 @@ list.files("mirtarbase_lim_1/results")
 read_tsv("mirtarbase_lim_1/results/TCGA-A7-A0CE-01A_1_perturbation_test.tsv")%>%
  select(name)->node_mirtarbase
 
-#3265 gen, 581 miRNA  
-
-mirtarbasegene_mat
+#3265 gen, 581 miRNA
 
 ```
 
@@ -92,8 +94,8 @@ tumor_perturbed_count_lim1%>%
   count(name)%>%
   filter(n> 50)%>%
   select(name)%>%
-  filter(!startsWith(name, "ENS"))%>%
-  pull()->lim1_tumor_mirna
+  filter(startsWith(name, "ENS"))%>%
+  pull()->lim1_tumor_gene
 
 normal_perturbed_count_lim1%>%
   filter(!is.na(values))%>%
@@ -101,8 +103,8 @@ normal_perturbed_count_lim1%>%
   count(name)%>%
   filter(n> 50)%>%
   select(name)%>%
-  filter(!startsWith(name, "ENS"))%>%
-  pull()-> lim1_normal_mirna
+  filter(startsWith(name, "ENS"))%>%
+  pull()-> lim1_normal_gene
 ```
 
 ```{r}
@@ -235,9 +237,13 @@ tumor_tissue_lim1%>%
   filter( perturbed_node_count_tumor != 0 | perturbed_node_count_normal != 0 )%>%
     mutate(perturbed_FC = log2((perturbed_node_count_tumor+1)/(perturbed_node_count_normal+1)))%>%
   filter(name %in% high_efficient$name, startsWith(name, "hsa"))%>%
-  filter(perturbed_FC> 1 | perturbed_FC < -1 )      
+  filter(perturbed_FC> 1 | perturbed_FC < -1 )
+    #-> lim1_mirna
   
-  #-> lim1_mirna
+  #filter(name %in% high_efficient$name)%>%
+  #filter(perturbed_FC> 1 | perturbed_FC < -1 )%>%
+  #select(name)%>%
+  #distinct() ->highest_efficient_nodes
   
   ggplot(aes(x = patient_id, y = name, fill = perturbed_FC))+
   geom_tile(aes(colour = perturbed_FC, fill = perturbed_FC))+
@@ -451,12 +457,6 @@ HMDD_mirtarbase%>%
 ```
 
 
-
-```{r}
-22/24
-```
-
-
 --------------------------------------------------
 
 #Lim =5 analizi
@@ -631,5 +631,152 @@ lim1_gene%>%
 
 ```
 
-# how 0.33 analizi
+# sample network
 
+bunun için gen ifadesi vs zaten gerekmiyor combined pairs mirtarbase_lim1 klasöründe node'lardan filtre yapıp edge seçmiş olacağım. 
+
+```{r}
+
+
+node_mirtarbase
+
+readRDS("mirtarbase_lim_1/tocombinepairs_mirtarbase.RDS")%>%
+  filter(miRNA %in% node_mirtarbase$name, Ensembl_Gene_Id %in% node_mirtarbase$name)%>%
+  mutate(miRNA_name = miRNA, competing_name = Ensembl_Gene_Id)%>%
+  as_tbl_graph()
+
+# Tabi ki elimde yine dev gibi bir network var. Şimdi de effective olarak bulduklarımızı filtreleyelim:
+
+# 228. satırdaki chunkta highest olanları buldum.
+
+highest_efficient_nodes
+
+readRDS("mirtarbase_lim_1/tocombinepairs_mirtarbase.RDS")%>%
+  filter(miRNA %in% highest_efficient_nodes$name, Ensembl_Gene_Id %in% highest_efficient_nodes$name)%>%
+  mutate(miRNA_name = miRNA, competing_name = Ensembl_Gene_Id)%>%
+  as_tbl_graph()%>%
+  mutate(node_type = ifelse(startsWith(name, "hsa"), "miRNA", "ceRNA"))%>%
+  ggraph(layout = "fr")+ #fr, graphopt iyi olabilir.
+  geom_edge_link(colour = "seashell2")+
+  geom_node_point(aes(filter= node_type == "ceRNA"), color = "sandybrown", shape = "circle", size= 1.5)+
+  geom_node_point(aes(filter= node_type == "miRNA"), color = "slateblue4", shape = "triangle", size= 3)+
+  theme_graph(base_family = "sans")+
+  geom_node_text(aes(filter= node_type == "miRNA", label = name), size =3, repel = TRUE)
+
+
+#son olarak kaydedilecek
+ggsave(filename = 'highest_efficient_nodes_mirtarbase.eps', device=cairo_ps, width = 12, height = 7 )
+
+```
+# Hive R plot
+
+transkripsiyon faktörleri
+
+```{r}
+
+readRDS("mirtarbase_lim_1/tocombinepairs_mirtarbase.RDS")%>%
+  filter(miRNA %in% highest_efficient_nodes$name, Ensembl_Gene_Id %in% highest_efficient_nodes$name)%>%
+  select(2,1)->combined_pairs
+
+read_delim("string_TFs.txt", delim = "\t", col_names = "text", skip = 1)%>%
+  separate(text, into = c("TFs", "disease_assoc", "regulated_genes", "regulated_gene_assoc", "regulated_associated_genes"), sep = "\t")%>%
+  mutate(shared_gene = str_split(regulated_gene_assoc, pattern = ","))%>%
+  unnest()%>%
+  select(TFs, disease_assoc, shared_gene)%>%
+  distinct()%>%
+  mutate(shared_gene=str_trim(shared_gene, side = "both"))->TFs
+
+
+TFs%>%
+  left_join(hg19, by = c("shared_gene"="hgnc_symbol"))%>%
+  distinct()%>%
+  filter(!is.na(ensembl_gene_id), ensembl_gene_id %in% highest_efficient_nodes$name)%>%
+  mutate(interaction = "TF associated", term = paste0("TF_", TFs))%>%
+  select(term, genes2=ensembl_gene_id, hgnc_symbol = shared_gene, interaction)%>%
+  distinct()->mirtarbase_TF_analysis
+
+# 83 gen meme kanseri ilişkili olarak rapor edilmiş. 227 tanesi ise zaten bulunmuş. 
+
+```
+
+
+```{r}
+
+bind_rows((
+read_tsv("kegg_mirtarbase_lim1.txt")%>%
+  filter(PValue < 0.05)%>%
+  clean_names()%>%
+  select(term, Gene_Count = count, p_value, genes)%>%
+  mutate(genes2 = str_split(genes, ", "))%>%
+  unnest()%>%
+  mutate(genes2 = str_trim(genes2, side = "both"), genes2 = ifelse(endsWith(genes2, ","), substr(genes2, 0, (nchar(genes2)-1)), genes2))%>%
+  left_join(hg19, by = c("genes2"="ensembl_gene_id"))%>%
+  select(term, genes2, hgnc_symbol)%>%
+  mutate(interaction = "KEGG_pathways")), (read_tsv("biogrid_mirtarbase_lim1.txt")%>%
+  filter(PValue < 0.05)%>%
+  clean_names()%>%
+  select(term, Gene_Count = count, p_value, genes)%>%
+  mutate(genes2 = str_split(genes, ", "))%>%
+  unnest()%>%
+  mutate(genes2 = str_trim(genes2, side = "both"), genes2 = ifelse(endsWith(genes2, ","), substr(genes2, 0, (nchar(genes2)-1)), genes2))%>%
+  left_join(hg19, by = c("genes2"="ensembl_gene_id"))%>%
+  select(term, genes2, hgnc_symbol)%>%
+  mutate(interaction = "PPI")))-> hive_plot
+
+
+
+  
+
+hive_plot%>%
+  bind_rows(mirtarbase_TF_analysis)->hive_plot
+
+hive_plot%>%
+  filter(startsWith(term, "TF_"))
+
+hive_plot%>%
+  select(interaction)%>%
+  distinct()
+
+
+hive_plot%>%
+  filter(interaction != "PPI", interaction != "KEGG_pathways")%>%
+  distinct(hgnc_symbol)
+
+# 318'i kegg patwayde
+# 471'i biogrid interaction'larda
+# 227'si ise TF associated Bunun 83'ü meme kanseri ilişkili olarak rapor edimiş.
+
+hive_plot%>%
+  select(hgnc_symbol)%>%
+  distinct()
+
+#607 tanesi
+
+
+
+hive_plot%>%
+  arrange(hgnc_symbol)%>%
+  mutate(situ= term)%>%
+  as_tbl_graph()%>%
+  mutate(interaction = "Biogrid protein interaction",
+         interaction = ifelse(startsWith(name, "hsa"), "KEGG Pathway", interaction),
+         interaction = ifelse(startsWith(name, "ENS"), "Gene", interaction),
+         interaction = ifelse(startsWith(name, "TF_"), "TF associated", interaction)
+         )%>%
+  #filter(interaction != "Biogrid protein interaction")%>%
+  ggraph("hive", axis = interaction)+
+  geom_edge_hive(aes(color = factor(situ)), lineend = "butt",
+  linejoin = "round",
+  linemitre = 2,
+  label_alpha = 1,
+  label_parse = FALSE,
+  check_overlap = TRUE) + 
+  geom_axis_hive(color="gray43", size = 2) +
+  coord_fixed()+
+  theme_graph()+
+  theme(legend.position="none")
+
+
+ggsave(filename = 'highest_efficient_nodes_enrichment_mirtarbase.eps', device=cairo_ps)
+
+```
