@@ -18,24 +18,11 @@ header-includes:
 
 \beginsupplement
 
-# 1. Functions defined for ceRNA models and workflow of method
 
-We defined the functions that can be used with R programming. Briefly, these functions process a given miRNA:gene dataset and convert to graph object. All values that are significant in miRNA:target interactions are stored in edge variables and processed with formulations that are given in previous section. The functions and steps of approach are explained as following (Figure S1 in Supplementary Figures) :
-
-
-**Conversion of dataset**: `priming_graph()` function processes the given dataset that includes competing elements in first variable and repressive element in second variable. If the affinity and/or degradation factors are specified in the function, factors are taken into account, are processed with defaults in vice versa. The formulations that are given in equations (1-4) are performed in this function. This step gives the graph object which contains efficiency values of miRNA:competing target pairs in steady-state in terms of amount. It is assumed that the initial target amounts in the dataset is observed after the repressive activity of miRNAs in steady-state. 
-
-**Transition of variables in graph**: In the previous step, the calculations are performed in the edge variables of the graph object. However, the graph object allows to use node variables, while the node features are handled to the graph. In this direction, update_nodes function carries the amount values to node variables This step must be applied with “once” option because it is primary process.
+The functions that are used in the this study are developed with R and are available in [Bioconductor](https://www.bioconductor.org/packages/release/bioc/html/ceRNAnetsim.html).
 
 
-**Trigger change in graph**: The dataset are assumed as steady-state in previous step and the efficiency coefficients are calculated according to this acceptance. In the network that is found in steady-state conditions, the change is applied to the graph object for perturbation of steady-state. To provide the perturbation in the network the work-flow offer two methods: *update_variables* and *update_how*. The first, a new dataset that is contained competing and repressive element names and current values of these can be processed with update_variables. The second option, the amount of the given node name in update_how function can be changed according to “how” argument.
-
-**Simulation of competing behavior of targets**: After the change in the steady-state conditions, the network elements try to gain steady-state again. This process progresses as repeating of regulations after the spreading the changes in the network. In this step, simulation of regulations according to given cycle count in simulate function is applied. After each simulation cycle, the miRNA repression values are re-calculated and the current values of competing elements are found and saved. The process is performed in the edge data and at the same time outputs of the calculations are carried from edge to node data.
-
-
-The node elements in the dataset are handled as two type; repressive (miRNAs) and competing (targets). It is assumed in approach that while targets are degrading or inhibiting by miRNAs continuously, miRNAs reversibly used. If the trigger of the network is a miRNA, it maintains the current value of amount that provides by user. On the contrary, it tries to help this process to provide steady-state through the regulations on its amount, if a competing element is used as a trigger. The functions that are used in the this study are developed with R and are available in [Bioconductor](https://www.bioconductor.org/packages/release/bioc/html/ceRNAnetsim.html).
-
-
+# 1. Determination of perturbation efficiencies of nodes in network.
 ```{r, include=FALSE, message=FALSE, warning=FALSE}
 
 library(tidygraph)
@@ -52,115 +39,13 @@ knitr::opts_chunk$set(warning = FALSE)
 library(ceRNAnetsim)
 ```
 
-+ load *minsamp* data
-
-```{r}
-data("minsamp")
-minsamp
+```{r, include=FALSE}
+data("minsamp") # refers Sample and Sample+ data
 ```
 
-See Table S1 in Supplementary Figures and Tables file.
+## Node efficiencies on Sample+ network
 
-# 2. *minsamp* dataset analysis in lack of interaction factors.
-
-Firstly, we have analysed minimal data without interaction factors between miRNA:target.
-
-- 1. We have evaluated graph in the steady state conditions as followings (Figure S2 in Supplementary Figures):
-
-```{r, message=FALSE, warning=FALSE}
-priming_graph(minsamp, competing_count = Competing_expression, miRNA_count = miRNA_expression)
-```
-
-- 2. We have obtained graph after change on Gene2 expression as following (Figure S3 in Supplementary Figures):
-
-```{r, message=FALSE, warning=FALSE}
-priming_graph(minsamp, competing_count = Competing_expression, miRNA_count = miRNA_expression)%>%
-  update_how("Gene2", 2)
-```
-
-
-- 3. We have determined regulations after Gene2 upregulation (Figure S4 in Supplementary Figures):
-
-```{r, message=FALSE, warning=FALSE}
-
-priming_graph(minsamp, competing_count = Competing_expression, miRNA_count = miRNA_expression)%>%
-  update_how("Gene2", 2)%>%
-  simulate(cycle= 2)
-
-```
-
-Note that the regulations are colored according to expression changes of present and a previous value. So, it can be observed that whole gene expressions increase in comparison of initial steady-state. The overall regulations of gene expressions are as followings:
-
-```{r, message=FALSE, warning=FALSE}
-priming_graph(minsamp, competing_count = Competing_expression, miRNA_count = miRNA_expression)%>%
-  update_how("Gene2", 2)%>%
-  simulate(2)%>%
-  activate(edges)%>%
-  as_tibble()%>%
-  select(Competing_name,comp_count_list,effect_list)%>%
-  unnest()
-```
-
-# 3. *minsamp* dataset analysis with interaction factors.
-
-We have made the same analysis in presence of interaction factors (Sequentially shown at Figure S5-7 in Supplementary Figures).
-
-```{r, message=FALSE, warning=FALSE}
-priming_graph(minsamp, competing_count = Competing_expression, miRNA_count = miRNA_expression, aff_factor = c(energy, seed_type), deg_factor = region)
-
-```
-
-```{r, message=FALSE, warning=FALSE}
-
-priming_graph(minsamp, competing_count = Competing_expression, miRNA_count = miRNA_expression, aff_factor = c(energy, seed_type), deg_factor = region)%>%
-  update_how("Gene2", 2)
-```
-
-```{r, message=FALSE, warning=FALSE}
-
-priming_graph(minsamp, competing_count = Competing_expression, miRNA_count = miRNA_expression, aff_factor = c(energy, seed_type), deg_factor = region)%>%
-  update_how("Gene2", 2)%>%
-  simulate(cycle=2)
-```
-
-When the graphs were examined, it was observed that behaviors (i.e. fluctuating trend) were same. But, when the results were analysed in terms of expression values, the regulation differences can be observed.
-
-```{r, message=FALSE, warning=FALSE}
-priming_graph(minsamp, competing_count = Competing_expression, miRNA_count = miRNA_expression, aff_factor = c(energy, seed_type), deg_factor = region)%>%
-  update_how("Gene2", 2)%>%
-  simulate(3)%>%
-  activate(edges)%>%
-  as_tibble()%>%
-  select(Competing_name,comp_count_list,effect_list)%>%
-  unnest()
-```
-
-# 4. Common target perturbation in *minsamp* dataset.
-
-Genes targeted by multiple miRNAs (referred to as "common target") are of special interest since they are subject to cooperative effect. Also, they perturb more than one neighborhood. In our small dataset, minsamp, Gene4 is regulated by two miRNAs. Let's simulate perturbation effects triggered by Gene4 (Shown at Figure S8 in Supplementary Figures) .
-
-```{r, message=FALSE, warning=FALSE}
-
-priming_graph(minsamp, competing_count = Competing_expression, miRNA_count = miRNA_expression, aff_factor = c(energy, seed_type), deg_factor = region)%>%
-  update_how("Gene4", 2)%>%
-  simulate(cycle = 2)
-```
-
-The common target perturbation  (increasing to two fold at Gene4 expression in presence of interaction factors) resulted in more prominent efficiency at the same conditions (shown at following).
-
-```{r, message=FALSE, warning=FALSE}
-priming_graph(minsamp, competing_count = Competing_expression, miRNA_count = miRNA_expression, aff_factor = c(energy, seed_type), deg_factor = region)%>%
-  update_how("Gene4", 2)%>%
-  simulate(3)%>%
-  activate(edges)%>%
-  as_tibble()%>%
-  select(Competing_name,comp_count_list,effect_list)%>%
-  unnest()
-```
-
-# 5. Determination of perturbation efficiencies of elements in system.
-
-```{r, message=FALSE, warning=FALSE}
+```{r, message=FALSE, warning=FALSE, echo=FALSE}
 
 priming_graph(minsamp, competing_count = Competing_expression, miRNA_count = miRNA_expression, aff_factor = c(energy, seed_type), deg_factor = region)-> sample_graph
 
@@ -170,12 +55,9 @@ find_node_perturbation(sample_graph, how = 2, cycle = 3, limit = 0.1)%>%
 
 ```
 
+# 2. Additional data manipulation steps
 
-
-
-# 6. Additional data manipulation steps
-
-## 6.1 Arrangement of CLASH dataset 
+## 2.1 Arrangement of CLASH dataset 
 
 CLASH dataset was retrieved from [PubMed](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3650559/) [@helwak_mapping_2013].
 
@@ -311,7 +193,7 @@ clashelwakfinal%>%
 
 ```
 
-## 6.2 Arrangement of CLEAR-CLiP Dataset [@moore_mirnatarget_2015]
+## 2.2 Arrangement of CLEAR-CLiP Dataset [@moore_mirnatarget_2015]
 
 CLASH dataset was retrieved from [Nature article](nature.com/articles/ncomms9864)
 
@@ -407,7 +289,7 @@ clearclipfinal%>%
 
 ```
 
-## 6.3 Integration of two experimental dataset
+## 2.3 Integration of two experimental dataset
 
 ```{r,  eval=FALSE}
 
@@ -438,7 +320,6 @@ Secondly, we organized seed type interactions in *Seed type manipulation* sectio
 seed_type_effect <- data_frame( seed_type = c("5-mer", "5-mer_noncanonical", "6-mer", "6-mer_noncanonical", "6-merA1", "6-merA1_noncanonical", "7-mer", "7-mer_noncanonical", "7-merA1", "7-merA1_noncanonical", "7-mer-8m", "7-mer-8m_noncanonical", "8-mer", "8-mer_noncanonical", "9-mer", "9-mer_noncanonical", "none"),
                                 seed_type_effect= c(0.05, 0.04, 0.07, 0.05, 0.07, 0.05, 0.23, 0.19, 0.19, 0.16, 0.25, 0.21, 0.43, 0.35, 0.43,0.35, 0.01)
                                 )
-
 experimentalmirnagene%>%
   inner_join(seed_type_effect, by= "seed_type") -> experimentalmirnagene
 ```
