@@ -83,11 +83,13 @@ mirtarbase_node_perturbations%>%
 x_gene = list(" "= lim_1_gene_tumor, " " = lim_1_gene_normal)
 
 
-pa1 <- ggVennDiagram(x_gene, label = "count", category.names = c("Tumor","Normal"))+
+pa1 <- ggVennDiagram(x_gene, label = "both", category.names = c("Tumor","Normal"))+
   scale_fill_gradient(low='bisque1',high = 'lightsalmon')+
   theme(legend.position="none", text = element_text(""), plot.margin = margin(0, 0, 0, 0, "mm"))
 
 pa1
+
+ggsave(filename = 'lim1_PE_gene_mirtarbase.eps', device=cairo_ps, width = 6, height = 3)
 
 ```
 
@@ -132,6 +134,18 @@ pa2 <- ggVennDiagram(x_mirna, label = "count", category.names = c("Tumor","Norma
 
 pa2
 ```
+
+```{r, eval=FALSE}
+library(ggpubr)
+
+#pA <- grid.arrange(pa1, pa2)
+
+pA <- ggpubr::ggarrange(pa1, pa2, nrow = 2)
+pA
+#ggsave(filename = 'lim1_PE_gene_mirtarbase.svg', width = 6, height = 6)
+```
+
+
 ## Functional Annotation Analysis
 
 ```{r}
