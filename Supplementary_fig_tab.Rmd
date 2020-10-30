@@ -9,6 +9,7 @@ output:
   html_document: default
   word_document: default
 bibliography: NAR-sample.bib
+urlcolor: blue
 header-includes: 
   \usepackage{float} \floatplacement{figure}{H} 
   \newcommand{\beginsupplement}{\setcounter{table}{0}  \renewcommand{\thetable}{S\arabic{table}} \setcounter{figure}{0}     \renewcommand{\thefigure}{S\arabic{figure}}}
@@ -50,19 +51,21 @@ library(tidygraph)
 library(dplyr)
 library(tidyr)
 library(stringr)
+library(ggraph)
+library(ggplot2)
 knitr::opts_chunk$set(tidy.opts=list(width.cutoff=50),tidy=TRUE)
 #knitr::opts_chunk$set(fig.pos = 'H')
 knitr::opts_chunk$set(cache=FALSE)
 
 ```
 
-```{r, message=FALSE, warning=FALSE}
+```{r, message=FALSE, warning=FALSE, echo=FALSE}
 library(ceRNAnetsim)
 ```
 
 ## 2.1 Sample dataset analysis in absence of interaction factors.
 
-```{r}
+```{r, echo=FALSE}
 # Sample dataset refers to minsamp in ceRNAnetsim package.
 data("minsamp")
 ```
@@ -115,6 +118,8 @@ priming_graph(minsamp,
 $G$, Gene; $M$, miRNA; $STE$, seed type effect; $RE$, Region Effect; $E$, Energy; $STE^\prime$, normalized values of seed type efficiency coefficient; $RE^\prime$, normalized values of region efficiency coefficient; $E^\prime$, normalized values of energy coefficient. Numbering on edges match the pair order in Table S1.
 
 ## 2.3 Sample+ dataset analysis with interaction factors.
+
+Interaction factors of Sample+ network are available in Table S1.
 
 ```{r, message=FALSE, warning=FALSE, echo=FALSE, fig.cap= "Sample+ in Steady-state", fig.width=5, fig.height=4}
 priming_graph(minsamp, competing_count = Competing_expression, miRNA_count = miRNA_expression, aff_factor = c(energy, seed_type), deg_factor = region)%>%
@@ -169,6 +174,26 @@ priming_graph(minsamp, competing_count = Competing_expression, miRNA_count = miR
 
 
 ![Sankey diagram represents top five KEGG and GO (molecular function and biological process) terms and genes enriched on these terms. Genes with single edge are not shown.](sankey_v2.png){#figs9}
+
+
+```{r, message=FALSE, warning=FALSE, echo=FALSE, fig.width=12, fig.height=5,fig.show='hold', fig.cap = "Tumor-specific perturbing nodes log2 transformed expression levels in tumor and normal tissue samples of 87 patients."}
+
+matched_patient_exp_dataset <- readRDS("figures_manuscript/matched_patient_exp_dataset.RDS")
+mirtarbase_gene_res <- readRDS("figures_manuscript/mirtarbase_gene_res.RDS")
+
+matched_patient_exp_dataset%>%
+  filter(Ensembl_Gene_Id %in% pull(filter(mirtarbase_gene_res, situ == "tumor_specific"), Ensembl_Gene_Id))%>%
+  pivot_longer(cols = contains("TCGA"), names_to="patient_id", values_to = "expressions")%>%
+  mutate(patient = ifelse(endsWith(patient_id, "01A"), "tumor", "normal"))%>%
+  left_join(mirtarbase_gene_res, by ="Ensembl_Gene_Id")%>%
+  group_by(patient, Ensembl_Gene_Id)%>%
+  ggplot(aes(x= hgnc_symbol, y=log2(expressions), fill = patient))+
+  #scale_y_log10()+
+  geom_boxplot(position = "dodge")+
+  theme_bw()+
+  theme(axis.text.x = element_text(angle = 90), panel.background = element_rect())+
+  xlab("")
+```
 
 
 # 3 Supplementary Tables
@@ -251,7 +276,7 @@ Table: Efficiency factors for binding regions on targets
 
 ## 3.3 Content of High-throughput experimental studies 
 
-|  Variable | Structure | Means 
+|  Variable | Structure | Definition 
 |-----------|-----------|-------|
 |  cluster    | character | Barcode from experimentally method |
 |  chromosome    | character | Chromosome of Target gene from raw data |
@@ -272,7 +297,7 @@ Table: Efficiency factors for binding regions on targets
 |   region_effect   | numeric | Coefficient of location on target | 
 |   seed_type_effect   | numeric | Coefficient for seed sequence of miRNA:target interaction |
 
-Table: miRNA:target pairs supported by High-throughput Experiments
+Table: Context of miRNA:target pairs supported by High-throughput Experiments. CLEAR-CLiP and CLASH datasets were integrated as described in Section 2 of Supplementary Material and Method.
 
 
 ## 3.4  Variables of network object during simulation
@@ -324,10 +349,4 @@ To evaluate significant nodes through parallel processing in breast cancer patie
 All codes are available at [github repo](https://github.com/selcenari/ceRNA_multifactorial_model).
 
 # REFERENCES
-
-
-
-
-
-
 

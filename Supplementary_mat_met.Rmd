@@ -9,6 +9,7 @@ output:
   html_document: default
   word_document: default
 bibliography: NAR-sample.bib
+urlcolor: blue
 header-includes: 
   \usepackage{float} \floatplacement{figure}{H} 
   \newcommand{\beginsupplement}{\setcounter{table}{0}  \renewcommand{\thetable}{S\arabic{table}} \setcounter{figure}{0}     \renewcommand{\thefigure}{S\arabic{figure}}}
