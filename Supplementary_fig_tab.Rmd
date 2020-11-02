@@ -21,27 +21,8 @@ header-includes:
 
 \beginsupplement
 
-# 1. Functions defined for ceRNA models and workflow of method
-
-We defined the functions that can be used with R programming. Briefly, these functions process a given miRNA:gene dataset and convert to graph object. All values that are significant in miRNA:target interactions are stored in edge variables and processed with formulations that are given in previous section. The functions and steps of approach are explained as following (Figure S1) :
-
-
-**Conversion of dataset**: `priming_graph()` function processes the given dataset that includes competing elements in first variable and repressive element in second variable. If the affinity and/or degradation factors are specified in the function, factors are taken into account, are processed with defaults in vice versa. The formulations that are given in equations (1-4) are performed in this function. This step gives the graph object which contains efficiency values of miRNA:competing target pairs in steady-state in terms of amount. It is assumed that the initial target amounts in the dataset is observed after the repressive activity of miRNAs in steady-state. 
-
-**Transition of variables in graph**: In the previous step, the calculations are performed in the edge variables of the graph object. However, the graph object allows to use node variables, while the node features are handled to the graph. In this direction, update_nodes function carries the amount values to node variables This step must be applied with “once” option because it is primary process.
-
-
-**Trigger change in graph**: The dataset are assumed as steady-state in previous step and the efficiency coefficients are calculated according to this acceptance. In the network that is found in steady-state conditions, the change is applied to the graph object for perturbation of steady-state. To provide the perturbation in the network the work-flow offer two methods: *update_variables* and *update_how*. The first, a new dataset that is contained competing and repressive element names and current values of these can be processed with update_variables. The second option, the amount of the given node name in update_how function can be changed according to “how” argument.
-
-**Simulation of competing behavior of targets**: After the change in the steady-state conditions, the network elements try to gain steady-state again. This process progresses as repeating of regulations after the spreading the changes in the network. In this step, simulation of regulations according to given cycle count in simulate function is applied. After each simulation cycle, the miRNA repression values are re-calculated and the current values of competing elements are found and saved. The process is performed in the edge data and at the same time outputs of the calculations are carried from edge to node data.
-
-
-The node elements in the dataset are handled as two type; repressive (miRNAs) and competing (targets). It is assumed in approach that while targets are degrading or inhibiting by miRNAs continuously, miRNAs reversibly used. If the trigger of the network is a miRNA, it maintains the current value of amount that provides by user. On the contrary, it tries to help this process to provide steady-state through the regulations on its amount, if a competing element is used as a trigger. The functions that are used in the this study are developed with R and are available in [Bioconductor](https://www.bioconductor.org/packages/release/bioc/html/ceRNAnetsim.html).
-
 
 # 2. Supplementary Figures 
-
-The codes used to obtain networks in this file can be found on the github page. Images that produced have been referred with codes.
 
 ![Workflow for simulation of competing endogenous RNA regulations. Graph object in steps 2-6 is saved and updated continuously.](workflow1.png){#figs1}
 
@@ -71,21 +52,23 @@ data("minsamp")
 ```
 
 
-```{r, message=FALSE, warning=FALSE,echo=FALSE, fig.cap= "Sample Dataset in Steady-state", fig.width=5, fig.height=4}
+```{r, message=FALSE, warning=FALSE,echo=FALSE, fig.cap= "Sample Dataset in Steady-state. Inıtial expression levels in minsamp network (*Sample* network in manuscript). The network contains two miRNAs and 6 genes with arbitrarily chosen expression values. Refer to Table S1 for exact expression values", fig.width=5, fig.height=4}
 priming_graph(minsamp, competing_count = Competing_expression, miRNA_count = miRNA_expression)%>%
   vis_graph(Competing_color = "navajowhite3", mirna_color = "ivory4",
-            title = " ")
+            title = " ")+
+  geom_node_text(aes(label = name), repel = TRUE, size =3)
 ```
 
 
-```{r, message=FALSE, warning=FALSE,echo=FALSE,  fig.keep='all', fig.cap= "Gene2 Upregulation on Sample Dataset", fig.width=5, fig.height=4}
+```{r, message=FALSE, warning=FALSE,echo=FALSE,  fig.keep='all', fig.cap= "Gene2 Upregulation on Sample Dataset. Expression level of Gene2 is increased from 10,000 to 20,000 in order to demonstrate the calculation steps.", fig.width=5, fig.height=4}
 priming_graph(minsamp, competing_count = Competing_expression, miRNA_count = miRNA_expression)%>%
   update_how("Gene2", 2)%>%
   vis_graph(Competing_color = "navajowhite3", mirna_color = "ivory4", Upregulation = "red", 
-            title = " ")
+            title = " ")+
+  geom_node_text(aes(label = name), repel = TRUE, size =3)
 ```
 
-```{r, message=FALSE, warning=FALSE, echo=FALSE, out.width='50%', fig.asp=1, fig.ncol = 2,  fig.show='hold', fig.cap = "Sequential iteration of Sample data. A) First response of system to Gene2 upregulation (2nd iteration). B) Spreading of perturbation on system (3th iteration)", fig.subcap= NULL}
+```{r, message=FALSE, warning=FALSE, echo=FALSE, out.width='50%', fig.asp=1, fig.ncol = 2,  fig.show='hold', fig.cap = "Sequential iteration of Sample data after up-regulation of Gene2. A) First response of system to Gene2 upregulation (2nd iteration). B) Spreading of perturbation on system (3th iteration)", fig.subcap= NULL}
 
 priming_graph(minsamp, 
               competing_count = Competing_expression, 
@@ -96,7 +79,8 @@ priming_graph(minsamp,
             mirna_color = "ivory4", 
             Upregulation = "red", 
             Downregulation = "blue", 
-            title = "A")
+            title = "A")+
+  geom_node_text(aes(label = name), repel = TRUE, size =3)
 
 priming_graph(minsamp, 
               competing_count = Competing_expression, 
@@ -107,68 +91,79 @@ priming_graph(minsamp,
             mirna_color = "ivory4", 
             Upregulation = "red", 
             Downregulation = "blue", 
-            title = "B")
+            title = "B")+
+  geom_node_text(aes(label = name), repel = TRUE, size =3)
 
 ```
 
 ## 2.2 Calculations with interaction factors
 
-![Calculations to determine of miRNA binding and repression efficiency.](fig_s5.png){#figs5}
+```{r, echo=FALSE, fig.cap="Calculation of initial miRNA repression activity using interaction parameters in Sample+ network. A) Interaction paramaters between genes and miRNAs in Sample+ are shown on network while expression levels can be found in Table S1. B) Interaction paramaters were updated after normalisation C) Amount of miRNA distributed to each mRNA according to mRNA levels and affinity parameters are shown on edges. D) Values on edges indicate repression activity. Red values indicate repression activity affected by region effect (RE) parameter. E) Total repression on G4 from two miRNAs is calculated by adding repression values originating from both miRNAs.", fig.show='hold', out.height= "70%", out.width="70%", fig.align = "center"}
+knitr::include_graphics("fig_s5.png")
+
+```
+
 
 $G$, Gene; $M$, miRNA; $STE$, seed type effect; $RE$, Region Effect; $E$, Energy; $STE^\prime$, normalized values of seed type efficiency coefficient; $RE^\prime$, normalized values of region efficiency coefficient; $E^\prime$, normalized values of energy coefficient. Numbering on edges match the pair order in Table S1.
 
 ## 2.3 Sample+ dataset analysis with interaction factors.
 
-Interaction factors of Sample+ network are available in Table S1.
-
-```{r, message=FALSE, warning=FALSE, echo=FALSE, fig.cap= "Sample+ in Steady-state", fig.width=5, fig.height=4}
+```{r, message=FALSE, warning=FALSE, echo=FALSE, fig.cap= "Sample+ in Steady-state. Interaction factors of Sample+ network are available in Table S1.", fig.width=5, fig.height=4}
 priming_graph(minsamp, competing_count = Competing_expression, miRNA_count = miRNA_expression, aff_factor = c(energy, seed_type), deg_factor = region)%>%
   vis_graph(Competing_color = "navajowhite3", mirna_color = "ivory4", 
-            title = " ")
+            title = " ")+
+  geom_node_text(aes(label = name), repel = TRUE, size =3)
 
 ```
 
-```{r, message=FALSE, warning=FALSE, echo=FALSE,  fig.cap= " When Gene2 is upregulated on Sample+", fig.width=5, fig.height=4}
+```{r, message=FALSE, warning=FALSE, echo=FALSE,  fig.cap= "Perturbation in Sample+ network by two-fold increase in Gene2 expression level.", fig.width=5, fig.height=4}
 priming_graph(minsamp, competing_count = Competing_expression, miRNA_count = miRNA_expression, aff_factor = c(energy, seed_type), deg_factor = region)%>%
   update_how("Gene2", 2)%>%
   vis_graph(Competing_color = "navajowhite3", mirna_color = "ivory4", Upregulation = "red", 
-            title = " ")
+            title = " ")+
+  geom_node_text(aes(label = name), repel = TRUE, size =3)
 ```
 
-```{r, message=FALSE, warning=FALSE,echo=FALSE, out.width='50%', fig.asp=1, fig.ncol = 2, fig.show='hold', fig.cap = "Sequential iteration of Sample+ A)First response of system to Gene2 upregulation (2nd iteration). B)Spreading of perturbation on system (3th iteration)"}
+```{r, message=FALSE, warning=FALSE,echo=FALSE, out.width='50%', fig.asp=1, fig.ncol = 2, fig.show='hold', fig.cap = "Sequential iteration of Sample+ A) First response of system to Gene2 upregulation (2nd iteration). B) Spreading of perturbation on system (3rd iteration). Although visualisation looks similar to Figure S4B, current counts of genes are drastically different."}
 priming_graph(minsamp, competing_count = Competing_expression, miRNA_count = miRNA_expression, aff_factor = c(energy, seed_type), deg_factor = region)%>%
   update_how("Gene2", 2)%>%
   simulate(cycle = 1)%>%
-  vis_graph(Competing_color = "navajowhite3", mirna_color = "ivory4", Upregulation = "red", Downregulation = "blue", title = "A")
+  vis_graph(Competing_color = "navajowhite3", mirna_color = "ivory4", Upregulation = "red", Downregulation = "blue", title = "A")+
+  geom_node_text(aes(label = name), repel = TRUE, size =3)
 
 priming_graph(minsamp, competing_count = Competing_expression, miRNA_count = miRNA_expression, aff_factor = c(energy, seed_type), deg_factor = region)%>%
   update_how("Gene2", 2)%>%
   simulate(cycle = 2)%>%
-  vis_graph(Competing_color = "navajowhite3", mirna_color = "ivory4", Upregulation = "red", Downregulation = "blue", title = "B")
+  vis_graph(Competing_color = "navajowhite3", mirna_color = "ivory4", Upregulation = "red", Downregulation = "blue", title = "B")+
+  geom_node_text(aes(label = name), repel = TRUE, size =3)
   
   
 ```
 
 ## 2.4 Common target perturbation in Sample+ dataset.
 
-```{r, message=FALSE, warning=FALSE, echo=FALSE, out.width='50%', fig.asp=1, fig.ncol = 2, fig.show='hold', fig.cap = "Perturbation of Gene4 on Sample+. A) Network at steady-state. B) Upregulation of Gene4. C) Primary response of network to upregulation of Gene4. D) Re-regulation of whole nodes on system (3th iteration)"}
+```{r, message=FALSE, warning=FALSE, echo=FALSE, out.width='50%', fig.asp=1, fig.ncol = 2, fig.show='hold', fig.cap = "Perturbation of Gene4 and its effects on Sample+. A) Network at steady-state. B) Upregulation of Gene4. C) Primary response of network to upregulation of Gene4. D) Re-regulation of whole nodes on system (3th iteration)"}
 
 priming_graph(minsamp, competing_count = Competing_expression, miRNA_count = miRNA_expression, aff_factor = c(energy, seed_type), deg_factor = region)%>%
-  vis_graph(Competing_color = "navajowhite3", mirna_color = "ivory4", Upregulation = "red", title = "A")
+  vis_graph(Competing_color = "navajowhite3", mirna_color = "ivory4", Upregulation = "red", title = "A")+
+  geom_node_text(aes(label = name), repel = TRUE, size =3)
 
 priming_graph(minsamp, competing_count = Competing_expression, miRNA_count = miRNA_expression, aff_factor = c(energy, seed_type), deg_factor = region)%>%
   update_how("Gene4", 2)%>%
-  vis_graph(Competing_color = "navajowhite3", mirna_color = "ivory4", Upregulation = "red", title = "B")
+  vis_graph(Competing_color = "navajowhite3", mirna_color = "ivory4", Upregulation = "red", title = "B")+
+  geom_node_text(aes(label = name), repel = TRUE, size =3)
 
 priming_graph(minsamp, competing_count = Competing_expression, miRNA_count = miRNA_expression, aff_factor = c(energy, seed_type), deg_factor = region)%>%
   update_how("Gene4", 2)%>%
   simulate(cycle=1)%>%
-  vis_graph(Competing_color = "navajowhite3", mirna_color = "ivory4", Upregulation = "red", title = "C")
+  vis_graph(Competing_color = "navajowhite3", mirna_color = "ivory4", Upregulation = "red", title = "C")+
+  geom_node_text(aes(label = name), repel = TRUE, size =3)
 
 priming_graph(minsamp, competing_count = Competing_expression, miRNA_count = miRNA_expression, aff_factor = c(energy, seed_type), deg_factor = region)%>%
   update_how("Gene4", 2)%>%
   simulate(cycle=2)%>%
-  vis_graph(Competing_color = "navajowhite3", mirna_color = "ivory4", Upregulation = "red", title = "D")
+  vis_graph(Competing_color = "navajowhite3", mirna_color = "ivory4", Upregulation = "red", title = "D")+
+  geom_node_text(aes(label = name), repel = TRUE, size =3)
 ```
 
 
@@ -176,7 +171,7 @@ priming_graph(minsamp, competing_count = Competing_expression, miRNA_count = miR
 ![Sankey diagram represents top five KEGG and GO (molecular function and biological process) terms and genes enriched on these terms. Genes with single edge are not shown.](sankey_v2.png){#figs9}
 
 
-```{r, message=FALSE, warning=FALSE, echo=FALSE, fig.width=12, fig.height=5,fig.show='hold', fig.cap = "Tumor-specific perturbing nodes log2 transformed expression levels in tumor and normal tissue samples of 87 patients."}
+```{r, message=FALSE, warning=FALSE, echo=FALSE, fig.width=12, fig.height=5,fig.show='hold', fig.cap = "Log2 transformed expression levels of tumor-specific perturbing nodes in tumor and normal tissue samples of 87 patients."}
 
 matched_patient_exp_dataset <- readRDS("figures_manuscript/matched_patient_exp_dataset.RDS")
 mirtarbase_gene_res <- readRDS("figures_manuscript/mirtarbase_gene_res.RDS")
@@ -276,77 +271,76 @@ Table: Efficiency factors for binding regions on targets
 
 ## 3.3 Content of High-throughput experimental studies 
 
-|  Variable | Structure | Definition 
-|-----------|-----------|-------|
-|  cluster    | character | Barcode from experimentally method |
-|  chromosome    | character | Chromosome of Target gene from raw data |
-|   start_position    | numeric | Gene start position from raw data |
-|   end_position     | numeric | Gene end position from raw data |
-|   strand     | character | Gene strand |
-|   hgnc_symbol     | character | Gene name (Symbol) |
-|   Ensembl_Gene_Id     | character | Ensembl Gene Id of gene |
-|   Ensembl_Transcript_Id   | character | Ensembl transcript id of mRNA of Target gene |
-|   target_seq   | character | mRNA sequences targeted by miRNA |
-|   miRNA   | character | miRNA id (from miRBase version 21 ) |
-|   miR_seq   | character | miRNA sequence |
-|   seed_type   | character | seed type of miRNA:target interaction |
-|   Energy   | numeric | Energy of miRNA:target binding |
-|   HG38build_loc   | character | Recent chromosomal location of Gene |
-|   Genome_build   | character| Genome build of given chromosome, start and end positions |
-|   region   | character | interaction location on target | 
-|   region_effect   | numeric | Coefficient of location on target | 
-|   seed_type_effect   | numeric | Coefficient for seed sequence of miRNA:target interaction |
+|  Variable | Definition 
+|-----------|-------|
+|  cluster    | Barcode from experimental method |
+|  chromosome    | Chromosome of Target gene from raw data |
+|   start_position   | Gene start position from raw data |
+|   end_position    | Gene end position from raw data |
+|   strand    | Gene strand |
+|   hgnc_symbol     | Gene name (Symbol) |
+|   Ensembl_Gene_Id     | Ensembl Gene Id of gene |
+|   Ensembl_Transcript_Id   | Ensembl transcript id of mRNA of Target gene |
+|   target_seq   | mRNA sequences targeted by miRNA |
+|   miRNA   | miRNA id (from miRBase version 21 ) |
+|   miR_seq   | miRNA sequence |
+|   seed_type  | seed type of miRNA:target interaction |
+|   Energy   | Energy of miRNA:target binding |
+|   HG38build_loc    | Recent chromosomal location of Gene |
+|   Genome_build   | Genome build of given chromosome, start and end positions |
+|   region   | interaction location on target | 
+|   region_effect   | Coefficient of location on target | 
+|   seed_type_effect | Coefficient for seed sequence of miRNA:target interaction |
 
 Table: Context of miRNA:target pairs supported by High-throughput Experiments. CLEAR-CLiP and CLASH datasets were integrated as described in Section 2 of Supplementary Material and Method.
 
 
 ## 3.4  Variables of network object during simulation
 
-As a result of simulation a dataset, a graph object is obtained that includes various variables in edge and node data. A graph object includes variables at following.
+As a result of simulation a dataset, a graph object is obtained that includes various variables in edge and node data. A graph object includes variables at Table S5.
 
  \begin{table}[ht]
 \centering
 \caption{ The context graph object during the process.}
-\begin{tabularx}{\textwidth}{llX}
+\begin{tabularx}{\textwidth}{lX}
   \hline
- Variables & Structure & Description \\
+ Variables & Description \\
   \hline
-   \emph{Node Variables} & & \\
-   name    & character & node name \\
-   type    & character &Competing or miRNA \\
-   node\_id    & numeric & in on graph object \\
-   initial\_count     & numeric & Initial Expression value of node \\
-   count\_pre     & numeric & Expression value of node at previous regulation \\
-   count\_current     & numeric & Existing expression value of node \\
-   changes\_variable     & character & Regulation of node (Up, down or steady) \\
+   \emph{Node Variables} &  \\
+   name    &  node name \\
+   type    & Competing or miRNA \\
+   node\_id    &  in on graph object \\
+   initial\_count     & Initial Expression value of node \\
+   count\_pre     &  Expression value of node at previous regulation \\
+   count\_current     &  Existing expression value of node \\
+   changes\_variable     &  Regulation of node (Up, down or steady) \\
    \hline
-   \emph{Edge Variables} & & \\
-   Competing name   & character & name of genes\\
-   miRNA name   & character & name of miRNAs \\
-   Competing expression   & numeric & Expression values of competing elements at steady-state \\
-   miRNA expression   & numeric & Expression values of miRNA elements at steady-state \\
-   energy   & numeric & coefficient of miRNA:target interactions (binding affinity) \\
-   seed type   & numeric & coefficient of miRNA:target interactions (binding affinity) \\
-   region   & numeric & coefficient of miRNA:target interactions (degradation efficiency) \\
-   afff factor   & numeric& coefficient scaled and combined affinity factor \\
-   degg factor   & numeric &coefficient scaled and combined degradation factor \\ 
-   comp\_count\_list   & list & list of competing expression for each iteration \\ 
-   comp\_count   & numeric & pre: competing expression at previous iteration; current: competing expression at present iteration \\
-   mirna\_count\_list   & list & list of miRNA expression for each iteration \\
-   mirna\_count   & numeric & pre: miRNA expression at previous iteration; current: miRNA expression at present iteration \\
-   effect   & numeric & pre: total miRNA reppressive effect on individual target at previous iteration ; current: miRNA reppressive effect on individual   target at present iteration \\
-   effect\_list   & list & list of miRNA reppressive effect on individual target for each iteration \\
+   \emph{Edge Variables} & \\
+   Competing name   &  name of genes\\
+   miRNA name   &  name of miRNAs \\
+   Competing expression   &  Expression values of competing elements at steady-state \\
+   miRNA expression   &  Expression values of miRNA elements at steady-state \\
+   energy   & coefficient of miRNA:target interactions (binding affinity) \\
+   seed type   &  coefficient of miRNA:target interactions (binding affinity) \\
+   region   &  coefficient of miRNA:target interactions (degradation efficiency) \\
+   afff factor   &  coefficient scaled and combined affinity factor \\
+   degg factor   & coefficient scaled and combined degradation factor \\ 
+   comp\_count\_list   & list of competing expression for each iteration \\ 
+   comp\_count   & pre: competing expression at previous iteration; current: competing expression at present iteration \\
+   mirna\_count\_list   & list of miRNA expression for each iteration \\
+   mirna\_count   &  pre: miRNA expression at previous iteration; current: miRNA expression at present iteration \\
+   effect   & pre: total miRNA reppressive effect on individual target at previous iteration ; current: miRNA reppressive effect on individual   target at present iteration \\
+   effect\_list   & list of miRNA reppressive effect on individual target for each iteration \\
   \hline
 \end{tabularx}
 \end{table}
 
 
-
-# 4. Notes
-
-To evaluate significant nodes through parallel processing in breast cancer patient network, perturbation on all nodes were triggered by 3-fold up-regulation with 10 iteration (cycle) due to small diameter of Real and Real+ networks. We analyzed perturbation efficiencies of all nodes in situation that accepts nodes with more than one percent change in expression as re-regulated (i.e, limit=1 argument in *find_node_perturbation()* function).
+# 4. Access to code
 
 All codes are available at [github repo](https://github.com/selcenari/ceRNA_multifactorial_model).
+
+\newpage
 
 # REFERENCES
 
