@@ -1,0 +1,1088 @@
+#Deleted in new
+chrMT:4470-5511
+#Deleted in new
+chrMT:3307-4262
+#Deleted in new
+chrMT:12337-14148
+#Deleted in new
+chrMT:12337-14148
+#Deleted in new
+chrMT:8527-9207
+#Deleted in new
+chrMT:5904-7445
+#Deleted in new
+chrMT:7586-8269
+#Deleted in new
+chrMT:4470-5511
+#Deleted in new
+chrMT:8527-9207
+#Deleted in new
+chrMT:4470-5511
+#Deleted in new
+chrMT:12337-14148
+#Deleted in new
+chrMT:10760-12137
+#Deleted in new
+chrMT:7586-8269
+#Deleted in new
+chrMT:3307-4262
+#Deleted in new
+chrMT:3307-4262
+#Deleted in new
+chrMT:10760-12137
+#Deleted in new
+chrMT:9207-9990
+#Deleted in new
+chrHSCHR6_MHC_MANN:30583828-30609632
+#Deleted in new
+chrMT:10470-10766
+#Deleted in new
+chrMT:4470-5511
+#Deleted in new
+chrMT:8527-9207
+#Deleted in new
+chrMT:5904-7445
+#Deleted in new
+chrHSCHR6_MHC_DBB:31777702-31780222
+#Deleted in new
+chrHSCHR6_MHC_DBB:31777702-31780222
+#Deleted in new
+chrMT:4470-5511
+#Deleted in new
+chrMT:12337-14148
+#Deleted in new
+chrMT:12337-14148
+#Deleted in new
+chrMT:12337-14148
+#Deleted in new
+chrMT:10470-10766
+#Deleted in new
+chrMT:8527-9207
+#Deleted in new
+chrMT:12337-14148
+#Deleted in new
+chrMT:8527-9207
+#Deleted in new
+chrHSCHR6_MHC_COX:32858771-32871622
+#Deleted in new
+chrMT:4470-5511
+#Deleted in new
+chrMT:12337-14148
+#Deleted in new
+chrMT:3307-4262
+#Deleted in new
+chrHSCHR6_MHC_MCF:33331732-33338829
+#Split in new
+chr1:148555979-148596267
+#Deleted in new
+chrMT:9207-9990
+#Deleted in new
+chrMT:9207-9990
+#Deleted in new
+chrMT:5904-7445
+#Deleted in new
+chrHSCHR6_MHC_DBB:30678239-30683464
+#Deleted in new
+chrMT:10760-12137
+#Deleted in new
+chrHSCHR6_MHC_SSTO:33498671-33517062
+#Deleted in new
+chrMT:4470-5511
+#Deleted in new
+chrMT:8527-9207
+#Deleted in new
+chrMT:3307-4262
+#Deleted in new
+chrMT:7586-8269
+#Deleted in new
+chrMT:3307-4262
+#Deleted in new
+chrMT:4470-5511
+#Deleted in new
+chrMT:12337-14148
+#Deleted in new
+chrMT:8527-9207
+#Deleted in new
+chrHSCHR6_MHC_COX:32858771-32871622
+#Deleted in new
+chrMT:5904-7445
+#Deleted in new
+chrMT:10760-12137
+#Deleted in new
+chrMT:12337-14148
+#Deleted in new
+chrMT:12337-14148
+#Deleted in new
+chrMT:8527-9207
+#Deleted in new
+chrMT:9207-9990
+#Deleted in new
+chrMT:10470-10766
+#Deleted in new
+chrMT:4470-5511
+#Deleted in new
+chrMT:3307-4262
+#Deleted in new
+chrMT:3307-4262
+#Deleted in new
+chrMT:8527-9207
+#Deleted in new
+chrMT:4470-5511
+#Deleted in new
+chrMT:9207-9990
+#Deleted in new
+chrMT:5904-7445
+#Deleted in new
+chrMT:10059-10404
+#Deleted in new
+chrMT:12337-14148
+#Deleted in new
+chrHSCHR6_MHC_DBB:30558418-30576630
+#Deleted in new
+chrMT:9207-9990
+#Deleted in new
+chrMT:4470-5511
+#Deleted in new
+chrMT:5904-7445
+#Deleted in new
+chrMT:4470-5511
+#Deleted in new
+chrHSCHR6_MHC_COX:31732662-31751095
+#Deleted in new
+chrMT:10760-12137
+#Deleted in new
+chrMT:10059-10404
+#Deleted in new
+chrMT:12337-14148
+#Deleted in new
+chrMT:4470-5511
+#Deleted in new
+chrMT:10760-12137
+#Deleted in new
+chrMT:10760-12137
+#Deleted in new
+chrMT:12337-14148
+#Deleted in new
+chrMT:10470-10766
+#Deleted in new
+chrHSCHR6_MHC_DBB:31777702-31780222
+#Deleted in new
+chrHSCHR6_MHC_DBB:31777702-31780222
+#Deleted in new
+chrHSCHR6_MHC_APD:31806879-31809393
+#Deleted in new
+chrHSCHR6_MHC_APD:31806879-31809393
+#Deleted in new
+chrHSCHR6_MHC_DBB:30678239-30683464
+#Deleted in new
+chrHSCHR6_MHC_SSTO:32155615-32158971
+#Deleted in new
+chrMT:5904-7445
+#Deleted in new
+chrHSCHR6_MHC_QBL:31837931-31855870
+#Deleted in new
+chrMT:8527-9207
+#Deleted in new
+chrMT:8527-9207
+#Partially deleted in new
+chr2:149632819-149883273
+#Deleted in new
+chrMT:7586-8269
+#Deleted in new
+chrMT:4470-5511
+#Deleted in new
+chrMT:10760-12137
+#Deleted in new
+chrMT:8527-9207
+#Deleted in new
+chrMT:10760-12137
+#Deleted in new
+chrHSCHR6_MHC_MANN:30712282-30730363
+#Deleted in new
+chrHSCHR6_MHC_MANN:30712282-30730363
+#Deleted in new
+chrHSCHR6_MHC_DBB:31777702-31780222
+#Deleted in new
+chrHSCHR6_MHC_DBB:31777702-31780222
+#Partially deleted in new
+chr7:139246316-139477577
+#Deleted in new
+chrHSCHR6_MHC_MANN:30712282-30730363
+#Deleted in new
+chrHSCHR6_MHC_DBB:31777702-31780222
+#Deleted in new
+chrHSCHR6_MHC_DBB:31777702-31780222
+#Deleted in new
+chrHSCHR6_MHC_DBB:30678239-30683464
+#Deleted in new
+chrHSCHR6_MHC_DBB:30678239-30683464
+#Deleted in new
+chrHSCHR6_MHC_SSTO:32169488-32198715
+#Deleted in new
+chrMT:8527-9207
+#Deleted in new
+chrHSCHR6_MHC_DBB:30678239-30683464
+#Partially deleted in new
+chr12:122516628-122631894
+#Deleted in new
+chrMT:8527-9207
+#Deleted in new
+chrHSCHR6_MHC_DBB:31777702-31780222
+#Deleted in new
+chrHSCHR6_MHC_DBB:31777702-31780222
+#Deleted in new
+chrHSCHR6_MHC_APD:31806879-31809393
+#Deleted in new
+chrHSCHR6_MHC_APD:31806879-31809393
+#Deleted in new
+chrHSCHR6_MHC_QBL:31688591-31697781
+#Deleted in new
+chrHSCHR6_MHC_DBB:31777702-31780222
+#Deleted in new
+chrHSCHR6_MHC_DBB:31777702-31780222
+#Deleted in new
+chrHSCHR6_MHC_APD:31806879-31809393
+#Deleted in new
+chrHSCHR6_MHC_APD:31806879-31809393
+#Deleted in new
+chrHSCHR6_MHC_DBB:30678239-30683464
+#Deleted in new
+chrMT:9207-9990
+#Deleted in new
+chrMT:5904-7445
+#Deleted in new
+chrHSCHR6_MHC_DBB:33217712-33222212
+#Deleted in new
+chrMT:9207-9990
+#Deleted in new
+chrMT:14747-15887
+#Deleted in new
+chrHSCHR6_MHC_DBB:30678239-30683464
+#Partially deleted in new
+chr7:192969-300711
+#Deleted in new
+chrHSCHR6_MHC_SSTO:31486441-31487956
+#Deleted in new
+chrHSCHR6_MHC_COX:32044940-32046524
+#Deleted in new
+chrHSCHR6_MHC_DBB:31777702-31780222
+#Deleted in new
+chrHSCHR6_MHC_DBB:31777702-31780222
+#Deleted in new
+chrHSCHR6_MHC_MCF:30535711-30540449
+#Deleted in new
+chrHSCHR6_MHC_COX:32858771-32871622
+#Deleted in new
+chrHSCHR6_MHC_DBB:31777702-31780222
+#Deleted in new
+chrHSCHR6_MHC_DBB:31777702-31780222
+#Deleted in new
+chrHSCHR6_MHC_APD:31806879-31809393
+#Deleted in new
+chrHSCHR6_MHC_APD:31806879-31809393
+#Deleted in new
+chrMT:5904-7445
+#Deleted in new
+chrHSCHR6_MHC_MCF:33331732-33338829
+#Deleted in new
+chrHSCHR6_MHC_QBL:31688591-31697781
+#Deleted in new
+chrHSCHR6_MHC_DBB:30678239-30683464
+#Deleted in new
+chrHSCHR6_MHC_DBB:31777702-31780222
+#Deleted in new
+chrHSCHR6_MHC_DBB:31777702-31780222
+#Deleted in new
+chrHSCHR6_MHC_DBB:31777702-31780222
+#Deleted in new
+chrHSCHR6_MHC_DBB:31777702-31780222
+#Deleted in new
+chrHSCHR6_MHC_APD:31806879-31809393
+#Deleted in new
+chrHSCHR6_MHC_APD:31806879-31809393
+#Deleted in new
+chrHSCHR6_MHC_MCF:33452528-33456065
+#Deleted in new
+chrHSCHR6_MHC_DBB:31777702-31780222
+#Deleted in new
+chrHSCHR6_MHC_DBB:31777702-31780222
+#Deleted in new
+chrHSCHR6_MHC_APD:31806879-31809393
+#Deleted in new
+chrHSCHR6_MHC_APD:31806879-31809393
+#Deleted in new
+chrHSCHR6_MHC_COX:32858771-32871622
+#Deleted in new
+chrHSCHR6_MHC_COX:31732662-31751095
+#Deleted in new
+chrHSCHR6_MHC_SSTO:30612310-30632260
+#Deleted in new
+chrHSCHR6_MHC_SSTO:33498671-33517062
+#Deleted in new
+chrHSCHR6_MHC_COX:32100987-32106437
+#Deleted in new
+chrHSCHR6_MHC_COX:33178689-33187788
+#Deleted in new
+chrHSCHR6_MHC_COX:33178689-33187788
+#Deleted in new
+chrHSCHR6_MHC_COX:31624311-31628739
+#Deleted in new
+chrMT:8527-9207
+#Split in new
+chr1:148555979-148596267
+#Deleted in new
+chrHSCHR6_MHC_COX:31732662-31751095
+#Partially deleted in new
+chr2:233924677-234116549
+#Deleted in new
+chrMT:7586-8269
+#Deleted in new
+chrMT:10059-10404
+#Deleted in new
+chrMT:7586-8269
+#Deleted in new
+chrHSCHR6_MHC_MCF:33437818-33452509
+#Deleted in new
+chrMT:14747-15887
+#Deleted in new
+chrHSCHR6_MHC_DBB:30678239-30683464
+#Deleted in new
+chrHSCHR6_MHC_SSTO:30612310-30632260
+#Deleted in new
+chrMT:10760-12137
+#Deleted in new
+chrHSCHR6_MHC_DBB:30678239-30683464
+#Deleted in new
+chrMT:12337-14148
+#Deleted in new
+chrMT:8527-9207
+#Deleted in new
+chrMT:9207-9990
+#Deleted in new
+chrMT:10470-10766
+#Deleted in new
+chrHSCHR6_MHC_APD:31806879-31809393
+#Deleted in new
+chrHSCHR6_MHC_APD:31806879-31809393
+#Deleted in new
+chrHSCHR6_MHC_DBB:31777702-31780222
+#Deleted in new
+chrHSCHR6_MHC_DBB:31777702-31780222
+#Deleted in new
+chrHSCHR6_MHC_COX:32100987-32106437
+#Deleted in new
+chrMT:14149-14673
+#Deleted in new
+chrMT:14149-14673
+#Deleted in new
+chrMT:14149-14673
+#Deleted in new
+chrHSCHR6_MHC_DBB:31777702-31780222
+#Deleted in new
+chrHSCHR6_MHC_DBB:31777702-31780222
+#Deleted in new
+chrHSCHR6_MHC_DBB:31777702-31780222
+#Deleted in new
+chrHSCHR6_MHC_DBB:31777702-31780222
+#Deleted in new
+chrHSCHR6_MHC_SSTO:32155615-32158971
+#Deleted in new
+chrHSCHR6_MHC_DBB:31777702-31780222
+#Deleted in new
+chrHSCHR6_MHC_DBB:31777702-31780222
+#Deleted in new
+chrMT:14149-14673
+#Deleted in new
+chrHSCHR6_MHC_DBB:31777702-31780222
+#Deleted in new
+chrHSCHR6_MHC_DBB:31777702-31780222
+#Deleted in new
+chrMT:4470-5511
+#Deleted in new
+chrMT:8527-9207
+#Deleted in new
+chrHSCHR6_MHC_COX:30685348-30700375
+#Partially deleted in new
+chr7:139246316-139477577
+#Partially deleted in new
+chr2:149632819-149883273
+#Deleted in new
+chrHSCHR6_MHC_APD:31806879-31809393
+#Deleted in new
+chrHSCHR6_MHC_APD:31806879-31809393
+#Deleted in new
+chrHSCHR6_MHC_DBB:31777702-31780222
+#Deleted in new
+chrHSCHR6_MHC_DBB:31777702-31780222
+#Partially deleted in new
+chr10:128593978-129250781
+#Deleted in new
+chrHSCHR6_MHC_COX:32044940-32046524
+#Deleted in new
+chrHSCHR6_MHC_QBL:31688591-31697781
+#Deleted in new
+chrHSCHR6_MHC_COX:32858771-32871622
+#Partially deleted in new
+chr18:72265106-72777627
+#Deleted in new
+chrHSCHR6_MHC_QBL:31688591-31697781
+#Deleted in new
+chrHSCHR6_MHC_DBB:31777702-31780222
+#Deleted in new
+chrHSCHR6_MHC_DBB:31777702-31780222
+#Deleted in new
+chrHSCHR6_MHC_COX:32100987-32106437
+#Partially deleted in new
+chr7:139246316-139477577
+#Deleted in new
+chrHSCHR6_MHC_MCF:33456681-33467390
+#Partially deleted in new
+chr2:149632819-149883273
+#Partially deleted in new
+chr7:143318043-143427502
+#Partially deleted in new
+chr7:143318043-143427502
+#Partially deleted in new
+chr7:143318043-143427502
+#Deleted in new
+chrMT:5904-7445
+#Deleted in new
+chrHSCHR6_MHC_MANN:30583828-30609632
+#Deleted in new
+chrHSCHR6_MHC_QBL:31837931-31855870
+#Deleted in new
+chrHSCHR6_MHC_DBB:31777702-31780222
+#Deleted in new
+chrHSCHR6_MHC_DBB:31777702-31780222
+#Deleted in new
+chrMT:14149-14673
+#Deleted in new
+chrHSCHR6_MHC_DBB:31777702-31780222
+#Deleted in new
+chrHSCHR6_MHC_DBB:31777702-31780222
+#Deleted in new
+chrHSCHR6_MHC_DBB:31777702-31780222
+#Deleted in new
+chrHSCHR6_MHC_DBB:31777702-31780222
+#Deleted in new
+chrMT:14747-15887
+#Deleted in new
+chrMT:14149-14673
+#Deleted in new
+chrMT:5904-7445
+#Deleted in new
+chrHSCHR6_MHC_DBB:31777702-31780222
+#Deleted in new
+chrHSCHR6_MHC_DBB:31777702-31780222
+#Deleted in new
+chrMT:14149-14673
+#Deleted in new
+chrHSCHR6_MHC_DBB:31777702-31780222
+#Deleted in new
+chrHSCHR6_MHC_DBB:31777702-31780222
+#Partially deleted in new
+chrX:10413350-10851773
+#Deleted in new
+chrMT:5904-7445
+#Split in new
+chr10:47894023-47949412
+#Split in new
+chr10:47894023-47949412
+#Deleted in new
+chrMT:14149-14673
+#Partially deleted in new
+chr7:139246316-139477577
+#Deleted in new
+chrHSCHR6_MHC_COX:32100987-32106437
+#Deleted in new
+chrHSCHR6_MHC_DBB:30678239-30683464
+#Deleted in new
+chrHSCHR6_MHC_DBB:30678239-30683464
+#Deleted in new
+chrMT:5904-7445
+#Deleted in new
+chrHSCHR6_MHC_DBB:30678239-30683464
+#Deleted in new
+chrMT:14747-15887
+#Deleted in new
+chrMT:9207-9990
+#Deleted in new
+chrMT:12337-14148
+#Deleted in new
+chrMT:8527-9207
+#Deleted in new
+chrMT:5904-7445
+#Deleted in new
+chrHSCHR6_MHC_SSTO:32155615-32158971
+#Deleted in new
+chrMT:9207-9990
+#Deleted in new
+chrHSCHR6_MHC_COX:33178689-33187788
+#Deleted in new
+chrHSCHR6_MHC_COX:33178689-33187788
+#Deleted in new
+chrHSCHR6_MHC_COX:30685348-30700375
+#Deleted in new
+chrMT:7586-8269
+#Deleted in new
+chrHSCHR6_MHC_DBB:30678239-30683464
+#Deleted in new
+chrHSCHR6_MHC_DBB:30678239-30683464
+#Deleted in new
+chrMT:3307-4262
+#Deleted in new
+chrMT:12337-14148
+#Deleted in new
+chrMT:5904-7445
+#Deleted in new
+chrMT:3307-4262
+#Deleted in new
+chrMT:10760-12137
+#Deleted in new
+chrMT:10760-12137
+#Deleted in new
+chrMT:8527-9207
+#Deleted in new
+chrHSCHR6_MHC_DBB:31777702-31780222
+#Deleted in new
+chrHSCHR6_MHC_DBB:31777702-31780222
+#Partially deleted in new
+chr2:149632819-149883273
+#Deleted in new
+chrHSCHR6_MHC_COX:33178689-33187788
+#Deleted in new
+chrHSCHR6_MHC_COX:33178689-33187788
+#Deleted in new
+chrHSCHR6_MHC_QBL:31688591-31697781
+#Deleted in new
+chrHSCHR6_MHC_DBB:31921138-31932782
+#Deleted in new
+chrMT:14149-14673
+#Deleted in new
+chrMT:5904-7445
+#Deleted in new
+chrHSCHR6_MHC_COX:32858771-32871622
+#Deleted in new
+chrHSCHR6_MHC_MCF:33452528-33456065
+#Deleted in new
+chrMT:12337-14148
+#Deleted in new
+chrMT:9207-9990
+#Deleted in new
+chrHSCHR6_MHC_COX:32858771-32871622
+#Deleted in new
+chrHSCHR6_MHC_COX:31732662-31751095
+#Deleted in new
+chrMT:10760-12137
+#Partially deleted in new
+chr10:128593978-129250781
+#Deleted in new
+chrHSCHR6_MHC_MCF:30535711-30540449
+#Deleted in new
+chrMT:9207-9990
+#Deleted in new
+chrMT:10760-12137
+#Deleted in new
+chrMT:8527-9207
+#Split in new
+chr8:145486055-145515082
+#Split in new
+chr8:145486055-145515082
+#Partially deleted in new
+chr7:139246316-139477577
+#Deleted in new
+chrMT:4470-5511
+#Deleted in new
+chrHSCHR6_MHC_DBB:31777702-31780222
+#Deleted in new
+chrHSCHR6_MHC_DBB:31777702-31780222
+#Deleted in new
+chrMT:7586-8269
+#Deleted in new
+chrHSCHR6_MHC_COX:32858771-32871622
+#Deleted in new
+chrHSCHR6_MHC_DBB:31777702-31780222
+#Deleted in new
+chrHSCHR6_MHC_DBB:31777702-31780222
+#Deleted in new
+chrMT:14149-14673
+#Partially deleted in new
+chrX:10413350-10851773
+#Deleted in new
+chrHSCHR6_MHC_DBB:31777702-31780222
+#Deleted in new
+chrHSCHR6_MHC_DBB:31777702-31780222
+#Deleted in new
+chrHSCHR6_MHC_APD:31806879-31809393
+#Deleted in new
+chrHSCHR6_MHC_APD:31806879-31809393
+#Deleted in new
+chrHSCHR6_MHC_MANN:30712282-30730363
+#Deleted in new
+chrMT:5904-7445
+#Deleted in new
+chrHSCHR6_MHC_DBB:31777702-31780222
+#Deleted in new
+chrHSCHR6_MHC_DBB:31777702-31780222
+#Deleted in new
+chrMT:5904-7445
+#Deleted in new
+chrMT:5904-7445
+#Deleted in new
+chrHSCHR6_MHC_DBB:31777702-31780222
+#Deleted in new
+chrHSCHR6_MHC_DBB:31777702-31780222
+#Deleted in new
+chrHSCHR6_MHC_DBB:31777702-31780222
+#Deleted in new
+chrHSCHR6_MHC_DBB:31777702-31780222
+#Deleted in new
+chrHSCHR6_MHC_DBB:30678239-30683464
+#Deleted in new
+chrHSCHR6_MHC_DBB:31777702-31780222
+#Deleted in new
+chrHSCHR6_MHC_DBB:31777702-31780222
+#Deleted in new
+chrMT:14149-14673
+#Deleted in new
+chrMT:4470-5511
+#Deleted in new
+chrHSCHR6_MHC_COX:32100987-32106437
+#Deleted in new
+chrHSCHR6_MHC_APD:31806879-31809393
+#Deleted in new
+chrHSCHR6_MHC_APD:31806879-31809393
+#Deleted in new
+chrHSCHR6_MHC_DBB:31777702-31780222
+#Deleted in new
+chrHSCHR6_MHC_DBB:31777702-31780222
+#Deleted in new
+chrMT:4470-5511
+#Deleted in new
+chrHSCHR6_MHC_COX:31732662-31751095
+#Deleted in new
+chrHSCHR6_MHC_APD:31806879-31809393
+#Deleted in new
+chrHSCHR6_MHC_APD:31806879-31809393
+#Deleted in new
+chrHSCHR6_MHC_APD:31806879-31809393
+#Deleted in new
+chrHSCHR6_MHC_APD:31806879-31809393
+#Deleted in new
+chrHSCHR6_MHC_DBB:30678239-30683464
+#Split in new
+chr8:145486055-145515082
+#Split in new
+chr8:145486055-145515082
+#Deleted in new
+chrHSCHR6_MHC_DBB:31777702-31780222
+#Deleted in new
+chrHSCHR6_MHC_DBB:31777702-31780222
+#Deleted in new
+chrHSCHR6_MHC_MANN:30712282-30730363
+#Deleted in new
+chrHSCHR6_MHC_MANN:30712282-30730363
+#Deleted in new
+chrHSCHR6_MHC_DBB:30558418-30576630
+#Deleted in new
+chrHSCHR6_MHC_COX:31732662-31751095
+#Deleted in new
+chrHSCHR6_MHC_DBB:30678239-30683464
+#Deleted in new
+chrHSCHR6_MHC_DBB:31777702-31780222
+#Deleted in new
+chrHSCHR6_MHC_DBB:31777702-31780222
+#Deleted in new
+chrHSCHR6_MHC_COX:31732662-31751095
+#Deleted in new
+chrHSCHR6_MHC_COX:31732662-31751095
+#Deleted in new
+chrHSCHR6_MHC_DBB:31777702-31780222
+#Deleted in new
+chrHSCHR6_MHC_DBB:31777702-31780222
+#Deleted in new
+chrHSCHR6_MHC_DBB:30678239-30683464
+#Deleted in new
+chrHSCHR6_MHC_DBB:31777702-31780222
+#Deleted in new
+chrHSCHR6_MHC_DBB:31777702-31780222
+#Deleted in new
+chrHSCHR6_MHC_DBB:30678239-30683464
+#Deleted in new
+chrMT:12337-14148
+#Deleted in new
+chrMT:8527-9207
+#Deleted in new
+chrMT:9207-9990
+#Deleted in new
+chrHSCHR6_MHC_DBB:30678239-30683464
+#Partially deleted in new
+chr7:139246316-139477577
+#Deleted in new
+chrMT:8527-9207
+#Deleted in new
+chrMT:8527-9207
+#Deleted in new
+chrMT:12337-14148
+#Deleted in new
+chrMT:5904-7445
+#Deleted in new
+chrHSCHR6_MHC_APD:31806879-31809393
+#Deleted in new
+chrHSCHR6_MHC_APD:31806879-31809393
+#Deleted in new
+chrMT:14747-15887
+#Deleted in new
+chrHSCHR6_MHC_DBB:31777702-31780222
+#Deleted in new
+chrHSCHR6_MHC_DBB:31777702-31780222
+#Deleted in new
+chrMT:14747-15887
+#Deleted in new
+chrHSCHR6_MHC_DBB:31777702-31780222
+#Deleted in new
+chrHSCHR6_MHC_DBB:31777702-31780222
+#Deleted in new
+chrHSCHR6_MHC_DBB:31777702-31780222
+#Deleted in new
+chrHSCHR6_MHC_DBB:31777702-31780222
+#Deleted in new
+chrHSCHR6_MHC_COX:31732662-31751095
+#Deleted in new
+chrHSCHR6_MHC_MCF:32222563-32225000
+#Deleted in new
+chrHSCHR6_MHC_DBB:31777702-31780222
+#Deleted in new
+chrHSCHR6_MHC_DBB:31777702-31780222
+#Deleted in new
+chrHSCHR6_MHC_MCF:33331732-33338829
+#Deleted in new
+chrHSCHR6_MHC_COX:32858771-32871622
+#Deleted in new
+chrHSCHR6_MHC_COX:30865832-30871754
+#Deleted in new
+chrMT:9207-9990
+#Deleted in new
+chrHSCHR6_MHC_MANN:33330195-33334422
+#Deleted in new
+chrHSCHR6_MHC_MANN:30583828-30609632
+#Deleted in new
+chrHSCHR6_MHC_DBB:30678239-30683464
+#Deleted in new
+chrMT:14149-14673
+#Deleted in new
+chrHSCHR6_MHC_COX:30685348-30700375
+#Deleted in new
+chrHSCHR6_MHC_DBB:31777702-31780222
+#Deleted in new
+chrHSCHR6_MHC_DBB:31777702-31780222
+#Deleted in new
+chrHSCHR6_MHC_COX:30575335-30584021
+#Deleted in new
+chrMT:14149-14673
+#Deleted in new
+chrHSCHR6_MHC_DBB:33217712-33222212
+#Deleted in new
+chrHSCHR6_MHC_DBB:31777702-31780222
+#Deleted in new
+chrHSCHR6_MHC_DBB:31777702-31780222
+#Deleted in new
+chrMT:5904-7445
+#Deleted in new
+chrHSCHR6_MHC_DBB:31777702-31780222
+#Deleted in new
+chrHSCHR6_MHC_DBB:31777702-31780222
+#Deleted in new
+chrHSCHR6_MHC_APD:31806879-31809393
+#Deleted in new
+chrHSCHR6_MHC_APD:31806879-31809393
+#Deleted in new
+chrHSCHR6_MHC_DBB:31759586-31765032
+#Deleted in new
+chrHSCHR6_MHC_DBB:31777702-31780222
+#Deleted in new
+chrHSCHR6_MHC_DBB:31777702-31780222
+#Deleted in new
+chrHSCHR6_MHC_DBB:33217712-33222212
+#Deleted in new
+chrHSCHR6_MHC_DBB:31777702-31780222
+#Deleted in new
+chrHSCHR6_MHC_DBB:31777702-31780222
+#Deleted in new
+chrMT:5904-7445
+#Deleted in new
+chrHSCHR6_MHC_DBB:30678239-30683464
+#Deleted in new
+chrMT:5904-7445
+#Deleted in new
+chrMT:8527-9207
+#Deleted in new
+chrHSCHR6_MHC_COX:32100987-32106437
+#Deleted in new
+chrHSCHR6_MHC_COX:32858771-32871622
+#Deleted in new
+chrHSCHR6_MHC_COX:32858771-32871622
+#Deleted in new
+chrHSCHR6_MHC_MANN:30712282-30730363
+#Deleted in new
+chrHSCHR6_MHC_DBB:30678239-30683464
+#Deleted in new
+chrHSCHR6_MHC_DBB:31777702-31780222
+#Deleted in new
+chrHSCHR6_MHC_DBB:31777702-31780222
+#Deleted in new
+chrMT:10760-12137
+#Deleted in new
+chrMT:3307-4262
+#Deleted in new
+chrHSCHR6_MHC_DBB:31777702-31780222
+#Deleted in new
+chrHSCHR6_MHC_DBB:31777702-31780222
+#Deleted in new
+chrMT:5904-7445
+#Deleted in new
+chrHSCHR6_MHC_SSTO:33527235-33560852
+#Deleted in new
+chrMT:5904-7445
+#Deleted in new
+chrHSCHR6_MHC_MANN:30712282-30730363
+#Deleted in new
+chrHSCHR6_MHC_DBB:31777702-31780222
+#Deleted in new
+chrHSCHR6_MHC_DBB:31777702-31780222
+#Deleted in new
+chrHSCHR6_MHC_APD:31806879-31809393
+#Deleted in new
+chrHSCHR6_MHC_APD:31806879-31809393
+#Deleted in new
+chrHSCHR6_MHC_COX:33178689-33187788
+#Deleted in new
+chrHSCHR6_MHC_COX:33178689-33187788
+#Deleted in new
+chrHSCHR6_MHC_DBB:30678239-30683464
+#Deleted in new
+chrHSCHR6_MHC_COX:31732662-31751095
+#Deleted in new
+chrHSCHR6_MHC_COX:31732662-31751095
+#Deleted in new
+chrHSCHR6_MHC_DBB:31777702-31780222
+#Deleted in new
+chrHSCHR6_MHC_DBB:31777702-31780222
+#Deleted in new
+chrHSCHR6_MHC_DBB:30558418-30576630
+#Deleted in new
+chrHSCHR6_MHC_QBL:31837931-31855870
+#Deleted in new
+chrHSCHR6_MHC_COX:33178689-33187788
+#Deleted in new
+chrHSCHR6_MHC_COX:33178689-33187788
+#Partially deleted in new
+chr7:139246316-139477577
+#Deleted in new
+chrHSCHR6_MHC_COX:32858771-32871622
+#Deleted in new
+chrHSCHR6_MHC_MANN:30583828-30609632
+#Deleted in new
+chrHSCHR6_MHC_COX:30575335-30584021
+#Deleted in new
+chrHSCHR6_MHC_DBB:30678239-30683464
+#Deleted in new
+chrHSCHR6_MHC_DBB:31777702-31780222
+#Deleted in new
+chrHSCHR6_MHC_DBB:31777702-31780222
+#Deleted in new
+chrHSCHR6_MHC_DBB:31777702-31780222
+#Deleted in new
+chrHSCHR6_MHC_DBB:31777702-31780222
+#Partially deleted in new
+chr15:29129629-29410518
+#Split in new
+chr1:148555979-148596267
+#Deleted in new
+chrMT:5904-7445
+#Deleted in new
+chrHSCHR6_MHC_APD:31806879-31809393
+#Deleted in new
+chrHSCHR6_MHC_APD:31806879-31809393
+#Deleted in new
+chrHSCHR6_MHC_COX:32858771-32871622
+#Deleted in new
+chrMT:8527-9207
+#Deleted in new
+chrHSCHR6_MHC_DBB:31777702-31780222
+#Deleted in new
+chrHSCHR6_MHC_DBB:31777702-31780222
+#Deleted in new
+chrMT:10760-12137
+#Deleted in new
+chrMT:10760-12137
+#Deleted in new
+chrMT:10760-12137
+#Deleted in new
+chrMT:10760-12137
+#Deleted in new
+chrMT:3307-4262
+#Deleted in new
+chrMT:14747-15887
+#Deleted in new
+chrMT:7586-8269
+#Deleted in new
+chrMT:7586-8269
+#Deleted in new
+chrHSCHR6_MHC_QBL:28870783-28891770
+#Deleted in new
+chrHSCHR6_MHC_DBB:33217712-33222212
+#Partially deleted in new
+chr12:122516628-122631894
+#Deleted in new
+chrHSCHR6_MHC_QBL:31837931-31855870
+#Deleted in new
+chrHSCHR6_MHC_COX:31624311-31628739
+#Deleted in new
+chrMT:3307-4262
+#Deleted in new
+chrHSCHR6_MHC_DBB:30678239-30683464
+#Deleted in new
+chrMT:4470-5511
+#Deleted in new
+chrMT:9207-9990
+#Deleted in new
+chrHSCHR6_MHC_DBB:30678239-30683464
+#Deleted in new
+chrMT:3307-4262
+#Deleted in new
+chrHSCHR6_MHC_DBB:31777702-31780222
+#Deleted in new
+chrHSCHR6_MHC_DBB:31777702-31780222
+#Deleted in new
+chrMT:5904-7445
+#Deleted in new
+chrMT:14747-15887
+#Split in new
+chr10:47894023-47949412
+#Split in new
+chr10:47894023-47949412
+#Split in new
+chr1:148555979-148596267
+#Deleted in new
+chrHSCHR6_MHC_COX:32858771-32871622
+#Deleted in new
+chrMT:5904-7445
+#Split in new
+chr1:148555979-148596267
+#Deleted in new
+chrHSCHR6_MHC_DBB:30678239-30683464
+#Deleted in new
+chrMT:5904-7445
+#Deleted in new
+chrMT:8527-9207
+#Deleted in new
+chrMT:8527-9207
+#Deleted in new
+chrHSCHR6_MHC_APD:31806879-31809393
+#Deleted in new
+chrHSCHR6_MHC_APD:31806879-31809393
+#Deleted in new
+chrHSCHR6_MHC_DBB:31777702-31780222
+#Deleted in new
+chrHSCHR6_MHC_DBB:31777702-31780222
+#Deleted in new
+chrHSCHR6_MHC_DBB:31777702-31780222
+#Deleted in new
+chrHSCHR6_MHC_DBB:31777702-31780222
+#Deleted in new
+chrMT:9207-9990
+#Deleted in new
+chrMT:9207-9990
+#Deleted in new
+chrMT:7586-8269
+#Deleted in new
+chrMT:5904-7445
+#Deleted in new
+chrMT:14747-15887
+#Deleted in new
+chrMT:5904-7445
+#Deleted in new
+chrMT:5904-7445
+#Deleted in new
+chrMT:8527-9207
+#Deleted in new
+chrMT:3307-4262
+#Deleted in new
+chrMT:4470-5511
+#Deleted in new
+chrHSCHR6_MHC_DBB:30678239-30683464
+#Partially deleted in new
+chr12:122516628-122631894
+#Deleted in new
+chrHSCHR6_MHC_COX:32858771-32871622
+#Deleted in new
+chrMT:3307-4262
+#Deleted in new
+chrMT:3307-4262
+#Deleted in new
+chrHSCHR6_MHC_SSTO:33498671-33517062
+#Deleted in new
+chrHSCHR6_MHC_MANN:30712282-30730363
+#Deleted in new
+chrMT:14149-14673
+#Deleted in new
+chrHSCHR6_MHC_MANN:30712282-30730363
+#Deleted in new
+chrHSCHR6_MHC_DBB:31777702-31780222
+#Deleted in new
+chrHSCHR6_MHC_DBB:31777702-31780222
+#Deleted in new
+chrHSCHR6_MHC_COX:32100987-32106437
+#Deleted in new
+chrHSCHR6_MHC_DBB:31747358-31756947
+#Deleted in new
+chrMT:10059-10404
+#Partially deleted in new
+chr7:139246316-139477577
+#Deleted in new
+chrMT:4470-5511
+#Deleted in new
+chrMT:3307-4262
+#Deleted in new
+chrHSCHR6_MHC_COX:31732662-31751095
+#Deleted in new
+chrMT:5904-7445
+#Deleted in new
+chrHSCHR6_MHC_DBB:30678239-30683464
+#Deleted in new
+chrHSCHR6_MHC_COX:32858771-32871622
+#Deleted in new
+chrHSCHR6_MHC_DBB:31777702-31780222
+#Deleted in new
+chrHSCHR6_MHC_DBB:31777702-31780222
+#Deleted in new
+chrMT:12337-14148
+#Deleted in new
+chrHSCHR6_MHC_DBB:30678239-30683464
+#Deleted in new
+chrHSCHR6_MHC_DBB:31777702-31780222
+#Deleted in new
+chrHSCHR6_MHC_DBB:31777702-31780222
+#Deleted in new
+chrHSCHR6_MHC_DBB:31777702-31780222
+#Deleted in new
+chrHSCHR6_MHC_DBB:31777702-31780222
+#Deleted in new
+chrHSCHR6_MHC_APD:31806879-31809393
+#Deleted in new
+chrHSCHR6_MHC_APD:31806879-31809393
+#Deleted in new
+chrHSCHR6_MHC_COX:32858771-32871622
+#Deleted in new
+chrHSCHR6_MHC_MANN:33322141-33326135
+#Deleted in new
+chrMT:7586-8269
+#Deleted in new
+chrMT:8527-9207
+#Deleted in new
+chrHSCHR6_MHC_DBB:30558418-30576630
+#Deleted in new
+chrHSCHR6_MHC_QBL:28870783-28891770
+#Split in new
+chr1:148555979-148596267

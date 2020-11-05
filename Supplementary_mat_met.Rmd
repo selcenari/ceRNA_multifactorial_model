@@ -174,42 +174,37 @@ clashelwakfinal %>%
   unite(chromosome_name, c("Chromosome","start_end"), sep = ":") %>% 
   write_tsv("lift19.txt",col_names = FALSE)
 
-#After we uploaded this file to UCSC Liftover site, the output files  lift19_del (deleted regions on the HG38 genome build) and hg38clashcomp (new locations of the genes on HG38) were downloaded
+#In liftover site, Original Assembly was chosen as hg19 and New Assebly was chosen as hg38. After we uploaded "lift19.txt" file to UCSC Liftover site, the output "View Conversions" was downloaded as hg38clashcomp (new locations of the genes on HG38), "Display failure file" was download as "lift19_del.txt" (deleted regions on the HG38 genome build)
 
-lift19_del <- read_tsv("deleted_lift19.txt")
-colnames(lift19_del)[1] <- "chromosome_loc"
-
-lift19_del <- lift19_del %>%
-  dplyr::filter(startsWith(chromosome_loc, "chr")) %>%
+lift19_del <- read_tsv("figure_manuscript/lift19_del.txt", 
+                       col_names = FALSE, 
+                       comment = "#") %>% 
+  rename(chromosome_loc = X1) %>% 
+  dplyr::filter(str_starts(chromosome_loc, "chr")) %>% 
   separate(chromosome_loc, c("Chr", "End"), "-", remove = TRUE) %>%
-  separate(Chr, c("Chr", "Start"), ":", remove = TRUE)
-
-lift19_del$Start <- as.numeric(lift19_del$Start)
-lift19_del$End <- as.numeric(lift19_del$End)
+  separate(Chr, c("Chr", "Start"), ":", remove = TRUE) %>% 
+  mutate(Start=as.numeric(Start),
+         End=as.numeric(End))
 
 #removing deleted location from CLASH dataset
 
-clashelwakfinal <-clashelwakfinal%>%
+clashelwakfinal <- clashelwakfinal %>%
   mutate(Chromosome = paste0("chr",chromosome_name, "")) %>%
   dplyr::anti_join(lift19_del, by = c("Chromosome"="Chr",
                                       "start_position"="Start",
                                       "end_position"="End"))
-
-hg38clash <- read.delim("hg38clashcomp.txt", header = FALSE, stringsAsFactors = FALSE)
-
 # adding new location information:
 
 clashelwakfinal <- clashelwakfinal %>% 
-  bind_cols(hg38clash)
+  bind_cols(read_tsv("figure_manuscript/hg38clashcomp.txt", 
+                      col_names = FALSE))
 
-colnames(clashelwakfinal)[18] <- "HG38build_loc"
-
-clashelwakfinal <- clashelwakfinal %>%
-  dplyr::mutate(Genom_build= rep("hg19"))
 
 # Arrangement in dataset
 
 clashelwakfinal <- clashelwakfinal %>% 
+  rename(HG38build_loc = X1) %>% 
+  mutate(Genom_build="hg19") %>% 
   dplyr::select(cluster=seq_ID, 
                 chromosome = Chromosome,
                 start_position, end_position, strand,
@@ -222,12 +217,8 @@ clashelwakfinal <- clashelwakfinal %>%
                 seed_type2 = seed_basepairs,
                 seed_type3 = folding_class,
                 Energy = folding_energy,
-                HG38build_loc, Genom_build, region) 
-
-
-clashelwakfinal$strand <- as.character(clashelwakfinal$strand)
-
-str(clashelwakfinal)
+                HG38build_loc, Genom_build, region) %>% 
+  mutate(strand = as.character(strand))
 ```
 
 ### Interpreting the CLASH seed structures in dataset
@@ -324,17 +315,16 @@ write_tsv(lift18, "lift18.txt")
 
 #After we searched this file in UCSC browser, the output loaded (deleted_lift18 deleted regions on the HG38 genome build; hg38clearclip new locations of the genes on HG38)
 
-deleted_lift18 <- read_tsv("deleted_lift18.txt")
-
-colnames(deleted_lift18)[1] <- "Chromosome_loc"
-
-deleted_lift18 <- deleted_lift18 %>%
-  dplyr::filter(startsWith(Chromosome_loc, "chr")) %>%
+deleted_lift18 <- read_tsv("figure_manuscript/lift18_del.txt",
+                           comment = "#",
+                           col_names = FALSE) %>% 
+  rename(Chromosome_loc = X1) %>% 
+  dplyr::filter(str_starts(Chromosome_loc, "chr")) %>%
   separate(Chromosome_loc, c("Chr", "End"), "-", remove = TRUE) %>%
-  separate(Chr, c("Chr", "Start"), ":", remove = TRUE)
+  separate(Chr, c("Chr", "Start"), ":", remove = TRUE) %>% 
+  mutate(Start = as.numeric(Start),
+         End = as.numeric(End))
 
-deleted_lift18$Start <- as.numeric(deleted_lift18$Start)
-deleted_lift18$End <- as.numeric(deleted_lift18$End)
 
 #removing deleted location from CLEAR-CLiP dataset
 
@@ -343,21 +333,14 @@ clearclipfinal <- clearclipfinal %>%
                                           "start_position"="Start", 
                                           "end_position"="End"))
 
-hg38clearclip<- read.delim("hg38clearclip.txt", header = FALSE, stringsAsFactors = FALSE)
-
-clearclipfinal <- clearclipfinal %>% 
-  bind_cols(hg38clearclip)
-
-colnames(clearclipfinal)[28] <- "HG38build_loc"
+hg38clearclip <- read_tsv("figure_manuscript/hg38clearclip.txt",
+                          col_names = FALSE)
 
 # adding new location information:
-
-clearclipfinal <- clearclipfinal %>%
-  dplyr::mutate(Genom_build= rep("hg18"))
-
-# Arrangement in dataset
-
-clearclipfinal %>%
+clearclipfinal <- clearclipfinal %>% 
+  bind_cols(hg38clearclip) %>% 
+  rename(HG38build_loc = X1) %>% 
+  mutate(Genom_build="hg18") %>%
   dplyr::select(cluster=cluster.ID, chromosome = chr, start_position, 
                 end_position, strand = strand.y, hgnc_symbol, 
                 Ensembl_Gene_Id =ensembl_gene_id, 
@@ -365,7 +348,7 @@ clearclipfinal %>%
                 target_seq = target.map, miRNA, 
                 miR_seq = miR.map, 
                 seed_type = 'seed match', Energy = MFE, 
-                HG38build_loc, Genom_build, region) -> clearclipfinal
+                HG38build_loc, Genom_build, region) 
 
 ```
 

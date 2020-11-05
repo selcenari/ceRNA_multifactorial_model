@@ -1,0 +1,106 @@
+#Partially deleted in new
+chr20:34357717-34590454
+#Partially deleted in new
+chr20:34357717-34590454
+#Partially deleted in new
+chr20:34357717-34590454
+#Partially deleted in new
+chr20:34357717-34590454
+#Partially deleted in new
+chr20:34357717-34590454
+#Partially deleted in new
+chr20:34357717-34590454
+#Partially deleted in new
+chr20:34357717-34590454
+#Partially deleted in new
+chr20:34357717-34590454
+#Partially deleted in new
+chr20:34357717-34590454
+#Partially deleted in new
+chr20:34357717-34590454
+#Partially deleted in new
+chr20:34357717-34590454
+#Partially deleted in new
+chr20:34357717-34590454
+#Partially deleted in new
+chr20:34357717-34590454
+#Partially deleted in new
+chr20:34357717-34590454
+#Partially deleted in new
+chr20:34357717-34590454
+#Partially deleted in new
+chr20:34357717-34590454
+#Partially deleted in new
+chr20:34357717-34590454
+#Partially deleted in new
+chr20:34357717-34590454
+#Partially deleted in new
+chr20:34357717-34590454
+#Partially deleted in new
+chr20:34357717-34590454
+#Partially deleted in new
+chr20:34357717-34590454
+#Partially deleted in new
+chr20:34357717-34590454
+#Partially deleted in new
+chr20:34357717-34590454
+#Partially deleted in new
+chr20:34357717-34590454
+#Split in new
+chr10:50696337-51041337
+#Split in new
+chr10:50696337-51041337
+#Split in new
+chr8:145456869-145485890
+#Partially deleted in new
+chr7:138907915-139123984
+#Partially deleted in new
+chr7:138907915-139123984
+#Partially deleted in new
+chr7:138907915-139123984
+#Partially deleted in new
+chr7:138907915-139123984
+#Partially deleted in new
+chr7:138907915-139123984
+#Partially deleted in new
+chr7:138907915-139123984
+#Partially deleted in new
+chr7:138907915-139123984
+#Partially deleted in new
+chr7:138907915-139123984
+#Partially deleted in new
+chr7:138907915-139123984
+#Partially deleted in new
+chr10:128584013-129140770
+#Partially deleted in new
+chr10:128584013-129140770
+#Partially deleted in new
+chr10:128584013-129140770
+#Partially deleted in new
+chr10:128584013-129140770
+#Partially deleted in new
+chr10:128584013-129140770
+#Split in new
+chr1:146616873-146713675
+#Split in new
+chr1:146616873-146713675
+#Split in new
+chr1:146616873-146713675
+#Split in new
+chr1:146616873-146713675
+#Split in new
+chr1:146616873-146713675
+#Split in new
+chr1:146616873-146713675
+#Split in new
+chr1:146616873-146713675
+#Split in new
+chr1:146616873-146713675
+#Split in new
+chr1:146616873-146713675
+#Split in new
+chr1:146616873-146713675
+#Split in new
+chr1:146616873-146713675
+#Split in new
+chr1:146616873-146713675
