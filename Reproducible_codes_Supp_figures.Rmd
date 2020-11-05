@@ -35,7 +35,7 @@ library(ceRNAnetsim)
 ```
 
 ```{r, include=FALSE}
-data("minsamp") # refers Sample and Sample+ data
+data("minsamp") # refers to Sample and Sample+ data
 ```
 
 See Table S1 in Supplementary Figure and Table file.
@@ -47,13 +47,17 @@ Firstly, we have analysed minimal data without interaction factors between miRNA
 - 1. We have evaluated graph in the steady state conditions as followings (Figure S2 in Supplementary Figures):
 
 ```{r, message=FALSE, warning=FALSE}
-priming_graph(minsamp, competing_count = Competing_expression, miRNA_count = miRNA_expression)
+priming_graph(minsamp, 
+              competing_count = Competing_expression, 
+              miRNA_count = miRNA_expression)
 ```
 
 - 2. We have obtained graph after change on Gene2 expression as following (Figure S3 in Supplementary Figures):
 
 ```{r, message=FALSE, warning=FALSE}
-priming_graph(minsamp, competing_count = Competing_expression, miRNA_count = miRNA_expression)%>%
+priming_graph(minsamp, 
+              competing_count = Competing_expression, 
+              miRNA_count = miRNA_expression) %>%
   update_how("Gene2", 2)
 ```
 
@@ -62,21 +66,24 @@ priming_graph(minsamp, competing_count = Competing_expression, miRNA_count = miR
 
 ```{r, message=FALSE, warning=FALSE}
 
-priming_graph(minsamp, competing_count = Competing_expression, miRNA_count = miRNA_expression)%>%
-  update_how("Gene2", 2)%>%
-  simulate(cycle= 2)
-
+priming_graph(minsamp, 
+              competing_count = Competing_expression, 
+              miRNA_count = miRNA_expression) %>%
+  update_how("Gene2", 2) %>%
+  simulate(cycle = 2)
 ```
 
 Note that the regulations are colored according to expression changes of present and a previous value. So, it can be observed that whole gene expressions increase in comparison of initial steady-state. The overall regulations of gene expressions are as followings:
 
 ```{r, message=FALSE, warning=FALSE}
-priming_graph(minsamp, competing_count = Competing_expression, miRNA_count = miRNA_expression)%>%
-  update_how("Gene2", 2)%>%
-  simulate(2)%>%
-  activate(edges)%>%
-  as_tibble()%>%
-  select(Competing_name,comp_count_list,effect_list)%>%
+priming_graph(minsamp, 
+              competing_count = Competing_expression, 
+              miRNA_count = miRNA_expression) %>%
+  update_how("Gene2", 2) %>%
+  simulate(2) %>%
+  activate(edges) %>%
+  as_tibble() %>%
+  select(Competing_name, comp_count_list, effect_list) %>%
   unnest()
 ```
 
@@ -85,32 +92,45 @@ priming_graph(minsamp, competing_count = Competing_expression, miRNA_count = miR
 We have made the same analysis in presence of interaction factors (Sequentially shown at Figure S6-8 in Supplementary Figures).
 
 ```{r, message=FALSE, warning=FALSE}
-priming_graph(minsamp, competing_count = Competing_expression, miRNA_count = miRNA_expression, aff_factor = c(energy, seed_type), deg_factor = region)
-
+priming_graph(minsamp, 
+              competing_count = Competing_expression, 
+              miRNA_count = miRNA_expression, 
+              aff_factor = c(energy, seed_type), 
+              deg_factor = region)
 ```
 
 ```{r, message=FALSE, warning=FALSE}
-
-priming_graph(minsamp, competing_count = Competing_expression, miRNA_count = miRNA_expression, aff_factor = c(energy, seed_type), deg_factor = region)%>%
+priming_graph(minsamp, 
+              competing_count = Competing_expression, 
+              miRNA_count = miRNA_expression, 
+              aff_factor = c(energy, seed_type), 
+              deg_factor = region) %>%
   update_how("Gene2", 2)
 ```
 
 ```{r, message=FALSE, warning=FALSE}
-
-priming_graph(minsamp, competing_count = Competing_expression, miRNA_count = miRNA_expression, aff_factor = c(energy, seed_type), deg_factor = region)%>%
-  update_how("Gene2", 2)%>%
-  simulate(cycle=2)
+priming_graph(minsamp, 
+              competing_count = Competing_expression, 
+              miRNA_count = miRNA_expression, 
+              aff_factor = c(energy, seed_type), 
+              deg_factor = region) %>%
+  update_how("Gene2", 2) %>%
+  simulate(cycle = 2)
 ```
 
 When the graphs were examined, it was observed that behaviors (i.e. fluctuating trend) were same. But, when the results were analysed in terms of expression values, the regulation differences can be observed.
 
 ```{r, message=FALSE, warning=FALSE}
-priming_graph(minsamp, competing_count = Competing_expression, miRNA_count = miRNA_expression, aff_factor = c(energy, seed_type), deg_factor = region)%>%
-  update_how("Gene2", 2)%>%
-  simulate(3)%>%
-  activate(edges)%>%
-  as_tibble()%>%
-  select(Competing_name,comp_count_list,effect_list)%>%
+priming_graph(minsamp, 
+              competing_count = Competing_expression, 
+              miRNA_count = miRNA_expression, 
+              aff_factor = c(energy, seed_type), 
+              deg_factor = region) %>%
+  update_how("Gene2", 2) %>%
+  simulate(3) %>%
+  activate(edges) %>%
+  as_tibble() %>%
+  select(Competing_name, comp_count_list, effect_list) %>%
   unnest()
 ```
 
@@ -119,20 +139,27 @@ priming_graph(minsamp, competing_count = Competing_expression, miRNA_count = miR
 Genes targeted by multiple miRNAs (referred to as "common target") are of special interest since they are subject to cooperative effect. Also, they perturb more than one neighborhood. In our small dataset, minsamp, Gene4 is regulated by two miRNAs. Let's simulate perturbation effects triggered by Gene4 (Shown at Figure S9 in Supplementary Figures) .
 
 ```{r, message=FALSE, warning=FALSE}
-
-priming_graph(minsamp, competing_count = Competing_expression, miRNA_count = miRNA_expression, aff_factor = c(energy, seed_type), deg_factor = region)%>%
-  update_how("Gene4", 2)%>%
+priming_graph(minsamp, 
+              competing_count = Competing_expression, 
+              miRNA_count = miRNA_expression, 
+              aff_factor = c(energy, seed_type), 
+              deg_factor = region) %>%
+  update_how("Gene4", 2) %>%
   simulate(cycle = 2)
 ```
 
 The common target perturbation  (increasing to two fold at Gene4 expression in presence of interaction factors) resulted in more prominent efficiency at the same conditions (shown at following).
 
 ```{r, message=FALSE, warning=FALSE}
-priming_graph(minsamp, competing_count = Competing_expression, miRNA_count = miRNA_expression, aff_factor = c(energy, seed_type), deg_factor = region)%>%
-  update_how("Gene4", 2)%>%
-  simulate(3)%>%
-  activate(edges)%>%
-  as_tibble()%>%
-  select(Competing_name,comp_count_list,effect_list)%>%
+priming_graph(minsamp, 
+              competing_count = Competing_expression, 
+              miRNA_count = miRNA_expression, 
+              aff_factor = c(energy, seed_type), 
+              deg_factor = region) %>%
+  update_how("Gene4", 2) %>%
+  simulate(3) %>%
+  activate(edges) %>%
+  as_tibble() %>%
+  select(Competing_name, comp_count_list, effect_list) %>%
   unnest()
 ```

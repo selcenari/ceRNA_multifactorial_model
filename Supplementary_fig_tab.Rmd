@@ -53,19 +53,26 @@ data("minsamp")
 
 
 ```{r, message=FALSE, warning=FALSE,echo=FALSE, fig.cap= "Sample Dataset in Steady-state. Inıtial expression levels in minsamp network (*Sample* network in manuscript). The network contains two miRNAs and 6 genes with arbitrarily chosen expression values. Refer to Table S1 for exact expression values", fig.width=5, fig.height=4}
-priming_graph(minsamp, competing_count = Competing_expression, miRNA_count = miRNA_expression)%>%
-  vis_graph(Competing_color = "navajowhite3", mirna_color = "ivory4",
-            title = " ")+
-  geom_node_text(aes(label = name), repel = TRUE, size =3)
+priming_graph(minsamp, 
+              competing_count = Competing_expression, 
+              miRNA_count = miRNA_expression) %>%
+  vis_graph(Competing_color = "navajowhite3", 
+            mirna_color = "ivory4",
+            title = " ") +
+  geom_node_text(aes(label = name), repel = TRUE, size = 3)
 ```
 
 
 ```{r, message=FALSE, warning=FALSE,echo=FALSE,  fig.keep='all', fig.cap= "Gene2 Upregulation on Sample Dataset. Expression level of Gene2 is increased from 10,000 to 20,000 in order to demonstrate the calculation steps.", fig.width=5, fig.height=4}
-priming_graph(minsamp, competing_count = Competing_expression, miRNA_count = miRNA_expression)%>%
-  update_how("Gene2", 2)%>%
-  vis_graph(Competing_color = "navajowhite3", mirna_color = "ivory4", Upregulation = "red", 
-            title = " ")+
-  geom_node_text(aes(label = name), repel = TRUE, size =3)
+priming_graph(minsamp,
+              competing_count = Competing_expression,
+              miRNA_count = miRNA_expression) %>%
+  update_how("Gene2", 2) %>%
+  vis_graph(Competing_color = "navajowhite3", 
+            mirna_color = "ivory4", 
+            Upregulation = "red",
+            title = " ") +
+  geom_node_text(aes(label = name), repel = TRUE, size = 3)
 ```
 
 ```{r, message=FALSE, warning=FALSE, echo=FALSE, out.width='50%', fig.asp=1, fig.ncol = 2,  fig.show='hold', fig.cap = "Sequential iteration of Sample data after up-regulation of Gene2. A) First response of system to Gene2 upregulation (2nd iteration). B) Spreading of perturbation on system (3th iteration)", fig.subcap= NULL}
@@ -84,9 +91,9 @@ priming_graph(minsamp,
 
 priming_graph(minsamp, 
               competing_count = Competing_expression, 
-              miRNA_count = miRNA_expression)%>%
-  update_how("Gene2", 2)%>%
-  simulate(2)%>%
+              miRNA_count = miRNA_expression) %>%
+  update_how("Gene2", 2) %>%
+  simulate(2) %>%
   vis_graph(Competing_color = "navajowhite3", 
             mirna_color = "ivory4", 
             Upregulation = "red", 
@@ -109,60 +116,112 @@ $G$, Gene; $M$, miRNA; $STE$, seed type effect; $RE$, Region Effect; $E$, Energy
 ## 2.3 Sample+ dataset analysis with interaction factors.
 
 ```{r, message=FALSE, warning=FALSE, echo=FALSE, fig.cap= "Sample+ in Steady-state. Interaction factors of Sample+ network are available in Table S1.", fig.width=5, fig.height=4}
-priming_graph(minsamp, competing_count = Competing_expression, miRNA_count = miRNA_expression, aff_factor = c(energy, seed_type), deg_factor = region)%>%
-  vis_graph(Competing_color = "navajowhite3", mirna_color = "ivory4", 
-            title = " ")+
-  geom_node_text(aes(label = name), repel = TRUE, size =3)
-
+priming_graph(minsamp, 
+              competing_count = Competing_expression, 
+              miRNA_count = miRNA_expression, 
+              aff_factor = c(energy, seed_type), 
+              deg_factor = region) %>%
+  vis_graph(Competing_color = "navajowhite3", 
+            mirna_color = "ivory4",
+            title = " ") +
+  geom_node_text(aes(label = name), repel = TRUE, size = 3)
 ```
 
 ```{r, message=FALSE, warning=FALSE, echo=FALSE,  fig.cap= "Perturbation in Sample+ network by two-fold increase in Gene2 expression level.", fig.width=5, fig.height=4}
-priming_graph(minsamp, competing_count = Competing_expression, miRNA_count = miRNA_expression, aff_factor = c(energy, seed_type), deg_factor = region)%>%
-  update_how("Gene2", 2)%>%
-  vis_graph(Competing_color = "navajowhite3", mirna_color = "ivory4", Upregulation = "red", 
-            title = " ")+
-  geom_node_text(aes(label = name), repel = TRUE, size =3)
+priming_graph(minsamp, 
+              competing_count = Competing_expression, 
+              miRNA_count = miRNA_expression, 
+              aff_factor = c(energy, seed_type), 
+              deg_factor = region) %>%
+  update_how("Gene2", 2) %>%
+  vis_graph(Competing_color = "navajowhite3", 
+            mirna_color = "ivory4", 
+            Upregulation = "red",
+            title = " ") +
+  geom_node_text(aes(label = name), repel = TRUE, size = 3)
 ```
 
 ```{r, message=FALSE, warning=FALSE,echo=FALSE, out.width='50%', fig.asp=1, fig.ncol = 2, fig.show='hold', fig.cap = "Sequential iteration of Sample+ A) First response of system to Gene2 upregulation (2nd iteration). B) Spreading of perturbation on system (3rd iteration). Although visualisation looks similar to Figure S4B, current counts of genes are drastically different."}
-priming_graph(minsamp, competing_count = Competing_expression, miRNA_count = miRNA_expression, aff_factor = c(energy, seed_type), deg_factor = region)%>%
-  update_how("Gene2", 2)%>%
-  simulate(cycle = 1)%>%
-  vis_graph(Competing_color = "navajowhite3", mirna_color = "ivory4", Upregulation = "red", Downregulation = "blue", title = "A")+
-  geom_node_text(aes(label = name), repel = TRUE, size =3)
+priming_graph(minsamp, 
+              competing_count = Competing_expression, 
+              miRNA_count = miRNA_expression, 
+              aff_factor = c(energy, seed_type), 
+              deg_factor = region) %>%
+  update_how("Gene2", 2) %>%
+  simulate(cycle = 1) %>%
+  vis_graph(Competing_color = "navajowhite3", 
+            mirna_color = "ivory4", 
+            Upregulation = "red", 
+            Downregulation = "blue", 
+            title = "A") +
+  geom_node_text(aes(label = name), repel = TRUE, size = 3)
 
-priming_graph(minsamp, competing_count = Competing_expression, miRNA_count = miRNA_expression, aff_factor = c(energy, seed_type), deg_factor = region)%>%
-  update_how("Gene2", 2)%>%
-  simulate(cycle = 2)%>%
-  vis_graph(Competing_color = "navajowhite3", mirna_color = "ivory4", Upregulation = "red", Downregulation = "blue", title = "B")+
-  geom_node_text(aes(label = name), repel = TRUE, size =3)
-  
-  
+priming_graph(minsamp, 
+              competing_count = Competing_expression, 
+              miRNA_count = miRNA_expression, 
+              aff_factor = c(energy, seed_type), 
+              deg_factor = region) %>%
+  update_how("Gene2", 2) %>%
+  simulate(cycle = 2) %>%
+  vis_graph(Competing_color = "navajowhite3", 
+            mirna_color = "ivory4", 
+            Upregulation = "red", 
+            Downregulation = "blue", 
+            title = "B") +
+  geom_node_text(aes(label = name), repel = TRUE, size = 3)
 ```
 
 ## 2.4 Common target perturbation in Sample+ dataset.
 
 ```{r, message=FALSE, warning=FALSE, echo=FALSE, out.width='50%', fig.asp=1, fig.ncol = 2, fig.show='hold', fig.cap = "Perturbation of Gene4 and its effects on Sample+. A) Network at steady-state. B) Upregulation of Gene4. C) Primary response of network to upregulation of Gene4. D) Re-regulation of whole nodes on system (3th iteration)"}
 
-priming_graph(minsamp, competing_count = Competing_expression, miRNA_count = miRNA_expression, aff_factor = c(energy, seed_type), deg_factor = region)%>%
-  vis_graph(Competing_color = "navajowhite3", mirna_color = "ivory4", Upregulation = "red", title = "A")+
+priming_graph(minsamp, 
+              competing_count = Competing_expression, 
+              miRNA_count = miRNA_expression, 
+              aff_factor = c(energy, seed_type), 
+              deg_factor = region) %>%
+  vis_graph(Competing_color = "navajowhite3", 
+            mirna_color = "ivory4", 
+            Upregulation = "red", 
+            title = "A") +
   geom_node_text(aes(label = name), repel = TRUE, size =3)
 
-priming_graph(minsamp, competing_count = Competing_expression, miRNA_count = miRNA_expression, aff_factor = c(energy, seed_type), deg_factor = region)%>%
-  update_how("Gene4", 2)%>%
-  vis_graph(Competing_color = "navajowhite3", mirna_color = "ivory4", Upregulation = "red", title = "B")+
+priming_graph(minsamp, 
+              competing_count = Competing_expression, 
+              miRNA_count = miRNA_expression, 
+              aff_factor = c(energy, seed_type), 
+              deg_factor = region) %>%
+  update_how("Gene4", 2) %>%
+  vis_graph(Competing_color = "navajowhite3", 
+            mirna_color = "ivory4", 
+            Upregulation = "red", 
+            title = "B") +
   geom_node_text(aes(label = name), repel = TRUE, size =3)
 
-priming_graph(minsamp, competing_count = Competing_expression, miRNA_count = miRNA_expression, aff_factor = c(energy, seed_type), deg_factor = region)%>%
-  update_how("Gene4", 2)%>%
-  simulate(cycle=1)%>%
-  vis_graph(Competing_color = "navajowhite3", mirna_color = "ivory4", Upregulation = "red", title = "C")+
+priming_graph(minsamp, 
+              competing_count = Competing_expression, 
+              miRNA_count = miRNA_expression, 
+              aff_factor = c(energy, seed_type), 
+              deg_factor = region) %>%
+  update_how("Gene4", 2) %>%
+  simulate(cycle=1) %>%
+  vis_graph(Competing_color = "navajowhite3", 
+            mirna_color = "ivory4", 
+            Upregulation = "red", 
+            title = "C") +
   geom_node_text(aes(label = name), repel = TRUE, size =3)
 
-priming_graph(minsamp, competing_count = Competing_expression, miRNA_count = miRNA_expression, aff_factor = c(energy, seed_type), deg_factor = region)%>%
-  update_how("Gene4", 2)%>%
-  simulate(cycle=2)%>%
-  vis_graph(Competing_color = "navajowhite3", mirna_color = "ivory4", Upregulation = "red", title = "D")+
+priming_graph(minsamp, 
+              competing_count = Competing_expression, 
+              miRNA_count = miRNA_expression, 
+              aff_factor = c(energy, seed_type), 
+              deg_factor = region) %>%
+  update_how("Gene4", 2) %>%
+  simulate(cycle=2) %>%
+  vis_graph(Competing_color = "navajowhite3", 
+            mirna_color = "ivory4", 
+            Upregulation = "red", 
+            title = "D") +
   geom_node_text(aes(label = name), repel = TRUE, size =3)
 ```
 
@@ -173,33 +232,29 @@ priming_graph(minsamp, competing_count = Competing_expression, miRNA_count = miR
 
 ```{r, message=FALSE, warning=FALSE, echo=FALSE, fig.width=12, fig.height=5,fig.show='hold', fig.cap = "Log2 transformed expression levels of tumor-specific perturbing nodes in tumor and normal tissue samples of 87 patients."}
 
-matched_patient_exp_dataset <- readRDS("figures_manuscript/matched_patient_exp_dataset.RDS")
-mirtarbase_gene_res <- readRDS("figures_manuscript/mirtarbase_gene_res.RDS")
+matched_patient_exp_dataset <- readRDS("figure_manuscript/matched_patient_exp_dataset.RDS")
+mirtarbase_gene_res <- readRDS("figure_manuscript/mirtarbase_gene_res.RDS")
 
-matched_patient_exp_dataset%>%
-  filter(Ensembl_Gene_Id %in% pull(filter(mirtarbase_gene_res, situ == "tumor_specific"), Ensembl_Gene_Id))%>%
-  pivot_longer(cols = contains("TCGA"), names_to="patient_id", values_to = "expressions")%>%
-  mutate(patient = ifelse(endsWith(patient_id, "01A"), "tumor", "normal"))%>%
-  left_join(mirtarbase_gene_res, by ="Ensembl_Gene_Id")%>%
-  group_by(patient, Ensembl_Gene_Id)%>%
-  ggplot(aes(x= hgnc_symbol, y=log2(expressions), fill = patient))+
-  #scale_y_log10()+
-  geom_boxplot(position = "dodge")+
-  theme_bw()+
-  theme(axis.text.x = element_text(angle = 90), panel.background = element_rect())+
+matched_patient_exp_dataset %>%
+  filter(Ensembl_Gene_Id %in% pull(filter(mirtarbase_gene_res, situ == "tumor_specific"), Ensembl_Gene_Id)) %>%
+  pivot_longer(cols = contains("TCGA"), 
+               names_to = "patient_id", 
+               values_to = "expressions") %>%
+  mutate(patient = ifelse(endsWith(patient_id, "01A"), 
+                          "tumor", "normal")) %>%
+  left_join(mirtarbase_gene_res, by = "Ensembl_Gene_Id") %>%
+  group_by(patient, Ensembl_Gene_Id) %>%
+  ggplot(aes(x = hgnc_symbol, y = log2(expressions), fill = patient)) +
+  # scale_y_log10()+
+  geom_boxplot(position = "dodge") +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 90), 
+        panel.background = element_rect()) +
   xlab("")
 ```
 
 
 # 3 Supplementary Tables
-
-```{r, eval=FALSE, include=FALSE}
-library(xtable)
-knitr::opts_chunk$set(tidy.opts=list(width.cutoff=50),tidy=TRUE)
-library(gt)
-knitr::opts_chunk$set(cache=FALSE)
-
-```
 
 ## 3.1 *Sample+* dataset
 
