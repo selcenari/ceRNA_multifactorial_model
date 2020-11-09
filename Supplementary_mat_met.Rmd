@@ -291,7 +291,7 @@ hg18 <- getBM(attributes = c("ensembl_transcript_id",
 
 ```{r,  eval=FALSE}
 clearclipfinal <- hg18 %>%
-  inner_join(clearclip, by= c("entrezgene"= "gene.id", 
+  inner_join(clearclip, by= c("entrezgene_id"= "gene.id", 
                               "hgnc_symbol"= "gene.symbol")) %>%
   distinct()
 ```
