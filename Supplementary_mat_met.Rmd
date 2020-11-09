@@ -260,35 +260,31 @@ clearclip <- readxl::read_excel("CLEAR-CLIP.xlsx",1, skip=23)
 ```
 
 ### Query of Human Genome 18
-
+            
 ```{r,  eval=FALSE}
 #HG18
+library(biomaRt)
 
-#listMarts(host = 'http://may2009.archive.ensembl.org')
+listEnsemblArchives()
 
-ensembl54 <- useMart(biomart='ENSEMBL_MART_ENSEMBL',
-                    dataset='hsapiens_gene_ensembl',
-                    host='may2009.archive.ensembl.org')
-ensembl54 <- useEnsembl(biomart = 'genes', 
-                       dataset = 'hsapiens_gene_ensembl',
-                       version = 54)
-listMarts(host="may2009.archive.ensembl.org")
-useMart("ensembl",host="may2009.archive.ensembl.org", dataset = "hsapiens_gene_ensembl")
-httr_config <- httr::config(ssl_cipher_list = "DEFAULT@SECLEVEL=1")
+#listMarts(host = 'may2009.archive.ensembl.org')
 
-mart <- useEnsembl(biomart = "ensembl", 
-                   dataset = "hsapiens_gene_ensembl", 
-                   version = "54")
+ensembl54 = useEnsembl(host='may2009.archive.ensembl.org', 
+                        biomart = "ensembl", 
+                         dataset = "hsapiens_gene_ensembl", 
+                         mirror = "useast")
+
 
 hg18 <- getBM(attributes = c("ensembl_transcript_id",
-                             "ensembl_gene_id",
-                             "chromosome_name", 
-                             "start_position",
-                             "end_position", 
-                             "hgnc_symbol", 
-                             "entrezgene", 
-                             "strand" ), 
-              mart = ensembl54)
+                              "ensembl_gene_id",
+                              "chromosome_name", 
+                              "start_position",
+                              "end_position", 
+                              "hgnc_symbol", 
+                              "entrezgene_id", 
+                              "strand" ), 
+                              mart = ensembl54)
+
 ```
 
 ### Adding Genome Information to dataset
