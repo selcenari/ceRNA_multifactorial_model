@@ -285,6 +285,7 @@ hg18 <- getBM(attributes = c("ensembl_transcript_id",
                               "strand" ), 
                               mart = ensembl54)
 
+
 ```
 
 ### Adding Genome Information to dataset
@@ -308,6 +309,13 @@ lift18 <- clearclipfinal %>%
   dplyr::select(location)
 
 write_tsv(lift18, "lift18.txt")
+
+```
+Please note that we have provided the hg18 liftover dataset under the data folder (lift18), since server error may occur.
+
+```{r,  eval=FALSE}
+
+lift18 <- read_tsv("data/lift18.txt")
 
 #After we searched this file in UCSC browser, the output loaded (deleted_lift18 deleted regions on the HG38 genome build; hg38clearclip new locations of the genes on HG38)
 
