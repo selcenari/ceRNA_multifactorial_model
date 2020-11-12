@@ -174,9 +174,9 @@ clashelwakfinal %>%
   unite(chromosome_name, c("Chromosome","start_end"), sep = ":") %>% 
   write_tsv("lift19.txt",col_names = FALSE)
 
-#In liftover site, Original Assembly was chosen as hg19 and New Assebly was chosen as hg38. After we uploaded "lift19.txt" file to UCSC Liftover site, the output "View Conversions" was downloaded as hg38clashcomp (new locations of the genes on HG38), "Display failure file" was download as "lift19_del.txt" (deleted regions on the HG38 genome build)
+#In liftover site, Original Assembly was chosen as hg19 and New Assembly was chosen as hg38. After we uploaded "lift19.txt" file to UCSC Liftover site, the output "View Conversions" was downloaded as hg38clashcomp (new locations of the genes on HG38), "Display failure file" was download as "lift19_del.txt" (deleted regions on the HG38 genome build)
 
-lift19_del <- read_tsv("figure_manuscript/lift19_del.txt", 
+lift19_del <- read_tsv("data/lift19_del.txt", 
                        col_names = FALSE, 
                        comment = "#") %>% 
   rename(chromosome_loc = X1) %>% 
@@ -196,7 +196,7 @@ clashelwakfinal <- clashelwakfinal %>%
 # adding new location information:
 
 clashelwakfinal <- clashelwakfinal %>% 
-  bind_cols(read_tsv("figure_manuscript/hg38clashcomp.txt", 
+  bind_cols(read_tsv("data/hg38clashcomp.txt", 
                       col_names = FALSE))
 
 
@@ -265,14 +265,11 @@ clearclip <- readxl::read_excel("CLEAR-CLIP.xlsx",1, skip=23)
 #HG18
 library(biomaRt)
 
-listEnsemblArchives()
-
 #listMarts(host = 'may2009.archive.ensembl.org')
-
 ensembl54 = useEnsembl(host='may2009.archive.ensembl.org', 
                         biomart = "ensembl", 
                          dataset = "hsapiens_gene_ensembl", 
-                         mirror = "useast")
+                         mirror = "asia")
 
 
 hg18 <- getBM(attributes = c("ensembl_transcript_id",
@@ -285,7 +282,17 @@ hg18 <- getBM(attributes = c("ensembl_transcript_id",
                               "strand" ), 
                               mart = ensembl54)
 
+# should there be any connection problems, read the pre-saved version of hg18 gene information by commenting out the following line
 
+# hg18 <- read_tsv("data/hg18.txt") %>%
+#   rename_with(~ tolower(.x) %>%
+#                 str_replace_all(" ","_") %>%
+#                 str_remove("_\\(bp\\)")) %>%
+#   rename(start_position=gene_start,
+#          end_position=gene_end) %>% 
+#   filter(!is.na(entrezgene_id)) %>% 
+#   filter(!is.na(hgnc_symbol))
+  
 ```
 
 ### Adding Genome Information to dataset
@@ -308,18 +315,25 @@ lift18 <- clearclipfinal %>%
   unite(location, c("chr","start_end"), sep = ":") %>%
   dplyr::select(location)
 
-write_tsv(lift18, "lift18.txt")
+# you can save current state of lift18 data frame
+# write_tsv(lift18, "data/lift18.txt")
 
 ```
-Please note that we have provided the hg18 liftover dataset under the data folder (lift18), since server error may occur.
+
+Please note that we have provided the hg18 liftover dataset under the data folder (lift18), in case of server errors/changes may occur. If you had problems generating lift18 data frame, please run the following code.
+
+```{r, eval=FALSE}
+lift18 <- read_tsv("data/lift18.txt")
+```
+
+
 
 ```{r,  eval=FALSE}
 
-lift18 <- read_tsv("data/lift18.txt")
 
-#After we searched this file in UCSC browser, the output loaded (deleted_lift18 deleted regions on the HG38 genome build; hg38clearclip new locations of the genes on HG38)
+# In liftover site, Original Assembly was chosen as hg18 and New Assembly was chosen as hg38. After we uploaded "lift18.txt" file to UCSC Liftover site, the output "View Conversions" was downloaded as "hg38clearclip.txt" (new locations of the genes on HG38), "Display failure file" was download as "lift18_del.txt" (deleted regions on the HG38 genome build)
 
-deleted_lift18 <- read_tsv("figure_manuscript/lift18_del.txt",
+deleted_lift18 <- read_tsv("data/lift18_del.txt",
                            comment = "#",
                            col_names = FALSE) %>% 
   rename(Chromosome_loc = X1) %>% 
@@ -337,7 +351,7 @@ clearclipfinal <- clearclipfinal %>%
                                           "start_position"="Start", 
                                           "end_position"="End"))
 
-hg38clearclip <- read_tsv("figure_manuscript/hg38clearclip.txt",
+hg38clearclip <- read_tsv("data/hg38clearclip.txt",
                           col_names = FALSE)
 
 # adding new location information:
@@ -396,13 +410,14 @@ experimentalmirnagene <- experimentalmirnagene %>%
   dplyr::select(-region2, -region3) %>%
   mutate(region_effect = case_when(
     region %in% c("3UTRCDS", "CDS3UTR", "5UTR3UTR", "CDS5UTR3UTR", "CDS3UTRintron") ~ "0.93",
+    region %in% c("5UTRCDS", "CDS5UTR") ~ "0.42",
     region %in% c("CDS", "CDSintron") ~ "0.42",
     region %in% c("3UTR", "3UTRintron") ~ "0.84",
     region %in% c("5UTR", "5UTRintron") ~ "0.01",
     region %in% c("intron", "") ~ "0.01",
     region %in% c("exon_unclassified", "") ~ "0.2",
-    TRUE ~ NA
-  ) %>% 
+    TRUE ~ NA_character_
+  )) %>% 
     mutate(region_effect = as.double(region_effect))
 ```
 
@@ -418,9 +433,10 @@ experimentalmirnagene <- experimentalmirnagene %>%
 ```
 
 ```{r}
-experimentalmirnagene <- readRDS("data/experimentalmirnagene.RDS")
-experimentalmirnagene
+# the data frame generated up to now should match the data frame used in manuscript so the output should be "zero" different rows.
+setdiff(experimentalmirnagene,readRDS("data/experimentalmirnagene.RDS"))
 ```
+
 
 The context of dataset is shown in Table S5 in Supplementary Tables.
 
