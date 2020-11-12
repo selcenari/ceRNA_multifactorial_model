@@ -432,11 +432,32 @@ experimentalmirnagene <- experimentalmirnagene %>%
   inner_join(seed_type_effect, by= "seed_type")
 ```
 
-```{r}
+
+The methods about miRNA:target interactions are based a basic principle that is reading after isolation of miRNA:target chimerics. The datasets contain all the chimeric miRNA:target structures found in the medium during the experiment. On the other hand, it could be said that the reading is performed as snapshot.Because of that, the methods can provide different chimeric interactions the same miRNA:target pair. We have preferred to select most effective interaction parameters for the same miRNA:target pairs that can exhibit various interactions. The step is performed as:
+
+```{r eval=FALSE}
+experimentalmirnagene <- experimentalmirnagene %>%
+  dplyr::select(miRNA, Ensembl_Gene_Id, hgnc_symbol, Energy, seed_type_effect, region_effect) %>%
+  distinct() %>%
+  group_by(Ensembl_Gene_Id, miRNA) %>%
+  mutate(
+    seed_type_effect = ifelse(seed_type_effect == max(seed_type_effect),
+                              seed_type_effect, 
+                              max(seed_type_effect) ),
+    Energy = ifelse(Energy == min(Energy), 
+                    Energy, 
+                    min(Energy)),
+    region_effect = ifelse(region_effect == max(region_effect),
+                           region_effect, 
+                           max(region_effect) ) ) %>%
+  distinct()
+```
+
+
+```{r, eval=FALSE}
 # the data frame generated up to now should match the data frame used in manuscript so the output should be "zero" different rows.
 setdiff(experimentalmirnagene,readRDS("data/experimentalmirnagene.RDS"))
 ```
-
 
 The context of dataset is shown in Table S5 in Supplementary Tables.
 
