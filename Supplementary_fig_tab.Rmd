@@ -254,6 +254,34 @@ matched_patient_exp_dataset %>%
 ```
 
 
+```{r, message=FALSE, warning=FALSE, echo=FALSE, fig.width=5, fig.height=5, fig.show='hold', fig.cap = "Log2 transformed expression level of miR-30a-5p in tumor and normal tissue samples of 87 patients."}
+
+matched_patient_miRNA_exp_dataset <- readRDS("figure_manuscript/matched_patient_miRNA_exp_dataset.RDS")
+
+significant_mirna_nodes <- readRDS("figure_manuscript/significant_mirna_nodes.RDS")
+
+matched_patient_miRNA_exp_dataset%>%
+  filter(miRNA %in% significant_mirna_nodes)%>%
+  filter(miRNA == "hsa-miR-30a-5p")%>%
+  pivot_longer(cols = contains("TCGA"), 
+               names_to = "patient_id", 
+               values_to = "expressions") %>%
+  mutate(patient = ifelse(endsWith(patient_id, "01A"), 
+                          "tumor", "normal")) %>%
+  group_by(patient, miRNA) %>%
+  ggplot(aes(x = miRNA, y = log2(expressions), fill = patient)) +
+  # scale_y_log10()+
+  geom_boxplot(position = "dodge") +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 90), 
+        panel.background = element_rect(),
+        legend.title = element_blank()) +
+  xlab("")
+
+```
+
+
+
 # 3 Supplementary Tables
 
 ## 3.1 *Sample+* dataset
