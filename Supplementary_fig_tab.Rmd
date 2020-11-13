@@ -254,7 +254,7 @@ matched_patient_exp_dataset %>%
 ```
 
 
-```{r, message=FALSE, warning=FALSE, echo=FALSE, fig.width=5, fig.height=5, fig.show='hold', fig.cap = "Log2 transformed expression level of miR-30a-5p in tumor and normal tissue samples of 87 patients."}
+```{r, message=FALSE, warning=FALSE, echo=FALSE, fig.width=4, fig.height=4, fig.show='hold', fig.cap = "Log2 transformed expression level of miR-30a-5p in tumor and normal tissue samples of 87 patients."}
 
 matched_patient_miRNA_exp_dataset <- readRDS("figure_manuscript/matched_patient_miRNA_exp_dataset.RDS")
 
