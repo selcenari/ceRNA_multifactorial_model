@@ -37,13 +37,33 @@ knitr::opts_chunk$set(warning = FALSE)
 
 # 1. Determination of perturbation efficiencies of nodes in network.
 
-`find_node_perturbation` function runs `calc_perturbation` function for each node with given parameters. In this particular example upregulation parameter is two, iteration parameter is three. By using formulas described in manuscript perturbation efficiency and number of affected nodes (perturbed count) are calculated. Results for Sample+ network are shown below.
+`find_node_perturbation` function runs `calc_perturbation` function for each node with given parameters. In this particular example up-regulation parameter was two, iteration parameter was three. By using formulas described in manuscript perturbation efficiency and number of affected nodes (perturbed count) were calculated. Results for *Sample* network are shown below.
+
+## 1.1  Sample Data set:
 
 ```{r, message=FALSE, warning=FALSE}
 library(ceRNAnetsim)
 data("minsamp") # refers Sample and Sample+ data
 
 
+sample_graph <- priming_graph(minsamp, 
+                              competing_count = Competing_expression, 
+                              miRNA_count = miRNA_expression)
+
+find_node_perturbation(sample_graph, 
+                       how = 2, 
+                       cycle = 3, 
+                       limit = 0.1) %>%
+  as_tibble() %>%
+  select(name, perturbation_efficiency, perturbed_count)
+
+```
+
+## 1.2 Sample+ Data set:
+
+Results for *Sample+* network are shown below.
+
+```{r, message=FALSE, warning=FALSE}
 sample_graph <- priming_graph(minsamp, 
                               competing_count = Competing_expression, 
                               miRNA_count = miRNA_expression, 
@@ -64,9 +84,9 @@ find_node_perturbation(sample_graph,
 
 # 2. Additional data manipulation steps
 
-## 2.1 Arrangement of CLASH dataset 
+## 2.1 Arrangement of CLASH data set 
 
-CLASH dataset was retrieved from [Helwak et. al](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3650559/) [@helwak_mapping_2013].
+CLASH data set was retrieved from [Helwak et. al](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3650559/) [@helwak_mapping_2013].
 
 ```{r, eval=FALSE, warning=FALSE, message=FALSE}
 
@@ -114,7 +134,7 @@ clashelwak <- clashelwak %>%
   rename_with(~ str_replace(.,"\'","_"), contains("UTR"))
 ```
 
-miRNA releases are obtained from [miRBase](http://www.mirbase.org/ftp.shtml). In this step, release 21 (in Human genome 38) was downloaded.
+miRNA releases were obtained from [miRBase](http://www.mirbase.org/ftp.shtml). In this step, release 21 (in Human genome 38) was downloaded.
 
 ```{r, eval=FALSE, warning=FALSE, message=FALSE}
 mirbase_url <- "ftp://mirbase.org/pub/mirbase/21/genomes/hsa.gff3"
@@ -129,7 +149,7 @@ mirbasehg38 <- read_tsv(mirbase_url, comment = "#", col_names = FALSE) %>%
   dplyr::select(chr = X1, start = X4, end = X5, strand = X7, ID, Alias, Name, Precusor)
 ```
 
-Since CLASH dataset is published according to Human Genome 19 version, we used miRBase release 15.
+Since CLASH data set was published according to Human Genome 19 version, we used miRBase release 15.
 
 ```{r, eval=FALSE}
 mirbase15_url <- "ftp://mirbase.org/pub/mirbase/15/database_files/mirna_mature.txt.gz"
@@ -161,11 +181,11 @@ clashelwakfinal <- read_tsv(mirbase15_url, col_names = FALSE) %>%
 
 ### Converting CLASH data to human genome 38 build.
 
-There are different liftover methods for conversion among Human Genome builds. We preffered to use [UCSC liftover tool](https://genome.ucsc.edu/cgi-bin/hgLiftOver)
+There are different liftover methods for conversion among Human Genome builds. We preferred to use [UCSC liftover tool](https://genome.ucsc.edu/cgi-bin/hgLiftOver)
 
 ```{r,  eval=FALSE}
 
-#Obtaining chromosomal locations from miRNA:target interaction dataset.
+#Obtaining chromosomal locations from miRNA:target interaction data set.
 
 clashelwakfinal %>%
   dplyr::select(1,2,3) %>%
@@ -186,7 +206,7 @@ lift19_del <- read_tsv("data/lift19_del.txt",
   mutate(Start=as.numeric(Start),
          End=as.numeric(End))
 
-#removing deleted location from CLASH dataset
+#removing deleted location from CLASH data set
 
 clashelwakfinal <- clashelwakfinal %>%
   mutate(Chromosome = paste0("chr",chromosome_name, "")) %>%
@@ -200,7 +220,7 @@ clashelwakfinal <- clashelwakfinal %>%
                       col_names = FALSE))
 
 
-# Arrangement in dataset
+# Arrangement in data set
 
 clashelwakfinal <- clashelwakfinal %>% 
   rename(HG38build_loc = X1) %>% 
@@ -221,7 +241,7 @@ clashelwakfinal <- clashelwakfinal %>%
   mutate(strand = as.character(strand))
 ```
 
-### Interpreting the CLASH seed structures in dataset
+### Interpreting the CLASH seed structures in data set
 
 ```{r,  eval=FALSE}
 clashelwakfinal <- clashelwakfinal %>%
@@ -244,9 +264,9 @@ clashelwakfinal <- clashelwakfinal %>%
 
 ```
 
-## 2.2 Arrangement of CLEAR-CLiP Dataset [@moore_mirnatarget_2015]
+## 2.2 Arrangement of CLEAR-CLiP data set [@moore_mirnatarget_2015]
 
-CLEAR-CLiP dataset was retrieved from [Moore et.al](https://www.nature.com/articles/ncomms9864). Please note that we need Supplementary Data 4, however there is error in website, you need to click on Supplementary Data 3 to download the data.
+CLEAR-CLiP data set was retrieved from [Moore et.al](https://www.nature.com/articles/ncomms9864). Please note that we need Supplementary Data 4, however there was error in website, you need to click on Supplementary Data 3 to download the data.
 
 ```{r,  eval=FALSE}
 clear_clip_url <- "https://static-content.springer.com/esm/art%3A10.1038%2Fncomms9864/MediaObjects/41467_2015_BFncomms9864_MOESM1022_ESM.xlsx"
@@ -295,7 +315,7 @@ hg18 <- getBM(attributes = c("ensembl_transcript_id",
   
 ```
 
-### Adding Genome Information to dataset
+### Adding Genome Information to data set
 
 ```{r,  eval=FALSE}
 clearclipfinal <- hg18 %>%
@@ -308,7 +328,7 @@ clearclipfinal <- hg18 %>%
 
 ```{r,   eval=FALSE}
 
-#Obtaining chromosomal locations from miRNA:target interaction dataset.
+#Obtaining chromosomal locations from miRNA:target interaction data set.
 
 lift18 <- clearclipfinal %>%
   unite(start_end, c("start_position", "end_position"), sep = "-") %>%
@@ -320,7 +340,7 @@ lift18 <- clearclipfinal %>%
 
 ```
 
-Please note that we have provided the hg18 liftover dataset under the data folder (lift18), in case of server errors/changes may occur. If you had problems generating lift18 data frame, please run the following code.
+Please note that we have provided the hg18 liftover data set under the data folder (lift18), in case of server errors/changes may occur. If you had problems generating lift18 data frame, please run the following code.
 
 ```{r, eval=FALSE}
 lift18 <- read_tsv("data/lift18.txt")
@@ -344,7 +364,7 @@ deleted_lift18 <- read_tsv("data/lift18_del.txt",
          End = as.numeric(End))
 
 
-#removing deleted location from CLEAR-CLiP dataset
+#removing deleted location from CLEAR-CLiP data set
 
 clearclipfinal <- clearclipfinal %>%
   dplyr::anti_join(deleted_lift18, by = c("chr"="Chr", 
@@ -370,9 +390,9 @@ clearclipfinal <- clearclipfinal %>%
 
 ```
 
-### Seed type manipulation in CLEAR-CLiP dataset
+### Seed type manipulation in CLEAR-CLiP data set
 
-In CLEAR-CLiP dataset, seed types were shown in detail. We adjusted as canonical and non-canonical.
+In CLEAR-CLiP data set, seed types were shown in detail. We adjusted as canonical and non-canonical.
 
 ```{r,  eval=FALSE}
 clipdata_seed <- data_frame(seed_type= c("5mer_1","5mer_2", "5mer_3", "6mer", "6mer.indel", "6mer.mm", "6mer_off.mm", "6merA1", "6merA1.indel", "6merA1.mm", "7merA1", "7merA1.indel", "7merA1.mm", "7merm8", "7merm8.indel", "7merm8,mm", "8mer", "8mer.indel", "8mer.mm", "NA" ),
@@ -384,7 +404,7 @@ clearclipfinal <- clearclipfinal %>%
 
 ```
 
-## 2.3 Integration of two experimental dataset
+## 2.3 Integration of two experimental data set
 
 CLASH and CLEAR-CLiP data were processed heavily and resulted in similar format after which they were concatenated. 
 
@@ -396,11 +416,11 @@ experimentalmirnagene <- bind_rows(clashelwakfinal, clearclipfinal) %>%
 
 ## 2.4 Adding Coefficients of Interaction factors
 
-Energy values in miRNA:target pairs are represented by high-throughput studies [@helwak_mapping_2013; @moore_mirnatarget_2015] which are utilized in this study. On the other hand, we have specified the other interaction factors, seed type and location of binding region on the target, as numeric values based on the previous studies.[@grimson_microrna_2007] have compared the seed types' effect on target repression with few miRNA had canonical seed pairing in their study. Additionally, [@bartel_micrornas:_2009] and [@betel2010comprehensive] have studied on functional and non-functional seed interactions. Based on results of these studies we have arranged seed types of miRNA:target interactions as numeric values. We also have redefined location of binding region on the target as numeric values, based on studies of [@hausser_analysis_2013] and [@helwak_mapping_2013]. With this process, we have handled this integrated dataset in context of competitor behaviors and functionality of interactions. 
+Energy values in miRNA:target pairs were represented by high-throughput studies [@helwak_mapping_2013; @moore_mirnatarget_2015] which were utilized in this study. On the other hand, we have specified the other interaction factors, seed type and location of binding region on the target, as numeric values based on the previous studies.[@grimson_microrna_2007] have compared the seed types' effect on target repression with few miRNA had canonical seed pairing in their study. Additionally, [@bartel_micrornas:_2009] and [@betel2010comprehensive] have studied on functional and non-functional seed interactions. Based on results of these studies we have arranged seed types of miRNA:target interactions as numeric values. We also have redefined location of binding region on the target as numeric values, based on studies of [@hausser_analysis_2013] and [@helwak_mapping_2013]. With this process, we have handled this integrated data set in context of competitor behaviors and functionality of interactions. 
 
 In this step we added numeric interaction values as following
 
-Firstly, we organized these values due to the fact that the regions were defined differently in two dataset. After that, region effect was added as numeric values (shown in Table S3). 
+Firstly, we organized these values due to the fact that the regions were defined differently in two data set. After that, region effect was added as numeric values (shown in Table S3). 
 
 ```{r,  eval=FALSE}
 experimentalmirnagene <- experimentalmirnagene %>%
@@ -421,7 +441,7 @@ experimentalmirnagene <- experimentalmirnagene %>%
     mutate(region_effect = as.double(region_effect))
 ```
 
-Secondly, we organized seed type interactions in *Seed type manipulation* section for CLEAR-CLiP dataset to show as found in CLASH dataset. Same type formatted values added dataset as numeric values (shown in Table S2).
+Secondly, we organized seed type interactions in *Seed type manipulation* section for CLEAR-CLiP data set to show as found in CLASH data set. Same type formatted values added data set as numeric values (shown in Table S2).
 
 ```{r,  eval=FALSE}
 
@@ -433,7 +453,7 @@ experimentalmirnagene <- experimentalmirnagene %>%
 ```
 
 
-The methods about miRNA:target interactions are based a basic principle that is reading after isolation of miRNA:target chimerics. The datasets contain all the chimeric miRNA:target structures found in the medium during the experiment. On the other hand, it could be said that the reading is performed as snapshot.Because of that, the methods can provide different chimeric interactions the same miRNA:target pair. We have preferred to select most effective interaction parameters for the same miRNA:target pairs that can exhibit various interactions. The step is performed as:
+The methods about miRNA:target interactions are based a basic principle that is reading after isolation of miRNA:target chimerics. The data sets contain all the chimeric miRNA:target structures found in the medium during the experiment. On the other hand, it could be said that the reading is performed as snapshot.Because of that, the methods can provide different chimeric interactions the same miRNA:target pair. We have preferred to select most effective interaction parameters for the same miRNA:target pairs that can exhibit various interactions. The step was performed as:
 
 ```{r eval=FALSE}
 experimentalmirnagene <- experimentalmirnagene %>%
@@ -459,24 +479,22 @@ experimentalmirnagene <- experimentalmirnagene %>%
 setdiff(experimentalmirnagene,readRDS("data/experimentalmirnagene.RDS"))
 ```
 
-The context of dataset is shown in Table S5 in Supplementary Tables.
+The context of data set was shown in Table S5 in Supplementary Tables.
 
 # 3. Functions defined for ceRNA models and workflow of method
 
-We defined the functions that can be used with R programming. Briefly, these functions process a given miRNA:gene dataset and convert to graph object. All values that are significant in miRNA:target interactions are stored in edge variables and processed with formulations that are given in previous section. The functions and steps of approach are explained as following (Figure S1) :
+We defined the functions that can be used with R programming. Briefly, these functions process a given miRNA:gene data set and convert to graph object. All values that are significant in miRNA:target interactions are stored in edge variables and processed with formulations that were suggested in manuscript. The functions and steps of approach are explained as following (Figure S1) :
 
 
-**Conversion of dataset**: `priming_graph()` function processes the given dataset that includes competing elements in first variable and repressive element in second variable. If the affinity and/or degradation factors are specified in the function, factors are taken into account, are processed with defaults in vice versa. The formulations that are given in equations (1-4) are performed in this function. This step gives the graph object which contains efficiency values of miRNA:competing target pairs in steady-state in terms of amount. It is assumed that the initial target amounts in the dataset is observed after the repressive activity of miRNAs in steady-state. 
-
-**Transition of variables in graph**: In the previous step, the calculations are performed in the edge variables of the graph object. However, the graph object allows to use node variables, while the node features are handled to the graph. In this direction, update_nodes function carries the amount values to node variables This step must be applied with “once” option because it is primary process.
+**Conversion of data set**: `priming_graph()` function processes the given data set that includes competing nodes in first variable and repressive miRNA nodes in second variable. If the affinity and/or degradation factors are specified in the function, factors are taken into account, are processed with defaults in vice versa. The formulations that are given in equations (1-4) are performed in this function. This step gives the graph object which contains *repression activity* values of miRNAs on paired target in steady-state.  
 
 
-**Trigger change in graph**: The dataset are assumed as steady-state in previous step and the efficiency coefficients are calculated according to this acceptance. In the network that is found in steady-state conditions, the change is applied to the graph object for perturbation of steady-state. To provide the perturbation in the network the work-flow offer two methods: *update_variables* and *update_how*. The first, a new dataset that is contained competing and repressive element names and current values of these can be processed with update_variables. The second option, the amount of the given node name in update_how function can be changed according to “how” argument.
+**Selecting trigger in graph**: The data set is assumed as steady-state in previous step and the interaction parameters are calculated. In the network at steady-state conditions, the change is applied to the graph object for perturbation of steady-state. To provide the perturbation in the network the work-flow offer two methods: *update_variables* and *update_how*. The first, a new data set that is contained competing and miRNA names and current values of these are processed. The second option, the amount of the given node name in update_how function, is changed according to “how” argument.
 
-**Simulation of competing behavior of targets**: After the change in the steady-state conditions, the network elements try to gain steady-state again. This process progresses as repeating of regulations after the spreading the changes in the network. In this step, simulation of regulations according to given cycle count in simulate function is applied. After each simulation cycle, the miRNA repression values are re-calculated and the current values of competing elements are found and saved. The process is performed in the edge data and at the same time outputs of the calculations are carried from edge to node data.
+**Simulation of competing behavior of targets**: After the change in the steady-state conditions, the network object tries to reach steady-state again. This process progresses as repeating of regulations after the spreading the changes in the network. In this step, simulation of regulations according to given cycle count in *simulate* function is applied. After each simulation cycle, the miRNA repression activities are re-calculated and the current values of competing elements are found and saved. The process is performed in the edge data and at the same time outputs of the calculations are carried from edge to node variables.
 
 
-The node elements in the dataset are handled as two type; repressive (miRNAs) and competing (targets). It is assumed in approach that while targets are degrading or inhibiting by miRNAs continuously, miRNAs reversibly used. If the trigger of the network is a miRNA, it maintains the current value of amount that provides by user. On the contrary, it tries to help this process to provide steady-state through the regulations on its amount, if a competing element is used as a trigger. The functions that are used in the this study are developed with R and are available in [Bioconductor](https://www.bioconductor.org/packages/release/bioc/html/ceRNAnetsim.html).
+The nodes in the data set are handled as two type; miRNAs and competing (i.e., genes or targets). It is assumed in approach that while targets are degrading or inhibiting by miRNAs continuously, miRNAs reversibly used. If the trigger of the network is a miRNA, it maintains the current value of amount that provides by user. On the contrary, it tries to help this process to provide steady-state through the regulations on its amount, if a competing element is used as a trigger. The functions that are used in the this study are developed with R and are available in [Bioconductor](https://www.bioconductor.org/packages/release/bioc/html/ceRNAnetsim.html).
 
 
 # 4. Perturbation analysis of Real/Real+ networks

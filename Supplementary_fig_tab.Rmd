@@ -24,7 +24,7 @@ header-includes:
 
 # 2. Supplementary Figures 
 
-![Workflow for simulation of competing endogenous RNA regulations. Graph object in steps 2-6 is saved and updated continuously.](workflow1.png){#figs1}
+![Workflow for simulation of competing endogenous RNA regulations. Graph object in steps is saved and updated continuously in simulation.](workflow2.jpg){#figs1}
 
 ```{r, include=FALSE, message=FALSE, warning=FALSE}
 
@@ -34,9 +34,14 @@ library(tidyr)
 library(stringr)
 library(ggraph)
 library(ggplot2)
+library(purrr)
+library(ggsignif)
 knitr::opts_chunk$set(tidy.opts=list(width.cutoff=50),tidy=TRUE)
 #knitr::opts_chunk$set(fig.pos = 'H')
 knitr::opts_chunk$set(cache=FALSE)
+source("C:/Users/SELCEN/Desktop/article/R/vis_graph.R")
+source("C:/Users/SELCEN/Desktop/article/R/simulate_vis.R")
+source("C:/Users/SELCEN/Desktop/article/R/simulate.R")
 
 ```
 
@@ -105,7 +110,7 @@ priming_graph(minsamp,
 
 ## 2.2 Calculations with interaction factors
 
-```{r, echo=FALSE, fig.cap="Calculation of initial miRNA repression activity using interaction parameters in Sample+ network. A) Interaction paramaters between genes and miRNAs in Sample+ are shown on network while expression levels can be found in Table S1. B) Interaction paramaters were updated after normalisation C) Amount of miRNA distributed to each mRNA according to mRNA levels and affinity parameters are shown on edges. D) Values on edges indicate repression activity. Red values indicate repression activity affected by region effect (RE) parameter. E) Total repression on G4 from two miRNAs is calculated by adding repression values originating from both miRNAs.", fig.show='hold', out.height= "70%", out.width="70%", fig.align = "center"}
+```{r, echo=FALSE, fig.cap="Calculation of initial miRNA repression level using interaction parameters in Sample+ network. A) Interaction paramaters between genes and miRNAs in Sample+ are shown on network while expression levels can be found in Table S1. B) Interaction paramaters were updated after normalisation C) Amount of miRNA distributed to each mRNA according to mRNA levels and affinity parameters are shown on edges. D) Values on edges indicate repression level. Red values indicate repression level affected by region effect (RE) parameter. E) Total repression on G4 from two miRNAs is calculated by adding repression values originating from both miRNAs.", fig.show='hold', out.height= "70%", out.width="70%", fig.align = "center"}
 knitr::include_graphics("fig_s5.png")
 
 ```
@@ -235,6 +240,8 @@ priming_graph(minsamp,
 matched_patient_exp_dataset <- readRDS("figure_manuscript/matched_patient_exp_dataset.RDS")
 mirtarbase_gene_res <- readRDS("figure_manuscript/mirtarbase_gene_res.RDS")
 
+comparisons <-  list(c("GNAS_normal", "GNAS_tumor"), c("MYH9_normal", "MYH9_tumor"), c("SLC7A5_normal", "SLC7A5_tumor"), c("NDRG1_normal", "NDRG1_tumor"), c("TRPS1_normal", "TRPS1_tumor"), c("CDK6_normal", "CDK6_tumor"), c("SYNGR2_normal", "SYNGR2_tumor"), c("CCND1_normal", "CCND1_tumor"), c("SOD2_normal", "SOD2_tumor"), c("VEGFA_normal", "VEGFA_tumor"), c("RGS2_normal", "RGS2_tumor"), c("DNMT1_normal", "DNMT1_tumor"), c("NOTCH2_normal", "NOTCH2_tumor"), c("THBS1_normal", "THBS1_tumor"), c("IGF1R_normal", "IGF1R_tumor"), c("RHOB_normal", "RHOB_tumor"), c("EIF4EBP2_normal", "EIF4EBP2_tumor"), c("SERPINH1_normal", "SERPINH1_tumor"), c("HNRNPK_normal", "HNRNPK_tumor"), c("ARL6IP1_normal", "ARL6IP1_tumor"), c("ZNF217_normal", "ZNF217_tumor"), c("SMAD2_normal", "SMAD2_tumor"), c("RCC2_normal", "RCC2_tumor"), c("NPM1_normal", "NPM1_tumor"), c("RPS23_normal", "RPS23_tumor"), c("COL4A1_normal", "COL4A1_tumor"), c("COL5A2_normal",   "COL5A2_tumor"))
+
 matched_patient_exp_dataset %>%
   filter(Ensembl_Gene_Id %in% pull(filter(mirtarbase_gene_res, situ == "tumor_specific"), Ensembl_Gene_Id)) %>%
   pivot_longer(cols = contains("TCGA"), 
@@ -243,16 +250,18 @@ matched_patient_exp_dataset %>%
   mutate(patient = ifelse(endsWith(patient_id, "01A"), 
                           "tumor", "normal")) %>%
   left_join(mirtarbase_gene_res, by = "Ensembl_Gene_Id") %>%
-  group_by(patient, Ensembl_Gene_Id) %>%
-  ggplot(aes(x = hgnc_symbol, y = log2(expressions), fill = patient)) +
+  group_by(patient, Ensembl_Gene_Id) %>% 
+  mutate(genes= str_c(hgnc_symbol, "_", patient))%>%# distinct(hgnc_symbol)%>% ungroup()%>% select(hgnc_symbol) %>%pull()->gene_list
+  ggplot(aes(x = genes, y = log2(expressions), fill = patient)) +
   # scale_y_log10()+
   geom_boxplot(position = "dodge") +
+  ggsignif::geom_signif(comparisons = comparisons, map_signif_level=TRUE, tip_length = 0.02, test = "wilcox.test", y_position = 19.5)+
   theme_bw() +
   theme(axis.text.x = element_text(angle = 90), 
         panel.background = element_rect()) +
   xlab("")
-```
 
+```
 
 ```{r, message=FALSE, warning=FALSE, echo=FALSE, fig.width=4, fig.height=4, fig.show='hold', fig.cap = "Log2 transformed expression level of miR-30a-5p in tumor and normal tissue samples of 87 patients."}
 
@@ -280,6 +289,17 @@ matched_patient_miRNA_exp_dataset%>%
 
 ```
 
+## 2.5 Runtime Analysis
+
+```{r, echo=FALSE, fig.cap="Simulation runtime comparison of sampled networks with size 500, 1000, 5000 and 10000", fig.show='hold', out.height= "50%", out.width="50%", fig.align = "center"}
+knitr::include_graphics("runtime_analysis/simulation_runtime_analysis.png")
+```
+
+
+
+```{r, echo=FALSE, fig.cap="Perturbation efficiency evaluation function runtime comparison of sampled networks with size 500, 1000, 5000 and 10000", fig.show='hold', out.height= "50%", out.width="50%", fig.align = "center"}
+knitr::include_graphics("runtime_analysis/perturbation_runtime_analysis.png")
+```
 
 
 # 3 Supplementary Tables
@@ -418,6 +438,22 @@ As a result of simulation a dataset, a graph object is obtained that includes va
 \end{tabularx}
 \end{table}
 
+
+## 3.5 Comparison of perturbation efficiency between Sample and Sample+ dataset
+
+| Data set || Sample+ || Sample 
+|-----------|-------|---------|------------| ------------|
+| **Name** |  **PE**  | **PC** | **PE** | **PC** 
+| Gene1 | 0.132 | 2 | 0.268 | 3 |
+| Gene2 | 0.198 | 3 | 0.268 | 3 |
+| Gene3 | 0.0555 | 2 | 0.150 | 3 |
+| Gene4 | 0.197 | 4 | 0.870 | 5 |
+| Gene5 | 0.143 | 1 | 0.358 | 2 |
+| Gene6 | 0.131 | 1 | 0.619 | 2 |
+| Mir1 | 0.806 | 3 | 1.638 | 4 |
+| Mir2 | 2.80 | 3 | 3.432 | 3 |
+
+Table: Perturbation efficiencies of nodes in Sample+ and Sample data set. PE, perturbation efficiency; PC, perturbed node count.
 
 # 4. Access to code
 
