@@ -455,9 +455,16 @@ As a result of simulation a dataset, a graph object is obtained that includes va
 
 Table: Perturbation efficiencies of nodes in Sample+ and Sample data set. PE, perturbation efficiency; PC, perturbed node count.
 
-# 4. Access to code
 
-All codes are available at [github repo](https://github.com/selcenari/ceRNA_multifactorial_model).
+# 4. Notes and Access to code
+
++ *Table S7*: represents functional annotations of all highly perturbing genes from simulations of network retrieved from miRTarBase.
+
++ *Table S8*: represents functional annotations of tumor specific highly perturbing genes achieved from simulations of network retrieved from miRTarBase.
+
++ *Table S9*: represents functional annotations of tumor specific highly perturbing genes achieved from simulations of network retrieved from miRNA:target pairs that are validated by high-throughput experimental studies.
+
++ All codes are available at [github repo](https://github.com/selcenari/ceRNA_multifactorial_model).
 
 \newpage
 
