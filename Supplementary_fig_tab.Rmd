@@ -49,15 +49,15 @@ source("C:/Users/SELCEN/Desktop/article/R/simulate.R")
 library(ceRNAnetsim)
 ```
 
-## 2.1 Sample dataset analysis in absence of interaction factors.
+## 2.1 Sample data set analysis in absence of interaction factors.
 
 ```{r, echo=FALSE}
-# Sample dataset refers to minsamp in ceRNAnetsim package.
+# Sample data set refers to minsamp in ceRNAnetsim package.
 data("minsamp")
 ```
 
 
-```{r, message=FALSE, warning=FALSE,echo=FALSE, fig.cap= "Sample Dataset in Steady-state. Inıtial expression levels in minsamp network (*Sample* network in manuscript). The network contains two miRNAs and 6 genes with arbitrarily chosen expression values. Refer to Table S1 for exact expression values", fig.width=5, fig.height=4}
+```{r, message=FALSE, warning=FALSE,echo=FALSE, fig.cap= "Sample Data set in Steady-state. Inıtial expression levels in minsamp network (*Sample* network in manuscript). The network contains two miRNAs and 6 genes with arbitrarily chosen expression values. Refer to Table S1 for exact expression values", fig.width=5, fig.height=4}
 priming_graph(minsamp, 
               competing_count = Competing_expression, 
               miRNA_count = miRNA_expression) %>%
@@ -68,7 +68,7 @@ priming_graph(minsamp,
 ```
 
 
-```{r, message=FALSE, warning=FALSE,echo=FALSE,  fig.keep='all', fig.cap= "Gene2 Upregulation on Sample Dataset. Expression level of Gene2 is increased from 10,000 to 20,000 in order to demonstrate the calculation steps.", fig.width=5, fig.height=4}
+```{r, message=FALSE, warning=FALSE,echo=FALSE,  fig.keep='all', fig.cap= "Gene2 Upregulation on Sample Data set. Expression level of Gene2 is increased from 10,000 to 20,000 in order to demonstrate the calculation steps.", fig.width=5, fig.height=4}
 priming_graph(minsamp,
               competing_count = Competing_expression,
               miRNA_count = miRNA_expression) %>%
@@ -80,7 +80,7 @@ priming_graph(minsamp,
   geom_node_text(aes(label = name), repel = TRUE, size = 3)
 ```
 
-```{r, message=FALSE, warning=FALSE, echo=FALSE, out.width='50%', fig.asp=1, fig.ncol = 2,  fig.show='hold', fig.cap = "Sequential iteration of Sample data after up-regulation of Gene2. A) First response of system to Gene2 upregulation (2nd iteration). B) Spreading of perturbation on system (3th iteration)", fig.subcap= NULL}
+```{r, message=FALSE, warning=FALSE, echo=FALSE, out.width='50%', fig.asp=1, fig.ncol = 2,  fig.show='hold', fig.cap = "Sequential iteration of Sample data after up-regulation of Gene2. A) First response of network to Gene2 upregulation (2nd iteration). B) Spreading of perturbation on system (3th iteration)", fig.subcap= NULL}
 
 priming_graph(minsamp, 
               competing_count = Competing_expression, 
@@ -110,15 +110,15 @@ priming_graph(minsamp,
 
 ## 2.2 Calculations with interaction factors
 
-```{r, echo=FALSE, fig.cap="Calculation of initial miRNA repression level using interaction parameters in Sample+ network. A) Interaction paramaters between genes and miRNAs in Sample+ are shown on network while expression levels can be found in Table S1. B) Interaction paramaters were updated after normalisation C) Amount of miRNA distributed to each mRNA according to mRNA levels and affinity parameters are shown on edges. D) Values on edges indicate repression level. Red values indicate repression level affected by region effect (RE) parameter. E) Total repression on G4 from two miRNAs is calculated by adding repression values originating from both miRNAs.", fig.show='hold', out.height= "70%", out.width="70%", fig.align = "center"}
+```{r, echo=FALSE, fig.cap="Calculation of initial miRNA repression level (counts) using interaction parameters in Sample+ network. A) Interaction paramaters between genes and miRNAs in Sample+ are shown on network while expression levels can be found in Table S1. B) Interaction paramaters were updated after normalisation C) Amount of miRNA distributed to each mRNA according to mRNA levels and affinity parameters (Energy and Seed Type Effect) are shown on edges. D) Values on edges indicate degredation level (couns). Red values indicate degredation level affected by region effect (RE) parameter. E) Total repression on G4 from two miRNAs is calculated by summing repression values originating from both miRNAs.", fig.show='hold', out.height= "70%", out.width="70%", fig.align = "center"}
 knitr::include_graphics("fig_s5.png")
 
 ```
 
 
-$G$, Gene; $M$, miRNA; $STE$, seed type effect; $RE$, Region Effect; $E$, Energy; $STE^\prime$, normalized values of seed type efficiency coefficient; $RE^\prime$, normalized values of region efficiency coefficient; $E^\prime$, normalized values of energy coefficient. Numbering on edges match the pair order in Table S1.
+$G$, Gene; $M$, miRNA; $STE$, seed type effect; $RE$, Region Effect; $E$, Energy; $STE^\prime$, normalized values of seed type effect; $RE^\prime$, normalized values of region effect parameter; $E^\prime$, normalized values of Energy parameter. Numbering on edges match the pair order in Table S1.
 
-## 2.3 Sample+ dataset analysis with interaction factors.
+## 2.3 Sample+ data set analysis with interaction factors.
 
 ```{r, message=FALSE, warning=FALSE, echo=FALSE, fig.cap= "Sample+ in Steady-state. Interaction factors of Sample+ network are available in Table S1.", fig.width=5, fig.height=4}
 priming_graph(minsamp, 
@@ -146,7 +146,7 @@ priming_graph(minsamp,
   geom_node_text(aes(label = name), repel = TRUE, size = 3)
 ```
 
-```{r, message=FALSE, warning=FALSE,echo=FALSE, out.width='50%', fig.asp=1, fig.ncol = 2, fig.show='hold', fig.cap = "Sequential iteration of Sample+ A) First response of system to Gene2 upregulation (2nd iteration). B) Spreading of perturbation on system (3rd iteration). Although visualisation looks similar to Figure S4B, current counts of genes are drastically different."}
+```{r, message=FALSE, warning=FALSE,echo=FALSE, out.width='50%', fig.asp=1, fig.ncol = 2, fig.show='hold', fig.cap = "Sequential iteration of Sample+ A) First response of network to Gene2 upregulation (2nd iteration). B) Spreading of perturbation on system (3rd iteration). Although visualisation looks similar to Figure S4B, current counts of genes are drastically different."}
 priming_graph(minsamp, 
               competing_count = Competing_expression, 
               miRNA_count = miRNA_expression, 
@@ -176,7 +176,7 @@ priming_graph(minsamp,
   geom_node_text(aes(label = name), repel = TRUE, size = 3)
 ```
 
-## 2.4 Common target perturbation in Sample+ dataset.
+## 2.4 Common target perturbation in Sample+ data set.
 
 ```{r, message=FALSE, warning=FALSE, echo=FALSE, out.width='50%', fig.asp=1, fig.ncol = 2, fig.show='hold', fig.cap = "Perturbation of Gene4 and its effects on Sample+. A) Network at steady-state. B) Upregulation of Gene4. C) Primary response of network to upregulation of Gene4. D) Re-regulation of whole nodes on system (3th iteration)"}
 
@@ -235,7 +235,7 @@ priming_graph(minsamp,
 ![Sankey diagram represents top five KEGG and GO (molecular function and biological process) terms and genes enriched on these terms. Genes with single edge are not shown.](sankey_v2.png){#figs9}
 
 
-```{r, message=FALSE, warning=FALSE, echo=FALSE, fig.width=12, fig.height=5,fig.show='hold', fig.cap = "Log2 transformed expression levels of tumor-specific perturbing nodes in tumor and normal tissue samples of 87 patients."}
+```{r, message=FALSE, warning=FALSE, echo=FALSE, fig.width=12, fig.height=5,fig.show='hold', fig.cap = "Log2 transformed expression levels of tumor-specific perturbing nodes in tumor and normal tissue samples of 87 patients for Real network."}
 
 matched_patient_exp_dataset <- readRDS("figure_manuscript/matched_patient_exp_dataset.RDS")
 mirtarbase_gene_res <- readRDS("figure_manuscript/mirtarbase_gene_res.RDS")
@@ -263,7 +263,7 @@ matched_patient_exp_dataset %>%
 
 ```
 
-```{r, message=FALSE, warning=FALSE, echo=FALSE, fig.width=4, fig.height=4, fig.show='hold', fig.cap = "Log2 transformed expression level of miR-30a-5p in tumor and normal tissue samples of 87 patients."}
+```{r, message=FALSE, warning=FALSE, echo=FALSE, fig.width=4, fig.height=4, fig.show='hold', fig.cap = "Log2 transformed expression level of miR-30a-5p in tumor and normal tissue samples of 87 patients for Real data set."}
 
 matched_patient_miRNA_exp_dataset <- readRDS("figure_manuscript/matched_patient_miRNA_exp_dataset.RDS")
 
@@ -304,7 +304,7 @@ knitr::include_graphics("runtime_analysis/perturbation_runtime_analysis.png")
 
 # 3 Supplementary Tables
 
-## 3.1 *Sample+* dataset
+## 3.1 *Sample+* data set
 
 
 |Competing| miRNA | Competing Expression | miRNA Expression | Seed Type Effect | Region Effect | Energy
@@ -317,16 +317,15 @@ knitr::include_graphics("runtime_analysis/perturbation_runtime_analysis.png")
 | `Gene5`   | `Mir2` | 5000  | 2000 | 0.05 | 0.40 | -11 |
 | `Gene6`   | `Mir2` | 10000 | 2000 | 0.01 | 0.80 | -25 |
 
-Table: The parameters which affect miRNA:target interactions (i.e. seed type, region, energy) are provided in Sample+ dataset, while these factors are not utilized in simulation of Sample dataset.
+Table: The parameters which affect miRNA:target interactions (i.e. seed type, region, energy) are provided in Sample+ data set, while these factors are not utilized in simulation of Sample data set.
 
 ## 3.2 Significant factors in miRNA:target interactions
 
-Some of information about miRNA:target interactions were exhibited directly by high-throughput studies. On the other hand, we were examined other interacion factors based on different studies.
+Some of information about miRNA:target interactions were exhibited directly by high-throughput studies. On the other hand, we were examined other interaction parameters based on different studies.
 
 + [@helwak_mapping_2013; @moore_mirnatarget_2015] reported the energy values in miRNA:target interactions.
 + Comparisons of canonical seed types were evaluated by study of [@grimson_microrna_2007], while functional and non-functional seed interactions were studied by [@bartel_micrornas:_2009] and [@betel2010comprehensive]. 
-+ Numeric definition of target region location effect was performed based on studies of [@hausser_analysis_2013] and [@helwak_mapping_2013]
-
++ Numeric definition of target region location effect was performed based on studies of [@hausser_analysis_2013] and [@helwak_mapping_2013].
 
 
 |seed type | seed type effect 
@@ -395,12 +394,12 @@ Table: Efficiency factors for binding regions on targets
 |   region_effect   | Coefficient of location on target | 
 |   seed_type_effect | Coefficient for seed sequence of miRNA:target interaction |
 
-Table: Context of miRNA:target pairs supported by High-throughput Experiments. CLEAR-CLiP and CLASH datasets were integrated as described in Section 2 of Supplementary Material and Method.
+Table: Context of miRNA:target pairs supported by High-throughput Experiments. CLEAR-CLiP and CLASH data sets were integrated as described in Section 2 of Supplementary Material and Method.
 
 
 ## 3.4  Variables of network object during simulation
 
-As a result of simulation a dataset, a graph object is obtained that includes various variables in edge and node data. A graph object includes variables at Table S5.
+As a result of simulation a data set, a graph object is obtained that includes various variables in edge and node data. A graph object includes variables at Table S5.
 
  \begin{table}[ht]
 \centering
@@ -439,7 +438,7 @@ As a result of simulation a dataset, a graph object is obtained that includes va
 \end{table}
 
 
-## 3.5 Comparison of perturbation efficiency between Sample and Sample+ dataset
+## 3.5 Comparison of perturbation efficiency between Sample and Sample+ data set
 
 | Data set || Sample+ || Sample 
 |-----------|-------|---------|------------| ------------|
@@ -458,11 +457,11 @@ Table: Perturbation efficiencies of nodes in Sample+ and Sample data set. PE, pe
 
 # 4. Notes and Access to code
 
-+ *Table S7*: represents functional annotations of all highly perturbing genes from simulations of network retrieved from miRTarBase.
++ *Table S7*: refers functional annotations of all highly perturbing genes from simulations of network retrieved from miRTarBase.
 
-+ *Table S8*: represents functional annotations of tumor specific highly perturbing genes achieved from simulations of network retrieved from miRTarBase.
++ *Table S8*: refers functional annotations of tumor specific highly perturbing genes achieved from simulations of network retrieved from miRTarBase.
 
-+ *Table S9*: represents functional annotations of tumor specific highly perturbing genes achieved from simulations of network retrieved from miRNA:target pairs that are validated by high-throughput experimental studies.
++ *Table S9*: refers functional annotations of tumor specific highly perturbing genes achieved from simulations of network retrieved from miRNA:target pairs that are validated by high-throughput experimental studies.
 
 + All codes are available at [github repo](https://github.com/selcenari/ceRNA_multifactorial_model).
 

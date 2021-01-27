@@ -80,8 +80,6 @@ find_node_perturbation(sample_graph,
 ```
 
 
-
-
 # 2. Additional data manipulation steps
 
 ## 2.1 Arrangement of CLASH data set 
@@ -347,7 +345,6 @@ lift18 <- read_tsv("data/lift18.txt")
 ```
 
 
-
 ```{r,  eval=FALSE}
 
 
@@ -416,7 +413,7 @@ experimentalmirnagene <- bind_rows(clashelwakfinal, clearclipfinal) %>%
 
 ## 2.4 Adding Coefficients of Interaction factors
 
-Energy values in miRNA:target pairs were represented by high-throughput studies [@helwak_mapping_2013; @moore_mirnatarget_2015] which were utilized in this study. On the other hand, we have specified the other interaction factors, seed type and location of binding region on the target, as numeric values based on the previous studies.[@grimson_microrna_2007] have compared the seed types' effect on target repression with few miRNA had canonical seed pairing in their study. Additionally, [@bartel_micrornas:_2009] and [@betel2010comprehensive] have studied on functional and non-functional seed interactions. Based on results of these studies we have arranged seed types of miRNA:target interactions as numeric values. We also have redefined location of binding region on the target as numeric values, based on studies of [@hausser_analysis_2013] and [@helwak_mapping_2013]. With this process, we have handled this integrated data set in context of competitor behaviors and functionality of interactions. 
+Energy values in miRNA:target pairs were represented by high-throughput studies [@helwak_mapping_2013; @moore_mirnatarget_2015] which were utilized in this study. On the other hand, we specified the other interaction factors (seed type and location of binding region on the target) as numeric values based on the previous studies.[@grimson_microrna_2007] had compared the seed types' effect on target repression with few miRNA had canonical seed pairing in their study. Additionally, [@bartel_micrornas:_2009] and [@betel2010comprehensive] have studied on functional and non-functional seed interactions. Based on results of these studies we compiled seed types of miRNA:target interactions as numeric values. We also have re-defined location of binding region on the target as numeric values, based on studies of [@hausser_analysis_2013] and [@helwak_mapping_2013]. With this process, we handled this integrated data set in context of competitor behaviors and functionality of interactions. 
 
 In this step we added numeric interaction values as following
 
@@ -441,7 +438,7 @@ experimentalmirnagene <- experimentalmirnagene %>%
     mutate(region_effect = as.double(region_effect))
 ```
 
-Secondly, we organized seed type interactions in *Seed type manipulation* section for CLEAR-CLiP data set to show as found in CLASH data set. Same type formatted values added data set as numeric values (shown in Table S2).
+Secondly, we arranged seed type parameters, as in *Seed type manipulation* section, of CLEAR-CLiP data set to show as found in CLASH data set. The values added data set as numeric values (shown in Table S2).
 
 ```{r,  eval=FALSE}
 
@@ -453,7 +450,7 @@ experimentalmirnagene <- experimentalmirnagene %>%
 ```
 
 
-The methods about miRNA:target interactions are based a basic principle that is reading after isolation of miRNA:target chimerics. The data sets contain all the chimeric miRNA:target structures found in the medium during the experiment. On the other hand, it could be said that the reading is performed as snapshot.Because of that, the methods can provide different chimeric interactions the same miRNA:target pair. We have preferred to select most effective interaction parameters for the same miRNA:target pairs that can exhibit various interactions. The step was performed as:
+The approaches to detect miRNA:target interactions are based a basic principle that is reading after isolation of miRNA:target chimerics. The data sets contain all readings from the chimeric miRNA:target pairs, isolated at a particular time. On the other hand, it could be said that the reading is performed in a snapshot fashion. Because of that, the methods can provide different chimeric interactions the same miRNA:target pair. We have preferred to select most effective interaction parameters for the same miRNA:target pairs that can exhibit various interactions. The step was performed as:
 
 ```{r eval=FALSE}
 experimentalmirnagene <- experimentalmirnagene %>%
@@ -500,8 +497,6 @@ The nodes in the data set are handled as two type; miRNAs and competing (i.e., g
 # 4. Perturbation analysis of Real/Real+ networks
 
 To evaluate significant nodes through parallel processing in breast cancer patient network, perturbation on all nodes were triggered by 3-fold up-regulation with 10 iteration (cycle) due to small diameter of Real and Real+ networks. We analyzed perturbation efficiencies of all nodes in situation that accepts nodes with more than one percent change in expression as re-regulated (i.e, limit=1 argument in *find_node_perturbation()* function).
-
-
 
 
 # REFERENCES
