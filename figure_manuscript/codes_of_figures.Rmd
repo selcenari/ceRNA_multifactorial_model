@@ -59,7 +59,7 @@ mirtarbase_node_perturbations%>%
   left_join(gene_dist, by = "name")%>%
   mutate(tissue_type = ifelse(endsWith(file_name, "01A"), "Tumor", "Normal"),
          node_type = ifelse(name %in% effective_nodes$name, "effective", "non_effective"))%>%
-  filter(node_type == "effective", perturbed_count > 78, perturbed > 1)%>% 
+  filter(node_type == "effective", perturbed_count > 78, perturbed > 10)%>% 
   filter(tissue_type != "Normal", startsWith(name, "ENS"))%>%
   distinct(name)%>%
   pull()->lim_1_gene_tumor
@@ -71,7 +71,7 @@ mirtarbase_node_perturbations%>%
   left_join(gene_dist, by = "name")%>%
   mutate(tissue_type = ifelse(endsWith(file_name, "01A"), "Tumor", "Normal"),
          node_type = ifelse(name %in% effective_nodes$name, "effective", "non_effective"))%>%
-  filter(node_type == "effective", perturbed_count > 78, perturbed > 1)%>% 
+  filter(node_type == "effective", perturbed_count > 78, perturbed > 10)%>% 
   filter(tissue_type == "Normal", startsWith(name, "ENS"))%>%
   distinct(name)%>%
   pull()->lim_1_gene_normal
@@ -101,7 +101,7 @@ mirtarbase_node_perturbations%>%
   left_join(gene_dist, by = "name")%>%
   mutate(tissue_type = ifelse(endsWith(file_name, "01A"), "Tumor", "Normal"),
          node_type = ifelse(name %in% effective_nodes$name, "effective", "non_effective"))%>%
-  filter(node_type == "effective", perturbed_count > 78, perturbed > 1)%>% 
+  filter(node_type == "effective", perturbed_count > 78, perturbed > 10)%>% 
   filter(tissue_type != "Normal", startsWith(name, "hsa"))%>%
   distinct(name)%>%
   pull()->lim_1_mirna_tumor
@@ -116,7 +116,7 @@ mirtarbase_node_perturbations%>%
   left_join(gene_dist, by = "name")%>%
   mutate(tissue_type = ifelse(endsWith(file_name, "01A"), "Tumor", "Normal"),
          node_type = ifelse(name %in% effective_nodes$name, "effective", "non_effective"))%>%
-  filter(node_type == "effective", perturbed_count > 78, perturbed > 1)%>% 
+  filter(node_type == "effective", perturbed_count > 78, perturbed > 10)%>% 
   filter(tissue_type == "Normal", startsWith(name, "hsa"))%>%
   distinct(name)%>%
   pull()->lim_1_mirna_normal
@@ -184,9 +184,13 @@ tumor_only_annotation%>%
   theme(panel.grid = element_blank(), axis.title = element_text(size =20), axis.text = element_text(size = 12),legend.position = "none")+
   scale_y_discrete(labels=scales::wrap_format(40),position = "left", limits = position)
 
+ggsave(filename = 'mirtarbase_annotation.svg', width = 8, height = 6)
+
 ```
 
-## Network construction with overall functional annotation: **Figure 3**
+
+-----------------
+## Network construction with overall functional annotation: Additional figure important genes from functional Annotation
 
 ```{r}
 
@@ -263,6 +267,8 @@ significant_node_graph%>%
   
 ```
 
+-----------------
+
 # Heat-maps for miRNAs
 
 +Detecting perturbing miRNAs
@@ -272,7 +278,7 @@ mirtarbase_node_perturbations%>%
   left_join(gene_dist, by = "name")%>%
   mutate(tissue_type = ifelse(endsWith(file_name, "01A"), "Tumor", "Normal"),
          node_type = ifelse(name %in% effective_nodes$name, "effective", "non_effective"))%>%
-  filter(node_type == "effective", perturbed_count > 78, perturbed > 1)%>%
+  filter(node_type == "effective", perturbed_count > 78, perturbed > 10)%>%
   filter(tissue_type != "Normal", startsWith(name, "hsa"))%>%
   dplyr::select(file_name, name,tissue_type, perturbed_count)->mirna_tumor
 
@@ -280,7 +286,7 @@ mirtarbase_node_perturbations%>%
   left_join(gene_dist, by = "name")%>%
   mutate(tissue_type = ifelse(endsWith(file_name, "01A"), "Tumor", "Normal"),
          node_type = ifelse(name %in% effective_nodes$name, "effective", "non_effective"))%>%
-  filter(node_type == "effective", perturbed_count > 78, perturbed > 1)%>%
+  filter(node_type == "effective", perturbed_count > 78, perturbed > 10)%>%
   filter(tissue_type == "Normal", startsWith(name, "hsa"))%>%
   dplyr::select(file_name, name,tissue_type, perturbed_count)->mirna_normal
 
@@ -296,15 +302,15 @@ mirna_tumor%>%
          perturbed_count_normal = ifelse(is.na(perturbed_count_normal), 1, perturbed_count_normal),
          log_FC= log2(perturbed_count_tumor/perturbed_count_normal))%>%
   ggplot(aes(x = file_name, y = name, fill = log_FC))+
-  geom_tile(aes(colour = log_FC, fill = log_FC))+coord_fixed(ratio = 1)+
+  geom_tile(aes(colour = log_FC, fill = log_FC))+
   theme_test()+
   theme(axis.text.x = element_blank(), #element_text(angle = 90, vjust = 0, hjust=0)
-        plot.title = element_text(hjust = 0.5, size =20), 
-        axis.title = element_text(size =20))+
+        plot.title = element_text(hjust = 0.5))+
   scale_colour_gradientn(colours = c("green","white", "red"), aesthetics = c("colour", "fill"), na.value = "grey")+
   ylab("Highly pertubing miRNA nodes")+
   xlab("Patients")+
-  theme( legend.title = element_blank(), panel.background = element_rect(fill = "white"), plot.margin = margin(0, 0, 0, 0, "cm"))
+  theme( legend.title = element_blank(), panel.background = element_rect(fill = "white"))
+
 
 ```
 
@@ -324,16 +330,15 @@ mirna_tumor%>%
          perturbed_count = as.numeric(str_replace_na(perturbed_count, 0)),
          perturbed_count_log = as.numeric(str_replace_na(perturbed_count_log, 0)))%>%
   ggplot(aes(x = file_name, y = name, fill = perturbed_count_log))+
-  geom_tile(aes(colour = perturbed_count_log, fill = perturbed_count_log))+coord_fixed(ratio = 1)+
+  geom_tile(aes(colour = perturbed_count_log, fill = perturbed_count_log))+
   theme_test()+
   theme(axis.text.x = element_blank(), #element_text(angle = 90, vjust = 0, hjust=0)
-        plot.title = element_text(hjust = 0.5, size =20), 
-        axis.title = element_text(size =20))+
+        plot.title = element_text(hjust = 0.5))+
   scale_colour_gradientn(colours = c("green","red", "black"), aesthetics = c("colour", "fill"), na.value = "grey")+
   ylab("Highly pertubing miRNA nodes")+
   xlab("Patients")+
   facet_grid(rows = "situ")+
-  theme( legend.title = element_blank(), panel.background = element_rect(fill = "gray93"), plot.margin = margin(0, 0, 0, 0, "cm"))
+  theme( legend.title = element_blank(), panel.background = element_rect(fill = "gray93"))
 
 
 ```
