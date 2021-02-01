@@ -189,7 +189,7 @@ ggsave(filename = 'mirtarbase_annotation.svg', width = 8, height = 6)
 ```
 
 
------------------
+----------------- This figure was removed from manuscript.
 ## Network construction with overall functional annotation: Additional figure important genes from functional Annotation
 
 ```{r}
@@ -280,6 +280,7 @@ mirtarbase_node_perturbations%>%
          node_type = ifelse(name %in% effective_nodes$name, "effective", "non_effective"))%>%
   filter(node_type == "effective", perturbed_count > 78, perturbed > 10)%>%
   filter(tissue_type != "Normal", startsWith(name, "hsa"))%>%
+  mutate(file_name= str_remove(file_name, "-01A"))%>%
   dplyr::select(file_name, name,tissue_type, perturbed_count)->mirna_tumor
 
 mirtarbase_node_perturbations%>%
@@ -288,6 +289,7 @@ mirtarbase_node_perturbations%>%
          node_type = ifelse(name %in% effective_nodes$name, "effective", "non_effective"))%>%
   filter(node_type == "effective", perturbed_count > 78, perturbed > 10)%>%
   filter(tissue_type == "Normal", startsWith(name, "hsa"))%>%
+  mutate(file_name= str_remove(file_name, "-11A"))%>%
   dplyr::select(file_name, name,tissue_type, perturbed_count)->mirna_normal
 
 ```
@@ -309,8 +311,9 @@ mirna_tumor%>%
   scale_colour_gradientn(colours = c("green","white", "red"), aesthetics = c("colour", "fill"), na.value = "grey")+
   ylab("Highly pertubing miRNA nodes")+
   xlab("Patients")+
-  theme( legend.title = element_blank(), panel.background = element_rect(fill = "white"))
+  theme( legend.title = element_blank(), panel.background = element_rect(fill = "white"),  plot.margin = margin(0, 0, 0, 0, "cm"))
 
+ggsave(filename = 'mirna_comparison.svg', width = 8, height = 4)
 
 ```
 
@@ -338,9 +341,10 @@ mirna_tumor%>%
   ylab("Highly pertubing miRNA nodes")+
   xlab("Patients")+
   facet_grid(rows = "situ")+
-  theme( legend.title = element_blank(), panel.background = element_rect(fill = "gray93"))
+  theme( legend.title = element_blank(), panel.background = element_rect(fill = "gray93"),  plot.margin = margin(0, 0, 0, 0, "cm"))
 
 
+ggsave(filename = 'mirna_comparison_normal_tumor.svg', width = 8, height = 7)
 ```
 
 
