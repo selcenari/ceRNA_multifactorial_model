@@ -58,7 +58,6 @@ find_node_perturbation(sample_graph,
   select(name, perturbation_efficiency, perturbed_count)
 
 ```
-
 ## 1.2 Sample+ Data set:
 
 Results for *Sample+* network are shown below.
