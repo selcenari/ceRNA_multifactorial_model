@@ -23,7 +23,7 @@ header-includes:
 The functions that are used in the this study are developed with R and are available in [Bioconductor](https://www.bioconductor.org/packages/release/bioc/html/ceRNAnetsim.html).
 
 
-```{r, include=FALSE, message=FALSE, warning=FALSE}
+```{r message=FALSE, warning=FALSE, include=FALSE}
 
 library(tidygraph)
 library(dplyr)
@@ -372,9 +372,9 @@ hg38clearclip <- read_tsv("data/hg38clearclip.txt",
 
 # adding new location information:
 clearclipfinal <- clearclipfinal %>% 
-  bind_cols(hg38clearclip) %>% 
+  dplyr::bind_cols(hg38clearclip) %>% 
   rename(HG38build_loc = X1) %>% 
-  mutate(Genom_build="hg18") %>%
+  dplyr::mutate(Genom_build="hg18") %>%
   dplyr::select(cluster=cluster.ID, chromosome = chr, start_position, 
                 end_position, strand = strand.y, hgnc_symbol, 
                 Ensembl_Gene_Id =ensembl_gene_id, 
@@ -466,13 +466,17 @@ experimentalmirnagene <- experimentalmirnagene %>%
     region_effect = ifelse(region_effect == max(region_effect),
                            region_effect, 
                            max(region_effect) ) ) %>%
+  ungroup()%>%
   distinct()
+
+saveRDS(experimentalmirnagene, file = "data/experimentalmirnagene.RDS")
+
 ```
 
 
 ```{r, eval=FALSE}
 # the data frame generated up to now should match the data frame used in manuscript so the output should be "zero" different rows.
-setdiff(experimentalmirnagene,readRDS("data/experimentalmirnagene.RDS"))
+dplyr::setdiff(experimentalmirnagene,readRDS("data/experimentalmirnagene.RDS"))
 ```
 
 The context of data set was shown in Table S5 in Supplementary Tables.
