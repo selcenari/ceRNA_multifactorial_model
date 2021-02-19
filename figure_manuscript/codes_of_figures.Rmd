@@ -13,16 +13,15 @@ output: pdf_document
 This file consists analysis steps and codes of figures in manuscript.
 
 ```{r, include=FALSE, message=FALSE, warning=FALSE}
-library(janitor)
 library(tidyverse)
 library(purrr)
 library(readr)
 library(biomaRt)
 library(TCGAbiolinks)
 library(ceRNAnetsim)
-library(dplyr)
 library(ggVennDiagram)
 library(ggraph)
+library(janitor)
 knitr::opts_chunk$set(tidy.opts=list(width.cutoff=50),tidy=TRUE)
 #knitr::opts_chunk$set(fig.pos = 'H')
 knitr::opts_chunk$set(cache=FALSE)
@@ -31,7 +30,9 @@ knitr::opts_chunk$set(cache=FALSE)
 
 ```{r}
 
-mirtarbase_node_perturbations <- readRDS("mirtarbase_node_perturbations.RDS") # data includes results of find_node_perturbation() function for tumor and normal samples of each patient.
+mirtarbase_node_perturbations <- readRDS("mirtarbase_node_perturbations.RDS") 
+# data includes results of find_node_perturbation() 
+#function for tumor and normal samples of each patient.
 
 ```
 
@@ -194,7 +195,8 @@ ggsave(filename = 'mirtarbase_annotation.svg', width = 8, height = 6)
 
 ```{r}
 
-significant_node_graph <- readRDS("significant_node_graph.RDS") #consists network of highly perturbing nodes.
+significant_node_graph <- readRDS("significant_node_graph.RDS") 
+#consists network of highly perturbing nodes.
 hg19 <- readRDS("hg19.RDS") #For id matching (obtained via bioMaRt package)
   
 ```
@@ -203,7 +205,8 @@ hg19 <- readRDS("hg19.RDS") #For id matching (obtained via bioMaRt package)
 
 ```{r}
 
-Annotation_overall <- readRDS("Annotation_overall.RDS") # consists functional annotation of 145 high perturbing nodes.
+Annotation_overall <- readRDS("Annotation_overall.RDS") 
+# consists functional annotation of 145 high perturbing nodes.
 
 Annotation_overall%>%
   filter(startsWith(Category, c("KEGG", "GO")), !str_detect(Category, "CC_DIRECT"))%>%
@@ -251,20 +254,49 @@ significant_node_graph%>%
   mutate(centrality= centrality_degree(mode = "all"),
          annotation = ifelse(name %in% gene_top_annotation_graph$Ensembl_Gene_Id, "Enriched Genes", "other"))%>%
   left_join(hg19, by =c("name"="ensembl_gene_id"))%>%
-  filter( type %in% c("miRNA", "Gene"))%>%
+  filter( type %in% c("miRNA", "Gene"))-> annotation_graph
+
+annotation_graph%>%
   ggraph(layout = "kk")+ 
   geom_edge_link(colour = "seashell2")+
   geom_node_point(color = "seashell2")+
-  geom_node_point(aes(filter= annotation == "Enriched Genes", size = centrality, color = "Enriched Genes"), shape = 16)+
-  geom_node_point(aes(filter= type == "miRNA", color = "miRNA"), shape = 17, size = 2)+
-  geom_node_point(aes(filter= type == "GO", size = centrality, color = "GO"), shape = 18)+
-  geom_node_point(aes(filter= type == "KEGG", size = centrality, color = "KEGG"), shape = 15)+
+  geom_node_point(aes(filter= annotation == "Enriched Genes", 
+                      size = centrality, color = "Enriched Genes"), 
+                  shape = 16)+
+  geom_node_point(aes(filter= type == "miRNA", color = "miRNA"), 
+                  shape = 17, 
+                  size = 2)+
+  geom_node_point(aes(filter= type == "GO", size = centrality, color = "GO"), 
+                  shape = 18)+
+  geom_node_point(aes(filter= type == "KEGG", size = centrality, color = "KEGG"), 
+                  shape = 15)+
   theme_graph(base_family = "sans")+
-  geom_node_text(aes(filter= name %in% top_important, label = hgnc_symbol), size =3.5, repel = TRUE)+
+  geom_node_text(aes(filter= name %in% top_important, label = hgnc_symbol), 
+                 size =3.5, 
+                 repel = TRUE)+
   theme(plot.margin = margin(0, 0, 0, 0, "cm"), legend.position = "none")+
   guides(size=FALSE, shape = FALSE)+
-  scale_color_manual(name = "Node types", values = c("Enriched Genes" = "sandybrown", "miRNA"= "dodgerblue2", "GO"= "green", "KEGG"= "red"))
-  
+  scale_color_manual(name = "Node types", 
+                     values = c("Enriched Genes" = "sandybrown",
+                                "miRNA"= "dodgerblue2",
+                                "GO"= "green", "KEGG"= "red"))
+
+
+```
+
+Note: Alternatively, network can also be visualized by using Cytoscape (v 3.8.2) and Rcy3 package from Bioconductor.
+
+```{r, eval=FALSE}
+annotation_graph
+#BiocManager::install("RCy3")
+
+library(RCy3)
+
+# After starting cytoscape at desktop, following commands are run:
+
+RCy3::cytoscapePing()
+createNetworkFromIgraph(annotation_graph)
+
 ```
 
 -----------------
@@ -308,10 +340,12 @@ mirna_tumor%>%
   theme_test()+
   theme(axis.text.x = element_blank(), #element_text(angle = 90, vjust = 0, hjust=0)
         plot.title = element_text(hjust = 0.5))+
-  scale_colour_gradientn(colours = c("green","white", "red"), aesthetics = c("colour", "fill"), na.value = "grey")+
+  scale_colour_gradientn(colours = c("green","white", "red"), 
+                         aesthetics = c("colour", "fill"), na.value = "grey")+
   ylab("Highly pertubing miRNA nodes")+
   xlab("Patients")+
-  theme( legend.title = element_blank(), panel.background = element_rect(fill = "white"),  plot.margin = margin(0, 0, 0, 0, "cm"))
+  theme( legend.title = element_blank(), panel.background = element_rect(fill = "white"), 
+         plot.margin = margin(0, 0, 0, 0, "cm"))
 
 ggsave(filename = 'mirna_comparison.svg', width = 8, height = 4)
 
@@ -326,7 +360,8 @@ ggsave(filename = 'mirna_comparison.svg', width = 8, height = 4)
 mirna_tumor%>%
   full_join(mirna_normal, by =c("name", "file_name"), suffix= c("_tumor", "_normal"), fill.na = 0)%>%
   dplyr::select(-3, -5)%>%
-  pivot_longer(cols = c("perturbed_count_tumor", "perturbed_count_normal"), names_to = "situ", values_to = "perturbed_count")%>%
+  pivot_longer(cols = c("perturbed_count_tumor", "perturbed_count_normal"), 
+               names_to = "situ", values_to = "perturbed_count")%>%
   mutate(perturbed_count_log = log2(perturbed_count),
          situ = str_replace(situ, "perturbed_count_normal", 'Perturbed count in normal'),
          situ = str_replace(situ, "perturbed_count_tumor", 'Perturbed count in tumor'),
@@ -341,11 +376,13 @@ mirna_tumor%>%
   ylab("Highly pertubing miRNA nodes")+
   xlab("Patients")+
   facet_grid(rows = "situ")+
-  theme( legend.title = element_blank(), panel.background = element_rect(fill = "gray93"),  plot.margin = margin(0, 0, 0, 0, "cm"))
+  theme( legend.title = element_blank(), panel.background = element_rect(fill = "gray93"),
+         plot.margin = margin(0, 0, 0, 0, "cm"))
 
 
 ggsave(filename = 'mirna_comparison_normal_tumor.svg', width = 8, height = 7)
 ```
+
 
 
 
