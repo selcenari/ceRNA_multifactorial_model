@@ -1,2 +1,2 @@
 # ceRNA_multifactorial_model
-Article files
+This repository contains additional materials of manuscript about competing endogeneous RNA analysis.
