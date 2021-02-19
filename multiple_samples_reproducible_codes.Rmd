@@ -1,0 +1,193 @@
+---
+title: "Reproducible multiple sample script"
+author:
+- Selcen Ari
+- Alper Yilmaz
+date: "`r Sys.Date()`"
+output: pdf_document
+---
+
+# Generating networks for multiple sample
+
+This file contains an example of competing endogenous RNA analysis with ceRNAnetsim package.
+
+```{r, include=FALSE, message=FALSE, warning=FALSE}
+#required packages
+library(tidyverse)
+library(tidygraph)
+library(readr)
+library(biomaRt)
+library(TCGAbiolinks)
+library(ceRNAnetsim)
+library(ggraph)
+library(janitor)
+library(SummarizedExperiment)
+library(ceRNAnetsim)
+knitr::opts_chunk$set(warning = FALSE, message = FALSE)
+```
+
+# 1. Downloading data for analysis
+
+```{r}
+
+#query for Ovarian and Breast Carcinoma in TCGA. In this example TCGAbiolinks package was used.
+
+query_gene_exp <- GDCquery(project = c("TCGA-BRCA", "TCGA-OV"),
+                  data.category = "Transcriptome Profiling",
+                  data.type = "Gene Expression Quantification", 
+                  workflow.type = "HTSeq - Counts")
+
+
+query_mirna_exp <- GDCquery(project = c("TCGA-BRCA", "TCGA-OV"),
+                  data.category = "Transcriptome Profiling",
+                  data.type = "Isoform Expression Quantification",
+                  workflow.type = "BCGSC miRNA Profiling")
+
+#finding samples which have both miRNA and gene expression dataset
+
+
+getResults(query_gene_exp, cols = c("project","cases"))%>%
+  mutate(barcode = substr(cases, 1,12))-> gene_exp_cases
+
+getResults(query_mirna_exp, cols = c("project","cases"))%>%
+  mutate(barcode = substr(cases, 1,12))-> mirna_exp_cases
+
+# For demostration purposes we select 10 random patients per cancer project.
+set.seed(1234)  
+gene_exp_cases%>%
+  inner_join(mirna_exp_cases, by = c("project", "barcode"))%>%
+  dplyr::select(project, barcode)%>%
+  distinct()%>%
+  group_by(project)%>%
+  sample_n(10)%>%
+  pull(barcode)->selected_barcodes
+```
+
+## query for selected patient barcodes
+
+```{r}
+query_gene_exp_selected <- GDCquery(project = c("TCGA-BRCA", "TCGA-OV"),
+                  data.category = "Transcriptome Profiling",
+                  data.type = "Gene Expression Quantification", 
+                  workflow.type = "HTSeq - Counts",
+                  barcode = selected_barcodes)
+
+
+query_mirna_exp_selected <- GDCquery(project = c("TCGA-BRCA", "TCGA-OV"),
+                  data.category = "Transcriptome Profiling",
+                  data.type = "Isoform Expression Quantification",
+                  workflow.type = "BCGSC miRNA Profiling",
+                  barcode = selected_barcodes)
+```
+
+## Downloading and preparing data
+
+```{r}
+GDCdownload(query_gene_exp_selected)
+GDCdownload(query_mirna_exp_selected)
+
+gene_exps <- GDCprepare(query_gene_exp_selected)
+mirna_exps <- GDCprepare(query_mirna_exp_selected)
+
+```
+
+## Preparing gene expression dataset
+
+```{r}
+#preparation of gene expression dataset
+
+as.data.frame(assay(gene_exps))%>%
+  mutate(ensembl_gene_id = rownames(.))%>%
+  dplyr::left_join(as.data.frame(rowData(gene_exps)), 
+                    by = "ensembl_gene_id")%>%
+  dplyr::select(Ensembl_Gene_Id = ensembl_gene_id, external_gene_name, 1:21)->gene_exp_to_be_analyzed
+
+#fixing sample ids
+cases <- which(substring(names(gene_exp_to_be_analyzed),1,4) %in% "TCGA")
+names(gene_exp_to_be_analyzed)[cases] <- substr(names(gene_exp_to_be_analyzed)[cases], 1,12)
+
+head(gene_exp_to_be_analyzed)
+```
+
+## Preparing miRNA expression dataset
+
+```{r}
+
+# miRNA expression dataset contains miRNAs with mirbase ids. So, firstly, mirbase_id_coversion dataset is downloaded and processed.
+
+mirbase_url <- "ftp://mirbase.org/pub/mirbase/21/genomes/hsa.gff3"
+
+read_tsv(mirbase_url, comment = "#", col_names = FALSE) %>%
+  dplyr::select(mirna_type= X3, definition = X9)%>%
+  filter(!endsWith(mirna_type, "primary_transcript"))%>%
+  tidyr::separate(definition, c("ID", "Alias", "Name", "Derivated"), sep = ";")%>%
+  dplyr::select(Alias, Name)%>%
+  tidyr::separate(Alias, c("trash1", "ID"), sep = "=")%>%
+  tidyr::separate(Name, c("trash2", "Name"), sep = "=")%>%
+  dplyr::select(-trash1, -trash2)-> mirbase_id_conv
+  
+# preparation of miRNA expression dataset. 
+# We used miRBase (Version 21) to obtain miRBase id (like MIMAT0000) for each mature isoform and 
+# aggregated readr per million for each isoform. 
+
+mirna_exps%>%
+  as.data.frame()%>%
+  dplyr::select(miRNA_ID, 
+                read_count, 
+                reads_per_million_miRNA_mapped, 
+                miRNA_region, 
+                barcode)%>%
+  dplyr::filter(startsWith(miRNA_region, "mature"))%>%
+  dplyr::mutate(mirbase_id =str_remove(miRNA_region, "mature,"))%>%
+  dplyr::select(-miRNA_region)%>%
+  dplyr::inner_join(mirbase_id_conv, 
+                    by = c("mirbase_id"="ID"))%>%
+  dplyr::group_by(Name, barcode)%>%
+  mutate(read_count= sum(read_count), 
+         reads_per_million_miRNA_mapped = sum(reads_per_million_miRNA_mapped))%>%
+  dplyr::ungroup()%>%
+  dplyr::select(miRNA = Name, reads_per_million_miRNA_mapped, barcode)%>% # reads_per_million_miRNA_mapped used for ceRNA analysis (optionally)
+  distinct()%>%
+  tidyr::pivot_wider(names_from = "barcode", values_from = "reads_per_million_miRNA_mapped")-> mirna_exp_to_be_analyzed
+
+#fixing sample ids
+cases <- which(substring(names(mirna_exp_to_be_analyzed),1,4) %in% "TCGA")
+names(mirna_exp_to_be_analyzed)[cases] <- substr(names(mirna_exp_to_be_analyzed)[cases], 1,12)
+
+head(mirna_exp_to_be_analyzed)
+
+```
+
+
+# Performing competing endogenous RNA (ceRNAnetsim) analysis
+
+Firstly, miRNA:gene pair dataset must be defined. Here, dataset of miRNA:gene pairs which were obtained from high-throughput experimental studies is used as an example. Note that in manuscript SPONGE analysis was preformed to refine miRNA:gene pairs. In this demonstration we omitted SPONGE analysis and use bare 
+
+```{r}
+
+experimentalmirnagene <- readRDS("data/experimentalmirnagene.RDS")
+
+graph_list = list()
+
+for(i in selected_barcodes){
+
+current_network <- experimentalmirnagene%>%
+  right_join(dplyr::select(gene_exp_to_be_analyzed, Ensembl_Gene_Id, i), by="Ensembl_Gene_Id")%>%
+  right_join(dplyr::select(mirna_exp_to_be_analyzed, miRNA, i), by ="miRNA", suffix= c("Gene_expression", "miRNA_expression"))%>%
+  dplyr::select(Ensembl_Gene_Id, miRNA, Gene_expression= paste0(i, "Gene_expression"), miRNA_expression = paste0(i, "miRNA_expression"))%>%
+  filter(!is.na(Gene_expression), !is.na(miRNA_expression))%>% 
+  filter(Gene_expression != 0, miRNA_expression != 0)%>%
+  priming_graph(competing_count = Gene_expression, 
+                miRNA_count = miRNA_expression)
+
+graph_list[[i]] <- current_network
+  
+}
+```
+
+Now we have miRNA:gene networks for 20 patients in a list. So any of them can be used with various functions provided by ceRNAnetsim package. Below we just printing out network of a single patient.
+
+```{r}
+graph_list$`TCGA-S3-AA17`
+```
+
